@@ -1,0 +1,98 @@
+#+STARTUP: overview hideblocks indent entitiespretty:
+* Sources
+
+- [[https://allendowney.github.io/ThinkPython/][Think Python (free online version, 3e)]]
+- Learn Python the Hard Way (Kindle)
+- A Student's Tutorial to Physical Modeling with Python (paperback)
+
+* Week 1 - Overview / A fancy first example
+
+- [ ] Assigned reading
+- [ ] Class workflow
+- [ ] Programming Assignments
+- [ ] DataCamp Assignments
+- [ ] Getting started with Colab
+- [ ] Q&A
+
+** Assigned reading
+
+- You will be assigned one chapter per week of "Think Python" (3e) by
+  Allen B. Downey.
+- The book is free: [[https://allendowney.github.io/ThinkPython/][allendowney.github.io/ThinkPython/]], and it comes
+  with Colab notebooks, which means that you can run all code online.
+- For each assigned chapter, you are expected to:
+  1. Read the text sections carefully (do not skim).
+  2. Run *all* code cells in the corresponding notebook.
+  3. Modify examples to test your understanding.
+  4. Take brief notes on anything that is unclear.
+  5. Keep your notes in your notebook where the code is.
+- Estimated time to completion: 60-90 minutes.
+- Let's check out the first chapter to see what you're up against.
+     
+** Class workflow
+
+- Class time will *not* repeat the notebook content line-by-line.
+- Each session will follow a fixed structure:
+  1. *Concept focus (10–15 min)*  
+     - Clarify key ideas from the reading  
+     - Address common misunderstandings  
+  2. *Guided coding (15 min)*  
+     - Short, targeted exercises based on the reading  
+     - You will write and run code in class  
+  3. *Independent practice (15–20 min)*  
+     - Variations and small problems  
+     - Requires applying—not copying—the examples  
+  4. *Wrap-up (5 min)*  
+     - Discussion of errors, edge cases, and takeaways
+
+- You are expected to arrive having:
+  + Opened the notebook
+  + Run the code at least once
+  + Identified at least one question or confusion
+
+** Programming Assignments
+
+- Weekly assignments are based on the notebook and require active
+  work.
+- For each chapter, you will submit your own notebook with:
+  - 3–5 short written answers (explanations or predictions)
+  - 2–3 modified code examples (not identical to the notebook)
+- Typical required actions include:
+  - Predicting output before running code
+  - Modifying expressions and explaining the result
+  - Creating and fixing simple errors
+- Estimated time per assignment:
+  - 45–60 minutes for most students
+- Assignments are graded for:
+  - Completion of required tasks
+  - Evidence of engagement (not copy/paste)
+
+** DataCamp assignments
+
+- You will complete one DataCamp lesson per week.
+- Lessons are officially timed (e.g., 1–4 hours), but actual time
+  varies.
+- When working carefully—running code outside the platform, testing
+  variations, or researching errors—you should expect:~60–90 minutes
+  per lesson.
+
+- To get full value from DataCamp, you are expected to:
+  + Complete all exercises (not skip or guess)
+  + Re-run key examples outside the platform (e.g., Colab or local
+    Python)
+  + Experiment with small modifications
+  + Look up unfamiliar concepts or errors
+
+- DataCamp is used to:
+  + Reinforce syntax and patterns
+  + Provide additional guided practice
+  + Build fluency through repetition
+    
+** Getting started with Google Colaboratory ("Colab")
+
+- Open colab.research.google.com
+- Register as a student to get Colab Pro now"
+  [[https://colab.research.google.com/signup][colab.research.google.com/signup]]
+- Code along with me: [[https://tinyurl.com/week-1-python-colab][tinyurl.com/week-1-python-colab]]
+
+  
