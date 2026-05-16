@@ -1,9 +1,10 @@
 #+STARTUP: overview hideblocks indent entitiespretty:
 * Sources
 
-- [[https://allendowney.github.io/ThinkPython/][Think Python (free online version, 3e)]]
+- [[https://allendowney.github.io/ThinkPython/][Think Python (free online version, 3e)]] also [[https://github.com/TVsony/Complete-Python/blob/master/Think%20Python%20third%20Edition.pdf][as PDF]]
 - Learn Python the Hard Way (Kindle)
 - A Student's Tutorial to Physical Modeling with Python (paperback)
+- [[https://github.com/bterwijn/memory_graph][Memory graph data structure visualization]]
 
 * Week 1 - Overview / A fancy first example
 
@@ -55,21 +56,22 @@
 - Weekly assignments are based on the notebook and require active
   work.
 - For each chapter, you will submit your own notebook with:
-  - 3–5 short written answers (explanations or predictions)
-  - 2–3 modified code examples (not identical to the notebook)
+  + 3–5 short written answers (explanations or predictions)
+  + 2–3 modified code examples (not identical to the notebook)
 - Typical required actions include:
-  - Predicting output before running code
-  - Modifying expressions and explaining the result
-  - Creating and fixing simple errors
+  + Predicting output before running code
+  + Modifying expressions and explaining the result
+  + Creating and fixing simple errors
 - Estimated time per assignment:
-  - 45–60 minutes for most students
+  + 45–60 minutes for most students
 - Assignments are graded for:
-  - Completion of required tasks
-  - Evidence of engagement (not copy/paste)
+  + Completion of required tasks
+  + Evidence of engagement (not copy/paste)
 
 ** DataCamp assignments
 
 - You will complete one DataCamp lesson per week.
+
 - Lessons are officially timed (e.g., 1–4 hours), but actual time
   varies.
 - When working carefully—running code outside the platform, testing
@@ -91,8 +93,45 @@
 ** Getting started with Google Colaboratory ("Colab")
 
 - Open colab.research.google.com
-- Register as a student to get Colab Pro now"
-  [[https://colab.research.google.com/signup][colab.research.google.com/signup]]
-- Code along with me: [[https://tinyurl.com/week-1-python-colab][tinyurl.com/week-1-python-colab]]
 
+- As a student, you can get Colab Pro for a year:
+  [[https://colab.research.google.com/signup][colab.research.google.com/signup]] - you may not need it.
+
+- Now, open [[https://is.gd/6nAJtZ][is.gd/6nAJtZ]] and code along with me.
+
+- The full script with detailed annotations, is in GitHub:
+  1. As a PDF (=.pdf=) or an Org-mode (=.org=) file to read
+  2. As a Colab notebook (=.ipynb=) to run
+
+- To open GitHub, go to: [[https://github.com/birkenkrahe/cs100][github.com/birkenkrahe/cs100]]
+
+** Next Assignments
+
+- Bonus assignment: Abortion statistics in the US
   
+- Read chapter 1, "Programming as a Way of Thinking" (pp. 1-10).
+
+- Optionally, play with the Colab notebook for chapter 1
+  ([[https://tinyurl.com/downey-chap01-ipynb][tinyurl.com/downey-chap01-ipynb]])
+
+- Complete lesson 1, "Python Basics" of the DataCamp course
+  "Introduction to Python" (1.5 hours)
+
+- You can interact with an "AI Coach" while watching the videos.
+
+- Estimated time for reading + online lesson: at least 2.5 hours.
+
+- There will be a test every week to check your understanding.
+
+- The first quiz will test DataCamp ch 1 and Think Python ch 1.
+
+- The deadline for the first quiz is June 5
+
+- There may not be a class on that day (since I'm moving)
+
+
+* Week 2 - Programming as a way of thinking (chapter 1)
+
+- [ ] Programming as a Way of Thinking: [[file:books/tp_ch1.org][See lecture.]]
+
+ 
