@@ -19,42 +19,46 @@
 
 - You will be assigned one chapter per week of "Think Python" (3e) by
   Allen B. Downey.
+
 - The book is free: [[https://allendowney.github.io/ThinkPython/][allendowney.github.io/ThinkPython/]], and it comes
   with Colab notebooks, which means that you can run all code online.
+
 - For each assigned chapter, you are expected to:
-  1. Read the text sections carefully (do not skim).
-  2. Run *all* code cells in the corresponding notebook.
-  3. Modify examples to test your understanding.
-  4. Take brief notes on anything that is unclear.
-  5. Keep your notes in your notebook where the code is.
-- Estimated time to completion: 60-90 minutes.
-- Let's check out the first chapter to see what you're up against.
-     
+  1. *Read* the text sections carefully (do not skim).
+  2. *Copy* the notebook so that you can edit it.
+  3. *Run *all* code cells in the corresponding notebook.
+  4. *Modify* examples to test your understanding.
+  5. *Take notes* on anything that is unclear.
+  6. Keep your notes in your notebook where the code is.
+- Estimated time to completion: *60-90 minutes.*
+- *Let's check out the first chapter to see what you're up against.*
+
+#+attr_html: :width 400px :float nil:
+[[../img/thinkPythonBook.png]]
+  
 ** Class workflow
 
 - Class time will *not* repeat the notebook content line-by-line.
-- Each session will follow a fixed structure:
-  1. *Concept focus (10–15 min)*  
-     - Clarify key ideas from the reading  
-     - Address common misunderstandings  
-  2. *Guided coding (15 min)*  
-     - Short, targeted exercises based on the reading  
-     - You will write and run code in class  
-  3. *Independent practice (15–20 min)*  
-     - Variations and small problems  
-     - Requires applying—not copying—the examples  
-  4. *Wrap-up (5 min)*  
-     - Discussion of errors, edge cases, and takeaways
+
+- Each session will (usually) include:
+  1. An opening prayer
+  2. A short review of what we did the last session.
+  3. A little coding to warm up the engines.
+  4. Some new concepts (or more on some old concepts).
+  5. Code along with me!
+  6. Practice the new concepts by solving an exercise.
+  7. A wrap-up to find out what you learnt.
+  8. A closing prayer.
 
 - You are expected to arrive having:
-  + Opened the notebook
+  + Opened the notebook for the assigned textbook chapter
   + Run the code at least once
   + Identified at least one question or confusion
 
 ** Programming Assignments
 
-- Weekly assignments are based on the notebook and require active
-  work.
+- Weekly assignments are based on the notebook/textbook and require
+  active work.
 - For each chapter, you will submit your own notebook with:
   + 3–5 short written answers (explanations or predictions)
   + 2–3 modified code examples (not identical to the notebook)
@@ -67,6 +71,8 @@
 - Assignments are graded for:
   + Completion of required tasks
   + Evidence of engagement (not copy/paste)
+- Assignments are usually co-developed with AI but heavily edited and
+  tested by me
 
 ** DataCamp assignments
 
@@ -74,6 +80,7 @@
 
 - Lessons are officially timed (e.g., 1–4 hours), but actual time
   varies.
+
 - When working carefully—running code outside the platform, testing
   variations, or researching errors—you should expect:~60–90 minutes
   per lesson.
@@ -92,6 +99,8 @@
     
 ** Getting started with Google Colaboratory ("Colab")
 
+- You'll learn Python through a form of "literate programming"
+
 - Open colab.research.google.com
 
 - As a student, you can get Colab Pro for a year:
@@ -107,31 +116,37 @@
 
 ** Next Assignments
 
-- Bonus assignment: Abortion statistics in the US
-  
-- Read chapter 1, "Programming as a Way of Thinking" (pp. 1-10).
+- *Bonus assignment:* Abortion statistics in the US.
 
-- Optionally, play with the Colab notebook for chapter 1
-  ([[https://tinyurl.com/downey-chap01-ipynb][tinyurl.com/downey-chap01-ipynb]])
+- *Read* chapter 1, "Programming as a Way of Thinking" (pp. 1-10).
 
-- Complete lesson 1, "Python Basics" of the DataCamp course
+- Optionally, *play* through the Colab notebook for chapter 1
+  ([[https://tinyurl.com/downey-chap01-ipynb][tinyurl.com/downey-chap01-ipynb]]). It contains the text, too.
+
+- *Complete* lesson 1, "Python Basics" of the DataCamp course
   "Introduction to Python" (1.5 hours)
 
-- You can interact with an "AI Coach" while watching the videos.
+- You can interact with an *"AI Coach"* while watching the videos.
 
 - Estimated time for reading + online lesson: at least 2.5 hours.
 
-- There will be a test every week to check your understanding.
+- There will be a *weekly quiz* to check your understanding.
 
-- The first quiz will test DataCamp ch 1 and Think Python ch 1.
+- The *first quiz* will test DataCamp ch 1 and Think Python ch 1.
 
-- The deadline for the first quiz is June 5
+- The *deadline* for the first quiz is June 5
 
 - There may not be a class on that day (since I'm moving)
 
+- If there's no class meeting, I will record a *code along* lecture.
 
 * Week 2 - Programming as a way of thinking (chapter 1)
 
-- [ ] Programming as a Way of Thinking: [[file:books/tp_ch1.org][See lecture.]]
+- [ ] Review: Programming as a Way of Thinking: [[file:books/tp_ch1.org][See lecture.]]
+- [ ] Next week (June 5th) there will be no class meeting
+- [ ] Instead, I will record a code along lecture for chapter 2
+- [ ] Chapter 2 deals with variable and statements
 
- 
+* Week 3 - Variables and Statements
+
+* Week 4 - Functions
