@@ -1,12 +1,32 @@
+#+TITLE:Agenda - Intro to Programming (Python)
+#+AUTHOR:Marcus Birkenkrahe
+#+SUBTITLE:CS 100, Catholic Polytechnic University
 #+STARTUP: overview hideblocks indent entitiespretty:
+* Catalog
+
+- 3 semester units, 45 clock hours
+- Description:
+  #+begin_quote
+  This is the first semester of the basic course in programming. We
+  will explore common computational problem-solving techniques useful
+  to computer scientists, but also to anyone who has large data sets,
+  repetitive processes, or other needs for computation. Students learn
+  to design and implement programs using variables, basic data types,
+  and simple data structures, with an emphasis on control issues such
+  as loops, conditionals, functions, and parameter passing. No prior
+  programming experience is assumed, although students should know the
+  basics of using a computer (e.g., a web browser and a text editor)
+  and should be comfortable with mathematics through Algebra
+  I. Students with significant prior programming experience should
+  consider skipping CS100, with CS Department approval, and enrolling
+  in CS101 with the instructor’s permission.
+  #+end_quote
+
 * Sources
 
 - [[https://allendowney.github.io/ThinkPython/][Think Python (free online version, 3e)]] also [[https://github.com/TVsony/Complete-Python/blob/master/Think%20Python%20third%20Edition.pdf][as PDF]]
-- Learn Python the Hard Way (Kindle)
-- A Student's Tutorial to Physical Modeling with Python (paperback)
-- [[https://github.com/bterwijn/memory_graph][Memory graph data structure visualization]]
 
-* Week 1 - Overview / A fancy first example
+* Week 1 - Overview and Getting Started with Python in Colab
 
 - [ ] Assigned reading
 - [ ] Class workflow
