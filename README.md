@@ -1,4 +1,4 @@
-![img](./img/cover.png)
+![img](./img/breughel_babel_1563.jpg)
 
 
 # Introduction to Programming (with Python)
