@@ -1,4 +1,4 @@
-#+TITLE:Introduction to Colab with Python (CS100)
+G#+TITLE:Introduction to Colab with Python (CS100)
 #+AUTHOR:Marcus Birkenkrahe with ChatGPT
 #+SUBTITLE:CS 100, Intro to Programming (with Python), Catholic Polytechnic University, Summer 26
 #+STARTUP: overview hideblocks indent
@@ -835,7 +835,7 @@ Add a new code cell and do all of this:
 
 5. Make a graph with your own =x= and =x= values:
 
-   #+begin_src python :file plot.png :results file graphics output :exports both :session *Python* :python python3 
+   #+begin_src python :file ../img/sommerfeldt.png :results file graphics output :exports both :session *Python* :python python3 
      import matplotlib.pyplot as plt
 
      x = ["Pi", "Euler", "Sommerfeld"]
@@ -843,10 +843,11 @@ Add a new code cell and do all of this:
 
      plt.plot(x, y, marker="o", linestyle="--")
      plt.title("Pi, Euler number, and Sommerfeld's constant")
+     plt.savefig("../img/sommerfeldt.png")
    #+end_src
 
    #+RESULTS:
-   [[file:plot.png]]
+   [[file:../img/sommerfeldt.png]]
 
    These constants are also built-in:
    #+begin_src python :results output :exports both :session *Python* :python python3 
