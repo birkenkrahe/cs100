@@ -7,7 +7,7 @@ G#+TITLE:Introduction to Colab with Python (CS100)
 * Sources
 
 - Introduction_to_Colab_with_Python_(CS100)_full_script.ipynb
-- Starter code: [[https://is.gd/6nAJtZ][is.gd/6nAJtZ]]
+- Starter code: [[https://is.gd/6nAJtZ][is.gd/6nAJtZ]] (empty
 
 * Objectives
 
@@ -357,7 +357,7 @@ Python distinguishes between text and numbers - at the user level.
 
 At the machine level, only numbers are known: The letter =A= for example
 corresponds to the ASCII code =65=:
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   print(ord('A')) # converts character string to ASCII number
   print(chr(65))  # converts ASCII number to character string
   print(type(ord('A'))) # it's an int[eger]
@@ -371,7 +371,7 @@ corresponds to the ASCII code =65=:
 : <class 'str'>
 
 Compare the results from these cells:
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   print(33)
   print("33")
 #+end_src
@@ -382,7 +382,7 @@ Compare the results from these cells:
 
 No difference in the display, but as you will see, the ~type~ is
 different:
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   print(type(33))   # integer
   print(type("33")) # string
 #+end_src
@@ -392,7 +392,7 @@ different:
 : <class 'str'>
 
 Introducing operations changes the picture:
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   print(2 + 3)
   print("2" + "3")
 #+end_src
@@ -411,7 +411,7 @@ symbol but the operator executes a *concatenation* of two strings.
 
 A *variable* stores a *value* so that we can use it later.
 
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   name = "Adam"
   print(name)
 #+end_src
@@ -419,7 +419,7 @@ A *variable* stores a *value* so that we can use it later.
 #+RESULTS:
 : Adam
 
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   x = 11
   y = 22
   print( x + y)
@@ -435,7 +435,7 @@ Try this:
 - Store the name of this course in it.
 
 Solution:
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   name = "Eve"
   print(name)
   x = 2
@@ -456,7 +456,7 @@ Solution:
 
 Python can make simple graphics.
 
-#+begin_src python :file ../img/plt.png :results file graphics output :exports both :session *Python* :python python3 
+#+begin_src python :file ../img/plt.png :results file graphics output :exports both :session *Python* :python python3
   import matplotlib.pyplot as plt # import library for graphics
 
   x = [1,2,3,4,5]    # list
@@ -482,7 +482,7 @@ What's going on here?
 Try this:
 - Change the numbers in =y= and run the cell again: How would you
   describe the results?
-  
+
   #+begin_example python
   y2 = [1,2,3,4,5]      # linear function y = x
   y3 = [5,4,3,2,1]      # negative slope y = -x + 6
@@ -491,7 +491,7 @@ Try this:
 
 - Show all three functions in the same plot:
   #+name: linear function
-  #+begin_src python :file ../img/plt2.png :results file graphics output :exports both :session *Python* :python python3 
+  #+begin_src python :file ../img/plt2.png :results file graphics output :exports both :session *Python* :python python3
     y2 = [1,2,3,4,5]
     y3 = [5, 4, 3, 2, 1]
     y4 = [1, 8, 27, 64, 125]
@@ -614,38 +614,6 @@ Try this:
 - Tighten the layout with ~fig.tight_layout()~
 - Save the plot to a file ="cdc.png"=
 
-#+begin_src python :file ../img/cdc.png :results file graphics output :exports both :session *Python* :python python3 
-  import matplotlib.pyplot as plt
-
-  fig, ax1 = plt.subplots(figsize=(10,5))
-  ax1.plot(year,
-           rate,
-           linewidth = 2,
-           label = "rate")
-  ax1.set_xlabel("Year")
-  ax1.set_ylabel("Rate per 1,000 women aged 15-44")
-  ax1.set_title("Legal induced abortions, United States (CDC)")
-  ax2 = ax1.twinx()
-  ax2.plot(year,
-           total_1000s,
-           linewidth = 2,
-           linestyle = "--",
-           label = "total")
-  plt.savefig("../img/cdc.png")
-#+end_src
-
-#+RESULTS:
-[[file:../img/cdc.png]]
-
-Interpretation:
-#+begin_quote
-- The data begin in 1973 with Roe vs. Wade, which legalized abortion.
-- Peak around 1980 when the system is reset to "abortion is legal".
-- 1995-2008: Rate plateaus while count drops - fewer women in range.
-- The curves track closely until 1998 - population change not driver.
-- Drop in count due to long-acting contraception devices.
-#+end_quote
-
 * Repetition with a loop
 
 Data usually come in bulk, as a result of measurements, and they are
@@ -659,7 +627,7 @@ five data points only. They are generated by the ~range()~ function.
 Then, for every data point, or value of the range, a message is
 printed:
 
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   for i in range(5):
       print("Python is running", i)
 #+end_src
@@ -676,9 +644,9 @@ that the ~range()~ argument (5) is an upper bound and not included.
 
 Try this:
 - Change =range(5)= to =range(3)=
-- Change the variable inside ~print(...)~ 
+- Change the variable inside ~print(...)~
 
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   for i in range(3):
       print("Quadratic loop values:", i, "square is", i**2)
 #+end_src
@@ -702,7 +670,7 @@ pseudo random numbers can be regenerated identically for a given seed.
 This code uses the ~for~ loop to generate a ~range~ of 5 integer random
 numbers between 1 and 10.
 
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   import random
 
   for i in range(5):
@@ -720,13 +688,13 @@ Try this:
 - Change the range of random numbers.
 - Add =random.seed(325)= and see what happens.
 
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   import random
   random.seed(325) # 325 AD Council of Nicea (resolved the Arian heresy)
   for i in range(5):
       print(random.randint(1,10))
 #+end_src
-  
+
 * Errors are normal
 
 This cell (run on the shell) contains a so-called ~SyntaxError~:
@@ -775,12 +743,12 @@ Add a new code cell and do all of this:
 - Print the result of =7 * 8=
 - Assign the result of =7 * 8= to a variable =x= and print it
 
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   print("Marcus Birkenkrahe")
   print(7 * 8)
   x = 7 * 8
   print(x)
-#+end_src  
+#+end_src
 
 #+RESULTS:
 : Marcus Birkenkrahe
@@ -790,7 +758,7 @@ Add a new code cell and do all of this:
 * Challenges
 
 1. Print your favorite number:
-   #+begin_src python :results output :exports both :session *Python* :python python3 
+   #+begin_src python :results output :exports both :session *Python* :python python3
      print(1/137) # the fine-structure constant (Sommerfeld's constant)
    #+end_src
 
@@ -798,7 +766,7 @@ Add a new code cell and do all of this:
    : 0.0072992700729927005
 
 2. Create two variables with numbers and print their sum:
-   #+begin_src python :results output :exports both :session *Python* :python python3 
+   #+begin_src python :results output :exports both :session *Python* :python python3
      x = 33
      y = 12
      print(x + y)
@@ -808,7 +776,7 @@ Add a new code cell and do all of this:
    : 45
 
 3. Print the numbers 1 through 5 using a loop
-   #+begin_src python :results output :exports both :session *Python* :python python3 
+   #+begin_src python :results output :exports both :session *Python* :python python3
      for i in range(5):
          print(i + 1)
    #+end_src
@@ -821,7 +789,7 @@ Add a new code cell and do all of this:
    : 5
 
 4. Generate three random numbers between 1 and 20 using a loop:
-   #+begin_src python :results output :exports both :session *Python* :python python3 
+   #+begin_src python :results output :exports both :session *Python* :python python3
      import random
 
      for i in range(3):
@@ -835,7 +803,7 @@ Add a new code cell and do all of this:
 
 5. Make a graph with your own =x= and =x= values:
 
-   #+begin_src python :file ../img/sommerfeldt.png :results file graphics output :exports both :session *Python* :python python3 
+   #+begin_src python :file ../img/sommerfeldt.png :results file graphics output :exports both :session *Python* :python python3
      import matplotlib.pyplot as plt
 
      x = ["Pi", "Euler", "Sommerfeld"]
@@ -850,7 +818,7 @@ Add a new code cell and do all of this:
    [[file:../img/sommerfeldt.png]]
 
    These constants are also built-in:
-   #+begin_src python :results output :exports both :session *Python* :python python3 
+   #+begin_src python :results output :exports both :session *Python* :python python3
      import math
      from scipy.constants import fine_structure
 
@@ -863,5 +831,3 @@ Add a new code cell and do all of this:
    : 3.141592653589793
    : 2.718281828459045
    : 0.0072973525643
-
-   
