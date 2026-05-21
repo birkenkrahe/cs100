@@ -456,18 +456,18 @@ Solution:
 
 Python can make simple graphics.
 
-#+begin_src python :file plot.png :results file graphics output :exports both :session *Python* :python python3 
+#+begin_src python :file ../img/plt.png :results file graphics output :exports both :session *Python* :python python3 
   import matplotlib.pyplot as plt # import library for graphics
 
   x = [1,2,3,4,5]    # list
   y = [1,4,9,16,25]  # another list
 
   plt.plot(x,y)  # plot y = f(x)
-  plt.savefig("plot.png") # save the plot in a PNG file
+  plt.savefig("../img/plt.png") # save the plot in a PNG file
 #+end_src
 
 #+RESULTS:
-[[file:plot.png]]
+[[file:../img/plt.png]]
 
 What's going on here?
 #+begin_quote
@@ -491,7 +491,7 @@ Try this:
 
 - Show all three functions in the same plot:
   #+name: linear function
-  #+begin_src python :file plot2.png :results file graphics output :exports both :session *Python* :python python3 
+  #+begin_src python :file ../img/plt2.png :results file graphics output :exports both :session *Python* :python python3 
     y2 = [1,2,3,4,5]
     y3 = [5, 4, 3, 2, 1]
     y4 = [1, 8, 27, 64, 125]
@@ -502,12 +502,12 @@ Try this:
 
     plt.title("Three functions")
     plt.legend()
-    plt.savefig("plot2.png")
+    plt.savefig("../img/plt2.png")
   #+end_src
 
   #+RESULTS: linear function
-  [[file:plot2.png]]
-  
+  [[file:../img/plt2.png]]
+
   This plot adds two more plot *customization* functions:
   - ~title()~ adds a title to the plot.
   - ~legend()~ adds a legend to the plot (using ~label~).
@@ -523,7 +523,7 @@ We download a public dataset and plot:
 
 Run the cell and inspect the graph.
 
-#+begin_src python :file NYCplot.png :results file graphics output :exports both :session *Python* :python python3
+#+begin_src python :file ../img/NYCplot.png :results file graphics output :exports both :session *Python* :python python3
   import pandas as pd
   import matplotlib.pyplot as plt
 
@@ -545,11 +545,11 @@ Run the cell and inspect the graph.
            linewidth=2)
   ax2.set_ylabel("Per capita water use [gallons/day]")
   fig.tight_layout()
-  plt.savefig("NYCplot.png")
+  plt.savefig("../img/NYCplot.png")
 #+end_src
 
 #+RESULTS:
-[[file:NYCplot.png]]
+[[file:../img/NYCplot.png]]
 
 Alternative data source: https://is.gd/CcdfoQ
 
@@ -614,7 +614,7 @@ Try this:
 - Tighten the layout with ~fig.tight_layout()~
 - Save the plot to a file ="cdc.png"=
 
-#+begin_src python :file cdc.png :results file graphics output :exports both :session *Python* :python python3 
+#+begin_src python :file ../img/cdc.png :results file graphics output :exports both :session *Python* :python python3 
   import matplotlib.pyplot as plt
 
   fig, ax1 = plt.subplots(figsize=(10,5))
@@ -631,10 +631,11 @@ Try this:
            linewidth = 2,
            linestyle = "--",
            label = "total")
+  plt.savefig("../img/cdc.png")
 #+end_src
 
 #+RESULTS:
-[[file:cdc.png]]
+[[file:../img/cdc.png]]
 
 Interpretation:
 #+begin_quote
