@@ -2,43 +2,52 @@
 #+AUTHOR:Marcus Birkenkrahe
 #+SUBTITLE:CS 100, Catholic Polytechnic University
 #+STARTUP: overview hideblocks indent entitiespretty:
-* Catalog
+#+attr_html: :width 600px :float nil:
+[[../img/breughel_babel_1563.jpg]]
 
-- 3 semester units, 45 clock hours
-- Description:
-  #+begin_quote
-  This is the first semester of the basic course in programming. We
-  will explore common computational problem-solving techniques useful
-  to computer scientists, but also to anyone who has large data sets,
-  repetitive processes, or other needs for computation. Students learn
-  to design and implement programs using variables, basic data types,
-  and simple data structures, with an emphasis on control issues such
-  as loops, conditionals, functions, and parameter passing. No prior
-  programming experience is assumed, although students should know the
-  basics of using a computer (e.g., a web browser and a text editor)
-  and should be comfortable with mathematics through Algebra
-  I. Students with significant prior programming experience should
-  consider skipping CS100, with CS Department approval, and enrolling
-  in CS101 with the instructor’s permission.
-  #+end_quote
+* Prayers
+** Opening Prayer (Standard)
+#+attr_html: :width 550px :float nil:
+[[../../img/opening_prayers.png]]
+** Closing Prayer (Aquinas)
+#+attr_html: :width 550px :float nil:
+[[../../img/closing_prayers.png]]
+** Why these prayers?
 
-* Sources
-
-- [[https://allendowney.github.io/ThinkPython/][Think Python (free online version, 3e)]] also [[https://github.com/TVsony/Complete-Python/blob/master/Think%20Python%20third%20Edition.pdf][as PDF]]
+- *The "Our Father"*, because we learn everything through him.
+- *The "Hail Mary"*, because we need trust and humility to learn.
+- *St. Albert the Great*, because he is the patron saint of scientists,
+  philosophers, and students of the natural sciences.
+- *St. Thomas Aquinas*, because he is the patron saint of Catholic
+  schools, universities, and scholars.
+- *St. Isidore of Seville*, because he is the patron saint of students,
+  scholars, the internet, computer users and encyclopedias.
+- *A student's prayer* is by St. Thomas Aquinas.
 
 * Week 1 - Overview and Getting Started with Python in Colab
 
+- [ ] Opening prayer
+- [ ] Syllabus walk-through
+- [ ] Course infrastructure
 - [ ] Assigned reading
 - [ ] Class workflow
-- [ ] Programming Assignments
-- [ ] DataCamp Assignments
+- [ ] Programming assignments
+- [ ] DataCamp assignments and walk-through
 - [ ] Getting started with Colab
-- [ ] Q&A
+- [ ] Next assignments
+- [ ] Wrap-up
+- [ ] Closing prayer
+
+** Course infrastructure
+
+- MS Teams -> assignments, quiz, recordings, chat, grades
+- GitHub -> class materials 
+- Colab -> Jupyter notebooks
 
 ** Assigned reading
 
 - You will be assigned one chapter per week of "Think Python" (3e) by
-  Allen B. Downey.
+  Allen B. Downey ([[https://github.com/TVsony/Complete-Python/blob/master/Think%20Python%20third%20Edition.pdf][PDF]])
 
 - The book is free: [[https://allendowney.github.io/ThinkPython/][allendowney.github.io/ThinkPython/]], and it comes
   with Colab notebooks, which means that you can run all code online.
@@ -94,13 +103,12 @@
 - Assignments are usually co-developed with AI but heavily edited and
   tested by me
 
-** DataCamp assignments
+** DataCamp assignments & walk-through
 
 - You will complete one DataCamp lesson per week.
 
-- Lessons are officially timed (e.g., 1–4 hours), but actual time
-  varies.
-
+- Timeframes are given (e.g. 1-4 hours) but actual time varies.
+  
 - When working carefully—running code outside the platform, testing
   variations, or researching errors—you should expect:~60–90 minutes
   per lesson.
@@ -117,14 +125,12 @@
   + Provide additional guided practice
   + Build fluency through repetition
     
-** Getting started with Google Colaboratory ("Colab")
+** Getting started with Python and Google Colaboratory ("Colab")
 
-- You'll learn Python through a form of "literate programming"
+- You'll learn Python through a form of "literate programming" with
+  Jupyter notebooks = text + Python code + output 
 
-- Open colab.research.google.com
-
-- As a student, you can get Colab Pro for a year:
-  [[https://colab.research.google.com/signup][colab.research.google.com/signup]] - you may not need it.
+- Open colab.research.google.com in your browser
 
 - Now, open [[https://is.gd/6nAJtZ][is.gd/6nAJtZ]] and code along with me.
 
@@ -136,7 +142,7 @@
 
 ** Next Assignments
 
-- *Bonus assignment:* Abortion statistics in the US.
+- *Bonus assignment:* Abortion statistics in the US (by August 28).
 
 - *Read* chapter 1, "Programming as a Way of Thinking" (pp. 1-10).
 
