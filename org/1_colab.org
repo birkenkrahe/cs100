@@ -1,4 +1,4 @@
-G#+TITLE:Introduction to Colab with Python (CS100)
+#+TITLE:Introduction to Colab with Python (CS100)
 #+AUTHOR:Marcus Birkenkrahe with ChatGPT
 #+SUBTITLE:CS 100, Intro to Programming (with Python), Catholic Polytechnic University, Summer 26
 #+STARTUP: overview hideblocks indent
@@ -7,7 +7,7 @@ G#+TITLE:Introduction to Colab with Python (CS100)
 * Sources
 
 - Introduction_to_Colab_with_Python_(CS100)_full_script.ipynb
-- Starter code: [[https://is.gd/6nAJtZ][is.gd/6nAJtZ]] (empty
+- Starter code: [[https://is.gd/6nAJtZ][is.gd/6nAJtZ]]
 
 * Objectives
 
@@ -584,7 +584,7 @@ Try this:
 - In a new code block, print =df.head()= to inspect the data
 - Change =figsize=(10,5)= to another size - e.g. (20,5)
 
-* Alternative example: Abortion statistics (bonus home assignment)
+* Alternative example: Abortion statistics (bonus assignment)
 
 As a challenge, use the following data to plot the legal induced
 abortions in the US between 1973 and 2000 according to CDC data:
@@ -622,7 +622,7 @@ Try this:
 - Do not use AI for this exercise: challenge yourself to type the code
   in yourself.
 - Submit the URL to your Colab notebook solution in the textbox to
-  this exercise.
+  the exercise
 
 * Repetition with a loop
 
@@ -765,36 +765,79 @@ Add a new code cell and do all of this:
 : 56
 : 56
 
-* Challenges (Home assignment)
+* Challenges (home assignment)
 
 1. Print your favorite number:
    #+begin_src python :results output :exports both :session *Python* :python python3
-
+     print(1/137) # the fine-structure constant (Sommerfeld's constant)
    #+end_src
+
+   #+RESULTS:
+   : 0.0072992700729927005
 
 2. Create two variables with numbers and print their sum:
    #+begin_src python :results output :exports both :session *Python* :python python3
-
+     x = 33
+     y = 12
+     print(x + y)
    #+end_src
+
+   #+RESULTS:
+   : 45
 
 3. Print the numbers 1 through 5 using a loop
    #+begin_src python :results output :exports both :session *Python* :python python3
-
+     for i in range(5):
+         print(i + 1)
    #+end_src
+
+   #+RESULTS:
+   : 1
+   : 2
+   : 3
+   : 4
+   : 5
 
 4. Generate three random numbers between 1 and 20 using a loop:
    #+begin_src python :results output :exports both :session *Python* :python python3
+     import random
 
+     for i in range(3):
+         print(random.randint(1,20))
    #+end_src
+
+   #+RESULTS:
+   : 8
+   : 8
+   : 20
 
 5. Make a graph with your own =x= and =x= values:
 
    #+begin_src python :file ../img/sommerfeldt.png :results file graphics output :exports both :session *Python* :python python3
+     import matplotlib.pyplot as plt
 
+     x = ["Pi", "Euler", "Sommerfeld"]
+     y = [3.14, 2.71, 1/137]
+
+     plt.plot(x, y, marker="o", linestyle="--")
+     plt.title("Pi, Euler number, and Sommerfeld's constant")
+     plt.savefig("../img/sommerfeldt.png")
    #+end_src
+
+   #+RESULTS:
+   [[file:../img/sommerfeldt.png]]
 
    These constants are also built-in:
    #+begin_src python :results output :exports both :session *Python* :python python3
+     import math
+     from scipy.constants import fine_structure
 
+     print(math.pi) # Pi
+     print(math.e)  # exp(1) = e
+     print(fine_structure)
    #+end_src
 
+   #+RESULTS:
+   : 3.141592653589793
+   : 2.718281828459045
+   : 0.0072973525643
