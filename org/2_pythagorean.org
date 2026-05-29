@@ -40,7 +40,7 @@ In Python, ~**~ is the exponentiation operator.
 #+RESULTS:
 : 25
 
-* Step 3: The hypotenuse — and a surprise
+* Step 3: The hypotenuse
 
 The square root of c_squared gives us c. A square root is the same as
 raising to the power 0.5, so ~c_squared**0.5~ works.
@@ -71,8 +71,16 @@ raising to the power 0.5, so ~c_squared**0.5~ works.
 : 5.0
 : <class 'float'>
 
-- ~round()~ cleans the display but the result is still a ~float~.
-- Compare: ~round(5.0, 2)~ vs ~round(4.999999, 2)~ — try both.
+- Here ~round()~ doesn't change the display — the answer is already clean.
+- Try =round(4.999999,2)=
+- The result is always a ~float~, rounded or not.
+
+#+begin_src python :results output :exports both :session *Python* :python python3 
+  print(round(4.999999,2))
+#+end_src
+
+#+RESULTS:
+: 5.0
 
 * Step 5: A non-Pythagorean triple
 
@@ -113,12 +121,12 @@ raising to the power 0.5, so ~c_squared**0.5~ works.
   a = 3
   b = 4
   c = round((a**2 + b**2)**0.5, 2)
-  print("Legs:        " + str(a) + " and " + str(b))
+  print("Legs:        " + str(float(a)) + " and " + str(float(b)))
   print("Hypotenuse:  " + str(c))
 #+end_src
 
 #+RESULTS:
-: Legs:        3 and 4
+: Legs:        3.0 and 4.0
 : Hypotenuse:  5.0
 
 - ~str()~ converts a number to a string so we can concatenate with ~+~.
@@ -155,7 +163,7 @@ Polish the output with a title and a separator that fits it exactly.
 
 #+begin_src python :results output :exports both :session *Python* :python python3
   title = "Pythagorean Theorem"
-  separator = "-" * len(title)
+  separator = "-" * len(title)  # generate line of dashes
   print(title)
   print(separator)
   a = 3
@@ -268,22 +276,30 @@ print(area)                 # prints 31.4 instead of 78.5
 - Comparisons (~>~, ~<~, ~==~, etc.) return a ~bool~: ~True~ or ~False~
 - ~len(s)~ returns the number of characters in string ~s~
 - ~"x" * n~ repeats string ~"x"~ n times
+- Python has three error families: syntax, runtime, and semantic
+- Syntax errors prevent the code from running at all
+- Runtime errors crash the program at the failing line
+- Semantic errors produce no message but give the wrong answer
 
 * Glossary
 
-| Term       | Meaning                                            |
-|------------+----------------------------------------------------|
-| ~**~         | Exponentiation operator (power or root)            |
-| ~**0.5~      | Square root written as a fractional exponent       |
-| ~float~      | Number with a decimal point                        |
-| ~int~        | Whole number without a decimal point               |
-| ~bool~       | Boolean type: ~True~ or ~False~                        |
-| ~type()~     | Returns the data type of a value                   |
-| ~round()~    | Rounds a float to a given number of decimal places |
-| ~abs()~      | Returns the absolute (non-negative) value          |
-| ~str()~      | Converts a value to a string                       |
-| expression | Combination of values and operators                |
-| nested     | An expression used inside another expression       |
-| comparison | Expression using ~>~, ~<~, ~==~, etc.; returns ~bool~      |
-| ~len()~      | Returns the number of characters in a string       |
-| ~*~          | Repeats a string when used with a string and ~int~   |
+| Term              | Meaning                                            |
+|-------------------+----------------------------------------------------|
+| ~**~                | Exponentiation operator (power or root)            |
+| ~**0.5~             | Square root written as a fractional exponent       |
+| ~float~             | Number with a decimal point                        |
+| ~int~               | Whole number without a decimal point               |
+| ~bool~              | Boolean type: ~True~ or ~False~                        |
+| ~type()~            | Returns the data type of a value                   |
+| ~round()~           | Rounds a float to a given number of decimal places |
+| ~abs()~             | Returns the absolute (non-negative) value          |
+| ~str()~             | Converts a value to a string                       |
+| expression        | Combination of values and operators                |
+| nested            | An expression used inside another expression       |
+| comparison        | Expression using ~>~, ~<~, ~==~, etc.; returns ~bool~      |
+| ~len()~             | Returns the number of characters in a string       |
+| ~*~                 | Repeats a string when used with a string and ~int~   |
+| syntax error      | Code Python cannot parse — caught before running   |
+| indentation error | Wrong indent — a kind of syntax error              |
+| runtime error     | Crash during execution (e.g. ~NameError~, ~TypeError~) |
+| semantic error    | Runs without crashing but produces the wrong answer |
