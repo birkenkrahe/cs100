@@ -230,10 +230,143 @@ channel. Please read it carefully and get back to me with questions!
 
 * Week 2 - Programming as a way of thinking (chapter 1)
 
-- [ ] Review: Programming as a Way of Thinking: [[file:books/tp_ch1.org][See lecture.]]
-- [ ] Next week (June 5th) there will be no class meeting
-- [ ] Instead, I will record a code along lecture for chapter 2
-- [ ] Chapter 2 deals with variable and statements
+- [ ] *Opening prayer*
+- [ ] *Info:* Changes to the Teams dashboard
+- [ ] *Review:* What did you achieve this week?
+- [ ] *Review:* Code along as I explore Pythagoras' theorem
+- [ ] *Info:* Next week (June 5th) there will be *no class meeting*
+- [ ] *New assignments* for the next two weeks: reading + quiz + code
+- [ ] *Closing prayer*
+
+** Opening prayer (Ps 126 + Our Father)
+
+#+begin_verse
+Unless the Lord build the house,
+they labour in vain that build it.
+Unless the Lord keep the city,
+he watcheth in vain that keepeth it."
+— Psalm 126:1,
+
+---
+
+*Our Father, who art in heaven,*
+*hallowed be Thy name,*
+*Thy kingdom come,*
+*Thy will be done*
+*on Earth as it is in heaven.*
+
+Give us this day our daily bread
+and forgive us our trespasses,
+as we forgive those who trespass against us,
+and lead us not into temptation,
+but deliver us from evil.
+
+Amen.
+#+end_verse
+** Review: Textbook chapter 1 "Programming as a way of thinking" (5')
+
+- Did you read it? How? Interactive or reading only?
+- What did you think of it?
+- Did you do any of the exercises yet?
+- What do you think about the title of the textbook chapter?
+
+Content:  
+- Arithmetic operators - standard and special
+- Arithmetic functions - ~round(), ~abs()~
+- Strings and string functions - ~str()~, ~len()~
+- Values and types - ~type()~, ~int()~, ~float()~
+- Formal vs. natural languages
+- Debugging
+- Exercises
+- Glossary
+
+*Next*:
+- Chapter 2, Variables and Statements (May 29 - June 5)
+- Chapter 3, Functions (June 5 - June 12)
+
+** Review: DataCamp "Intro to Python" lesson 1 "Python Basics" (5')
+#+attr_html: :width 400px :float nil:
+[[../img/datalab.png]]
+
+- How did you work through the lesson? Any questions?
+- Did you try the datalab workbook? (Jupyter notebook like Colab)
+- Did you do a practice exercise (nice way to keep streak fresh)?
+- Did you check out any other DataCamp courses?
+
+Content:
+- Printing to the display
+- Python as a calculator
+- Variables and types 
+- Variable assignment
+- Calculations with variables
+  
+** Warm up coding (in Colab)
+
+- Open the starter code from my GitHub gists in Colab:
+  ~gist.github.com/birkenkrahe/~ -> =Arithmetic exercises (Starter)=
+
+  or: [[https://tinyurl.com/arithmetic-exercises][tinyurl.com/arithmetic-exercises]] (there's a button)
+  
+- Solve the exercises on your own (no AI), then let's compare
+
+- The last two exercises are given as a bonus assignment for home
+
+- There is also a harder bonus assignment with tricky formulas,
+  "Formula translator" (graded)
+
+** Code along: Pythagoras
+
+- Open this gist on GitHub: [[https://tinyurl.com/python-pythagoras][tinyurl.com/python-pythagoras]]
+
+- Open the gist in Colab (there's a button)
+
+- Code along with me and ask questions along the way
+
+- Your programming assignment this week ("Pay stub") is very similar
+
+** New assignments
+
+*Week 2: May 29-June 5*
+
+1. *Submit* quiz 2 
+2. *Complete* and submit a home programming assignment
+3. *Read* chapter 2 of the textbook, "Variables and statements"
+4. *Complete* lesson 2 of the DataCamp course "Python lists"
+
+*Week 3: June 5-June 12* 
+
+1. *Submit* quiz 3
+2. *Complete* and submit a home programming assignment
+3. *Read* chapter 3 of the textbook, "Functions"
+4. *Complete* lesson 3 of the DataCamp course "Functions and packages"
+
+** Closing Prayer (1 Cor 13:11-12 + Hail Mary)
+
+#+begin_verse
+When I was a child, I spoke as a child,
+I understood as a child, I thought as a child.
+But, when I became a man,
+I put away the things of a child.
+
+We see now through a glass in a dark manner;
+but then face to face. Now I know in part;
+but then I shall know even as I am known."
+— 1 Cor 13:11-12
+
+---
+
+*Hail Mary, full of grace,*
+*the Lord is with Thee.*
+*Blessed art Though among women*
+*and blessed is the fruit of Thy womb, Jesus.*
+
+Holy Mary, Mother of God,
+pray for us sinners,
+now and in the our of our death.
+
+Amen.
+#+end_verse
+
 
 * Week 3 - Variables and Statements (chapter 2)
 

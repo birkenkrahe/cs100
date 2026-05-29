@@ -1,0 +1,289 @@
+#+TITLE: Pythagorean Theorem in Python
+#+STARTUP: overview hideblocks indent entitiespretty:
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :results output :exports both :python python3
+
+* Overview
+
+Explore Python's arithmetic, types, and built-in functions by
+computing the hypotenuse of a right triangle step by step.
+
+The Pythagorean theorem: for a right triangle with legs a and b,
+the hypotenuse c satisfies:
+
+  c² = a² + b²   →   c = √(a² + b²)
+
+* Step 1: Squaring the legs
+
+In Python, ~**~ is the exponentiation operator.
+
+#+begin_src python :results output :exports both :session *Python* :python python3 
+  a = 3
+  b = 4
+  a_squared = a**2
+  b_squared = b**2
+  print(a_squared)
+  print(b_squared)
+#+end_src
+
+#+RESULTS:
+: 9
+: 16
+
+* Step 2: Sum of squares
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  c_squared = a_squared + b_squared
+  print(c_squared)
+#+end_src
+
+#+RESULTS:
+: 25
+
+* Step 3: The hypotenuse — and a surprise
+
+The square root of c_squared gives us c. A square root is the same as
+raising to the power 0.5, so ~c_squared**0.5~ works.
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  c = c_squared**0.5
+  print(c)
+  print(type(c))
+#+end_src
+
+#+RESULTS:
+: 5.0
+: <class 'float'>
+
+- The answer is ~5.0~, not ~5~. Why?
+- ~**0.5~ *always* returns a ~float~, even when the result is a whole number.
+- ~type()~ lets us inspect this directly.
+
+* Step 4: Clean up with ~round()~
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  c = round(c_squared**0.5, 2)
+  print(c)
+  print(type(c))
+#+end_src
+
+#+RESULTS:
+: 5.0
+: <class 'float'>
+
+- ~round()~ cleans the display but the result is still a ~float~.
+- Compare: ~round(5.0, 2)~ vs ~round(4.999999, 2)~ — try both.
+
+* Step 5: A non-Pythagorean triple
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  a = 5
+  b = 7
+  c = round((a**2 + b**2)**0.5, 4)
+  print(c)
+#+end_src
+
+#+RESULTS:
+: 8.6023
+
+- The expression ~(a**2 + b**2)**0.5~ nests one expression inside another.
+- Python evaluates the inner parentheses first (order of operations).
+- Compare with the step-by-step version — same result, one line.
+
+* Step 6: What does ~abs()~ add?
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  a = -3
+  b = 4
+  c = round((a**2 + b**2)**0.5, 2)
+  print(c)
+  print(abs(a))
+#+end_src
+
+#+RESULTS:
+: 5.0
+: 3
+
+- Squaring removes the sign: ~(-3)**2 == 9~, same as ~3**2~.
+- ~abs()~ gives the positive value directly when you need it.
+
+* Step 7: Readable output
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  a = 3
+  b = 4
+  c = round((a**2 + b**2)**0.5, 2)
+  print("Legs:        " + str(a) + " and " + str(b))
+  print("Hypotenuse:  " + str(c))
+#+end_src
+
+#+RESULTS:
+: Legs:        3 and 4
+: Hypotenuse:  5.0
+
+- ~str()~ converts a number to a string so we can concatenate with ~+~.
+- Without ~str()~, Python raises a ~TypeError~. Try it.
+
+* Step 8: Booleans — a fourth type
+
+Comparisons in Python return a ~bool~: either ~True~ or ~False~.
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  a = 3
+  b = 4
+  c = round((a**2 + b**2)**0.5, 2)
+  print(c > a)
+  print(c > b)
+  print(c > a + b)
+  print(type(c > a))
+#+end_src
+
+#+RESULTS:
+: True
+: True
+: False
+: <class 'bool'>
+
+- The hypotenuse is always longer than either leg: both comparisons are ~True~.
+- But it is never longer than the sum of both legs: ~False~.
+- ~bool~ is Python's fourth basic type alongside ~int~, ~float~, and ~str~.
+- Comparison operators: ~>~, ~<~, ~>=~, ~<=~, ~==~, ~!=~
+
+* Step 9: Strings — ~len()~ and repetition
+
+Polish the output with a title and a separator that fits it exactly.
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  title = "Pythagorean Theorem"
+  separator = "-" * len(title)
+  print(title)
+  print(separator)
+  a = 3
+  b = 4
+  c = round((a**2 + b**2)**0.5, 2)
+  print("Legs:        " + str(a) + " and " + str(b))
+  print("Hypotenuse:  " + str(c))
+#+end_src
+
+#+RESULTS:
+: Pythagorean Theorem
+: -------------------
+: Legs:        3 and 4
+: Hypotenuse:  5.0
+
+- ~len(title)~ counts the characters in the string: try ~print(len(title))~.
+- ~"-" * 19~ repeats the string 19 times — ~*~ means repetition for strings.
+- The separator auto-fits: change ~title~ and it adjusts without touching ~separator~.
+- Contrast: ~+~ joins strings, ~*~ repeats them.
+
+* Step 10: A gallery of errors
+
+Python errors fall into three families: /syntax/ errors (bad grammar —
+Python refuses to run), /runtime/ errors (crash during execution), and
+/semantic/ errors (runs, but gives the wrong answer — no message at all).
+
+Each block below runs independently so one error does not affect the next.
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+# SyntaxError — Python cannot parse the code
+print("hello"
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+# IndentationError — unexpected indent (a kind of SyntaxError)
+x = 1
+  y = 2
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+# NameError — variable used before it was defined
+print(age)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+# TypeError — wrong type for the operation
+"3" + 3
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+# ValueError — right type, but the value makes no sense
+int("hello")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+# ZeroDivisionError — dividing by zero
+10 / 0
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+# ImportError — module does not exist
+import pandamonium
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+# IndexError — index beyond the list length
+x = [1, 2, 3]
+print(x[5])
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+# Semantic error — runs, but gives the wrong answer (no message!)
+radius = 5
+area = 2 * 3.14 * radius    # forgot radius**2
+print(area)                 # prints 31.4 instead of 78.5
+#+end_src
+
+#+RESULTS:
+: 31.400000000000002
+
+- Syntax and indentation errors are caught /before/ the code runs.
+- Runtime errors crash the program /at the line/ that fails.
+- Semantic errors are the sneakiest: Python is happy, but you are not.
+
+* Summary
+
+- ~**~ computes any power: ~a**2~ squares, ~a**0.5~ takes the square root
+- ~**0.5~ always returns a ~float~
+- ~type()~ reveals the data type of any value
+- ~round(value, n)~ rounds to n decimal places — result is still a ~float~
+- ~abs()~ returns the non-negative value
+- Expressions can be nested: ~(a**2 + b**2)**0.5~
+- ~str()~ converts a number to a string for concatenation with ~+~
+- Comparisons (~>~, ~<~, ~==~, etc.) return a ~bool~: ~True~ or ~False~
+- ~len(s)~ returns the number of characters in string ~s~
+- ~"x" * n~ repeats string ~"x"~ n times
+
+* Glossary
+
+| Term       | Meaning                                            |
+|------------+----------------------------------------------------|
+| ~**~         | Exponentiation operator (power or root)            |
+| ~**0.5~      | Square root written as a fractional exponent       |
+| ~float~      | Number with a decimal point                        |
+| ~int~        | Whole number without a decimal point               |
+| ~bool~       | Boolean type: ~True~ or ~False~                        |
+| ~type()~     | Returns the data type of a value                   |
+| ~round()~    | Rounds a float to a given number of decimal places |
+| ~abs()~      | Returns the absolute (non-negative) value          |
+| ~str()~      | Converts a value to a string                       |
+| expression | Combination of values and operators                |
+| nested     | An expression used inside another expression       |
+| comparison | Expression using ~>~, ~<~, ~==~, etc.; returns ~bool~      |
+| ~len()~      | Returns the number of characters in a string       |
+| ~*~          | Repeats a string when used with a string and ~int~   |
