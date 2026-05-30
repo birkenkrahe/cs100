@@ -1,0 +1,163 @@
+#+TITLE: CS 100 – Week 1 Quiz
+#+SUBTITLE: Course Rules, Colab Interface, and Python Basics
+#+DATE: Summer 2026
+#+OPTIONS: toc:nil num:nil
+
+25 questions · No time limit · Open materials permitted
+Correct answers marked with [*]
+
+* Part A: Course Rules and Infrastructure
+
+** Q1. Where can students find the course syllabus?
+   - Emailed directly to students
+   - On the instructor's personal website
+   - In the GitHub repository
+   - [*] In MS Teams > General channel
+
+** Q2. Which three platforms make up the course infrastructure?
+   - Blackboard, GitLab, Jupyter Hub
+   - [*] MS Teams, GitHub, Google Colab
+   - Canvas, GitHub, DataCamp
+   - MS Teams, Dropbox, Replit
+
+** Q3. How does the instructor primarily communicate weekly assignments to students?
+   - Through GitHub commit messages
+   - Via Canvas announcements
+   - By email to a distribution list
+   - [*] A weekly post in the MS Teams General channel
+
+** Q4. What is the policy on using AI tools such as ChatGPT or Claude in this course?
+   - Permitted without any conditions
+   - Permitted only for quizzes
+   - [*] Permitted and encouraged, but you must be able to explain every detail of your code
+   - Prohibited under all circumstances
+
+** Q5. Approximately how much time per week should students budget for this course (upper limit)?
+   - 10 or more hours
+   - 2 hours
+   - 30 minutes
+   - [*] About 6 hours (roughly 1 hour per day, 6 days)
+
+** Q6. What happens if a programming assignment is submitted after the deadline?
+   - It is accepted with no penalty
+   - It must be resubmitted the following week
+   - It receives a zero
+   - [*] It receives 50% of the available points
+
+** Q7. How are the multiple-choice quizzes designed in this course?
+   - Timed, closed-book, 30-minute limit
+   - Timed, 10 questions, 15-minute limit
+   - [*] Untimed; you can keep them open and use course materials to find answers
+   - Oral quizzes conducted via Teams video
+
+** Q8. What is the required Google account used for in this course?
+   - Accessing Google Drive for shared files
+   - Joining the course Teams channel
+   - [*] Running Jupyter notebooks in Google Colab
+   - Submitting assignments via Google Classroom
+
+* Part B: Google Colab and Notebook Concepts
+
+** Q9. What is the first step you should take when the instructor shares a starter Colab notebook?
+   - Run all cells immediately
+   - [*] File > Save a copy in Drive, so you have your own editable version
+   - Download it as a .py file
+   - Share it with a classmate before editing
+
+** Q10. What keyboard shortcut runs a code cell in Google Colab?
+   - Alt + Enter
+   - Ctrl + R
+   - [*] Ctrl + Enter or Shift + Enter
+   - F5
+
+** Q11. When you explore the Files panel in Colab and navigate to the parent directory, what kind of environment does it reveal?
+   - A Windows Server virtual machine
+   - [*] A Linux virtual machine running in the cloud
+   - A Docker container running Python only
+   - A macOS container
+
+** Q12. In the Colab Editor settings, which option should remain CHECKED for beginners?
+   - Enable code completions
+   - [*] Syntax checking
+   - Show line numbers
+   - Inline variable inspector
+
+** Q13. What is a Jupyter notebook, in the context of this course?
+   - A spreadsheet for tracking grades
+   - [*] A combined file containing text, runnable Python code, and output in one place
+   - A video streaming platform for lectures
+   - A PDF reader for the textbook
+
+** Q14. What does the term 'literate programming' refer to as used in this course?
+   - Writing programs that pass a grammar checker
+   - Reading code written by experienced programmers
+   - A certification for advanced Python developers
+   - [*] Combining prose explanations with runnable code in the same document
+
+** Q15. In a Colab text cell, which symbol (or symbols) creates a second-level Markdown heading?
+   - // Heading
+   - [*] ## Heading
+   - <Heading>
+   - ** Heading **
+
+** Q16. In Markdown (as demonstrated in the notebook), what syntax produces a bulleted list item?
+   - > item
+   - [*] - item (dash + space)
+   - # item
+   - * item (asterisk + space)
+
+* Part C: Python Basics (Demo Notebook Sections 1–5)
+
+** Q17. What does print("Hello, Python!") do?
+   - Stores the text in a variable
+   - [*] Displays the text Hello, Python! as output
+   - Opens a dialog box with the text
+   - Sends the text to a file
+
+** Q18. What is the result of the Python expression 17 % 3?
+   - 5
+   - 5.67
+   - [*] 2
+   - 0
+
+** Q19. What is the result of 17 // 3 in Python?
+   - 2
+   - [*] 5
+   - 5.67
+   - 6
+
+** Q20. What is the result of 2 ** 5 in Python?
+   - 25
+   - 7
+   - [*] 32
+   - 10
+
+** Q21. Given the expression 3 + 4 * 5, what does Python evaluate it to, and why?
+   - 35, because Python evaluates left to right
+   - 60, because Python multiplies all terms first
+   - [*] 23, because multiplication has higher precedence than addition
+   - 20, because Python adds before multiplying
+
+** Q22. What is the output of print("2" + "3") in Python?
+   - An error
+   - "2+3"
+   - [*] 23
+   - 5
+
+** Q23. In the notebook demo, after running these two cells independently — print(2 + 3) vs. print("2" + "3") — what is the key lesson?
+   - The + operator always returns a string
+   - [*] Python distinguishes between numeric types and string (text) types
+   - Strings and integers look the same to Python
+   - Python cannot add numbers without print()
+
+** Q24. After running name = "Adam" followed by print(name), what appears in the output?
+   - [*] Adam
+   - An error because name is not defined
+   - name
+   - "Adam"
+
+** Q25. In Section 5 of the demo notebook, which Python library is imported to produce a simple line plot?
+   - [*] matplotlib.pyplot
+   - numpy
+   - seaborn
+   - plotly
