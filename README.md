@@ -33,5 +33,5 @@
 
 # History
 
--   First offered @CPU: Summer 2026
+-   First offered @CPU: Fall 2025 (Java) / Summer 2026 (Python)
 
