@@ -302,10 +302,9 @@ Content:
   
 ** Warm up coding (in Colab)
 
-- Open the starter code from my GitHub gists in Colab:
-  ~gist.github.com/birkenkrahe/~ -> =Arithmetic exercises (Starter)=
+- Open the starter code in Colab: [[https://tinyurl.com/arithmetic-starter][tinyurl.com/arithmetic-starter]]
 
-  or: [[https://tinyurl.com/arithmetic-exercises][tinyurl.com/arithmetic-exercises]] (there's a button)
+- Copy the file to your GDrive to be able to edit it
   
 - Solve the exercises on your own (no AI), then let's compare
 
@@ -316,9 +315,9 @@ Content:
 
 ** Code along: Pythagoras
 
-- Open this gist on GitHub: [[https://tinyurl.com/python-pythagoras][tinyurl.com/python-pythagoras]]
+- Open the starter code in Colab: [[https://tinyurl.com/pythagoras-python][tinyurl.com/pythagoras-python]]
 
-- Open the gist in Colab (there's a button)
+- Copy the file to your GDrive to be able to edit it
 
 - Code along with me and ask questions along the way
 
@@ -368,6 +367,7 @@ Amen.
 #+end_verse
 
 
-* Week 3 - Variables and Statements (chapter 2)
 
-* Week 4 - Functions (chapter 3)
+
+
+
