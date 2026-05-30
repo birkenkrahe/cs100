@@ -24,7 +24,7 @@
   scholars, the internet, computer users and encyclopedias.
 - *A student's prayer* is by St. Thomas Aquinas.
 
-* Week 1 - Overview and Getting Started with Python in Colab
+* DONE Week 1 - Overview and Getting Started with Python in Colab
 
 - [X] Opening prayer
 - [X] About your instructor
@@ -228,15 +228,15 @@ channel. Please read it carefully and get back to me with questions!
 - Python is good for scientific computing (using math functions)
 - New vocabulary
 
-* Week 2 - Programming as a way of thinking (chapter 1)
+* DONE Week 2 - Programming as a way of thinking (chapter 1)
 
-- [ ] *Opening prayer*
-- [ ] *Info:* Changes to the Teams dashboard
-- [ ] *Review:* What did you achieve this week?
-- [ ] *Review:* Code along as I explore Pythagoras' theorem
-- [ ] *Info:* Next week (June 5th) there will be *no class meeting*
-- [ ] *New assignments* for the next two weeks: reading + quiz + code
-- [ ] *Closing prayer*
+- [X] *Opening prayer*
+- [X] *Info:* Changes to the Teams dashboard
+- [X] *Review:* What did you achieve this week?
+- [X] *Review:* Code along as I explore Pythagoras' theorem
+- [X] *Info:* Next week (June 5th) there will be *no class meeting*
+- [X] *New assignments* for the next two weeks: reading + quiz + code
+- [X] *Closing prayer*
 
 ** Opening prayer (Ps 126 + Our Father)
 
@@ -285,7 +285,7 @@ Content:
 - Chapter 3, Functions (June 5 - June 12)
 
 ** Review: DataCamp "Intro to Python" lesson 1 "Python Basics" (5')
-#+attr_html: :width 400px :float nil:
+#+attr_html: :width 600px :float nil:
 [[../img/datalab.png]]
 
 - How did you work through the lesson? Any questions?
@@ -310,10 +310,10 @@ Content:
 
 - The last two exercises are given as a bonus assignment for home
 
-- There is also a harder bonus assignment with tricky formulas,
+- There is another bonus assignment with tricky formulas,
   "Formula translator" (graded)
 
-** Code along: Pythagoras
+** Code along: Pythagoras in Python
 
 - Open the starter code in Colab: [[https://tinyurl.com/pythagoras-python][tinyurl.com/pythagoras-python]]
 
@@ -338,6 +338,16 @@ Content:
 2. *Complete* and submit a home programming assignment
 3. *Read* chapter 3 of the textbook, "Functions"
 4. *Complete* lesson 3 of the DataCamp course "Functions and packages"
+
+
+** Wrap-up
+
+- Pseudocode RULES
+- Variable separators
+- Limit the number of operations in your code
+- Rounding numbers
+- Pythagoras believed the number was the fabric of the universe
+- He was wrong, it's the WORD! (Not Microsoft)
 
 ** Closing Prayer (1 Cor 13:11-12 + Hail Mary)
 
