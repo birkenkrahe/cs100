@@ -240,7 +240,7 @@ channel. Please read it carefully and get back to me with questions!
 
 ** Opening prayer (Ps 126 + Our Father)
 
-#+begin_verse
+#+begin_quote
 Unless the Lord build the house,
 they labour in vain that build it.
 Unless the Lord keep the city,
@@ -262,7 +262,7 @@ and lead us not into temptation,
 but deliver us from evil.
 
 Amen.
-#+end_verse
+#+end_quote
 ** Review: Textbook chapter 1 "Programming as a way of thinking" (5')
 
 - Did you read it? How? Interactive or reading only?
@@ -351,7 +351,7 @@ Content:
 
 ** Closing Prayer (1 Cor 13:11-12 + Hail Mary)
 
-#+begin_verse
+#+begin_quote
 When I was a child, I spoke as a child,
 I understood as a child, I thought as a child.
 But, when I became a man,
@@ -374,7 +374,7 @@ pray for us sinners,
 now and in the our of our death.
 
 Amen.
-#+end_verse
+#+end_quote
 
 
 
