@@ -613,6 +613,14 @@ this will have to be done at the end of the term if you need it.
 
 * PRACTICE Warm up practice: Compute Euler's number (~e~)
 
+Open colab.research.google.com.
+
+In Colab, open ~Tools > Setting~ and check ~Use a temporary scratch
+notebook as the default landing page.~ Then =Save=.
+
+Now open colab.research.google.com again or refresh the page to code
+along if you like.
+
 - Euler's number e is also defined in the ~math~ module. e is the basis
   of the natural logarithm: ln(e) = 1:
   #+begin_src python :results output :exports both :session *Python* :python python3
