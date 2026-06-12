@@ -8,10 +8,10 @@
 * Prayers
 ** Opening Prayer (Standard)
 #+attr_html: :width 550px :float nil:
-[[../../img/opening_prayers.png]]
+[[../img/opening_prayers.png]]
 ** Closing Prayer (Aquinas)
 #+attr_html: :width 550px :float nil:
-[[../../img/closing_prayers.png]]
+[[../img/closing_prayers.png]]
 ** Why these prayers?
 
 - *The "Our Father"*, because we learn everything through him.
@@ -86,7 +86,7 @@
 
 - [X] MS Teams -> assignments, quiz, recordings, chat, grades
 - [X] GitHub -> class materials
-- [X] Google Colaboratory -> Jupyter notebooks 
+- [X] Google Colaboratory -> Jupyter notebooks
 
 ** Assigned reading
 
@@ -270,7 +270,7 @@ Amen.
 - Did you do any of the exercises yet?
 - What do you think about the title of the textbook chapter?
 
-Content:  
+Content:
 - Arithmetic operators - standard and special
 - Arithmetic functions - ~round(), ~abs()~
 - Strings and string functions - ~str()~, ~len()~
@@ -296,16 +296,16 @@ Content:
 Content:
 - Printing to the display
 - Python as a calculator
-- Variables and types 
+- Variables and types
 - Variable assignment
 - Calculations with variables
-  
+
 ** Warm up coding (in Colab)
 
 - Open the starter code in Colab: [[https://tinyurl.com/arithmetic-starter][tinyurl.com/arithmetic-starter]]
 
 - Copy the file to your GDrive to be able to edit it
-  
+
 - Solve the exercises on your own (no AI), then let's compare
 
 - The last two exercises are given as a bonus assignment for home
@@ -327,12 +327,12 @@ Content:
 
 *Week 2: May 29-June 5*
 
-1. *Submit* quiz 2 
+1. *Submit* quiz 2
 2. *Complete* and submit a home programming assignment
 3. *Read* chapter 2 of the textbook, "Variables and statements"
 4. *Complete* lesson 2 of the DataCamp course "Python lists"
 
-*Week 3: June 5-June 12* 
+*Week 3: June 5-June 12*
 
 1. *Submit* quiz 3
 2. *Complete* and submit a home programming assignment
@@ -376,8 +376,331 @@ now and in the our of our death.
 Amen.
 #+end_quote
 
+* CANCELLED Week 3 - [Moving] Variables & Types (chapter 2)
+* Week 4 - Solemnity of the Sacred Heart of Jesus / Functions and Packages
+* Plan
 
+| Activity                                     | Min |
+|----------------------------------------------+-----|
+| Opening prayer                               |   1 |
+| Projects intro (proposal)                    |   5 |
+| Review: Quiz 2 (Python basics)               |   5 |
+| Review: Paystub solution                     |   5 |
+| Review: Quiz 3 (variables and statements)    |   5 |
+| Review: Programming assignment (sphere/trig) |   5 |
+| Review: Python lists                         |   5 |
+| Variables & Statements (extension)           |  10 |
+| Warm-up: Euler's number (code-along)         |  10 |
+| Functions: Anatomy of a function             |  10 |
+| Functions: Traceback → pythontutor.com       |  10 |
+| Packages: NumPy preview                      |  10 |
+| Next assignments                             |   3 |
+| Checkout (takeaway)                          |   1 |
+| Closing prayer                               |   1 |
+|----------------------------------------------+-----|
 
+* Opening prayer
 
+[[../img/memorare_to_the_Sacred_Heart_of_Jesus.png]]
 
+* Projects (midterm/final)
 
+- 20% of your grade comes from two projects one at midterm, one before
+  the end.
+
+- The first project (due in week 7 - July 3rd)
+
+- Project ideas:
+
+  1) Pick a Python package, like ~matplotlib~ or ~numpy~, ~pandas~, ~seaborn~,
+     or another package interesting to what you know already, study
+     the documentation, and create a Colab notebook that illustrates a
+     use case.
+
+     Examples: Visualize a personal dataset (grades, sleep log,...);
+     pull data from a public API (weather, Bible verse, sports scores)
+     and process the response. If you work in finance or pet care,
+     look for Python packages used in these domains.
+
+  2) Write an application of your choice - a small standalone program
+     (single file) that does something useful. Build/document in
+     a Colab notebook.
+
+     Examples: Password generator, number- or word guessing game,
+     simple text based adventure game, unit converter, quiz game
+     pulling questions from a file, full song generator.
+
+- The final capstone project will be just like this but you'll have
+  more tools available and can (hopefully) built better stuff.
+
+- It is perfectly OK if you use AI to help you do this. But you need
+  to be able to present, demonstrate and explain your result.
+
+- Next milestone: Sketch a proposal by next week:
+  1) Rationale - What do you want to do?
+  2) References - What will you be looking for?
+  3) Results - What do you expect to get out of this?
+  4) Risks - What could go wrong?
+
+- Submit a prototype by the end of week 7 (July 3rd). Attach a file or
+  a link to a GDocs file, or write your proposal in the text field.
+
+- Estimated time: 1 hr for the proposal, 4-6 hours for the prototype
+  (spread out over 3 weeks).
+
+* Caveat
+
+Don't believe everything you read[fn:1]:
+#+begin_quote
+"Programming, and especially debugging, sometimes brings out strong
+emotions. If you are struggling with a difficult bug, you might feel
+angry, sad, or embarrassed." Downey (ch 1)
+#+end_quote
+
+* Review: Quiz / Assignments
+** Submission rules
+
+- For all URL uploads, you need to *share* the Colab file with *anyone
+  who has the link* so that I can grade it!
+
+- If you submit late, you can get 50% of the points if turned in by
+  August 28, 2026, for both quizzes and programming assignments.
+
+- The quizzes assume that you have either read the respective chapter
+  in the textbook or (better) clicked your way through the notebook.
+
+** Quiz 2 (Python basics)
+
+1. What does ='Well, ' + "it's a small " + 'world.'= produce?
+
+   Not entirely fair because the console (on the terminal) and Colab
+   (notebook) generate different answers:
+
+   #+begin_example python
+   >>> 'Well, ' + "it's a small " + 'world.'
+   "Well, it's a small world."
+   #+end_example
+
+   #+attr_html: :width 350px :float nil:
+   [[../img/smallworld.png]]
+
+   (I have made a note for the three who were robbed of one point.)
+
+2. What's the difference between "compile-time" and "run-time"?
+   #+begin_quote
+   *Compile-time:* when Python translates your (human-readable) source
+   code into bytecode, before any of it runs.
+
+   *Run-time:* when the Python interpreter executes that bytecode, line
+   by line.
+
+   All errors are called "bugs."
+
+   *Compile-time* errors prevent the program from starting at all — the
+   main one you'll encounter is ~SyntaxError~ (including
+   ~IndentationError~).
+
+   *Run-time* errors are called "exceptions" — they occur only when the
+   offending line is executed, and can be guarded against with
+   ~try~/~except~. Examples: ~NameError~, ~ZeroDivisionError~, ~TypeError~.
+
+   Because Python checks syntax before running anything, ~SyntaxError~
+   is usually caught immediately and points directly at the problem.
+   Run-time exceptions are often trickier — they may only surface when
+   a particular branch or input triggers them.
+
+   If you haven't done it yet, check "A Gallery of Errors" ([[https://github.com/birkenkrahe/cs100/blob/main/org/2_pythagorean.org#step-10-a-gallery-of-errors][GitHub]]).
+   #+end_quote
+
+3. All other mistakes seemed to be the result of someone not running a
+   command to check the answer: *Don't guess, but code and experiment!*
+
+If you got (1) wrong, you get an extra point. Everybody gets an extra
+point for (2). Unfortunately, I cannot add points to the gradebook, so
+this will have to be done at the end of the term if you need it.
+
+** Programming assignment: Paystub calculator
+
+- A solution is available at [[https://tinyurl.com/paystub-solution][tinyurl.com/paystub-solution]]
+
+- Any questions on this assignment?
+
+** Quiz 3 (variables and statements)
+
+- A student writes =primt("hello")= - what type of error is this?
+  #+attr_html: :width 600px :float nil:
+  [[../img/quiz_3_question_28.png]]
+
+  This is a *runtime error* (more specifically a ~NameError~):
+  #+begin_src bash :results output :exports both
+    python3 -c 'primt("hello")' 2>&1
+  #+end_src
+
+  #+RESULTS:
+  : Traceback (most recent call last):
+  :   File "<string>", line 1, in <module>
+  : NameError: name 'primt' is not defined. Did you mean: 'print'?
+
+** Programming assignment
+
+- Part 1: compute the volume of a sphere given its radius.
+  #+attr_html: :width 400px :float nil:
+  [[../img/volume-sphere.png]]
+
+- Part 2: confirm the trig version of Pythagoras' theorem.
+  #+attr_html: :width 400px :float nil:
+  [[../img/unit_circle.png]]
+
+** DataCamp - Python lists (reference and copy)
+
+- Python lists: mutable, ordered, heterogenous sequence.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+
+  #+end_src
+
+- A list name is a reference:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+
+  #+end_src
+
+- A real copy of a list involves new memory allocation:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+
+  #+end_src
+
+* Variables and Statements (extension)
+
+- What happens when a number is assigned to a variable: =n = 17= ?
+  #+begin_quote
+  + Python evaluates the expression on the right (=17=) creating an
+    integer object with that value.
+  + The name =n= is bound to that object. It can now be referenced as =n=.
+  #+end_quote
+
+- Is =n= now stuck with =17=?
+  #+begin_quote
+  + =n= is an entry in a namespace pointing to whatever object was last
+    bound to it.
+  + Rebinding it does not touch the object =17= at all, it just makes =n=
+    point elsewhere.
+  + No type is associated with the name =n=.
+  #+end_quote
+
+- Code example:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    n = 17
+    print(n)
+    n = "seventeen"
+    print(n)
+  #+end_src
+
+- Python variables are like *sticky notes*, not boxes.
+
+- What happens when you print a variable =n=: =print(n)= ?
+  #+begin_quote
+  1) Name lookup: Python looks up =n= in the current namespace
+  2) It finds the object it is bound to (e.g. the ~int~ object =17=)
+  3) ~print()~ receives a reference to that object
+  4) ~print()~ calls ~str()~ on the object: =str(17) -> '17'=
+  5) Resulting string is written to ~sys.stdout~ followed by a newline
+  #+end_quote
+
+- ~print()~ as a function returns ~None~:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    x = print(n)
+    print(x)
+  #+end_src
+
+* PRACTICE Warm up practice: Compute Euler's number (~e~)
+
+- Euler's number e is also defined in the ~math~ module. e is the basis
+  of the natural logarithm: ln(e) = 1:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+
+  #+end_src
+
+  #+RESULTS:
+  : 1.0
+
+- Compute e three ways:
+  1. use ~math.e~ and the exponentiation operator ~**~
+  2. use ~math.pow()~ to raise ~math.e~ to the power 2
+  3. use ~mat.exp()~ which takes an argument x, and compute e^{x}
+
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    # exp.py: compute e^2 in three different ways | Author: Marcus
+    # Birkenkrahe | Source: Downey, Think Python (3e), ch 2
+
+    # import math
+
+    # use math.e and the exponentiation operator **
+
+    # use math.pow() to raise math.e to the power 2
+
+    # use mat.exp() which takes an argument x, and compute e^{x}
+
+  #+end_src
+
+  - Which of these is correct?
+    #+begin_quote
+    ~math.e~ already carries a small rounding error (truncated to 64-bit
+    float representation). This error is compounded through squaring.
+
+    ~math.exp(2)~ computes e^{2} directly via a dedicated algorithm,
+    correctly rounded to the nearest value to the true mathematical
+    value. It never uses the constant ~math.e~.
+
+    *Rule*: When a closed-form function exists for what you want (exp,
+    log, sqrt, etc.) prefer it over composing more primitive
+    operations both for accuracy and speed.
+    #+end_quote
+
+  - Demonstrating that with the ~mpmath~ package (and f-string output):
+    #+begin_src python :results output :exports both :session *Python* :python python3
+
+    #+end_src
+
+* PRACTICE User-defined functions and Packages (extension and practice)
+
+- Step 1: Anatomy of a function
+- Step 2: Traceback and Pythontutor.com
+- Step 3: NumPy preview 
+
+Open the Colab starter notebook:
+[[https://tinyurl.com/functions-packages-starter][tinyurl.com/functions-packages-starter]]
+
+Complete notebook: 
+[[https://tinyurl.com/functions-packages-complete][tinyurl.com/functions-packages-complete]]
+
+* Next assignments (June 19th)
+
+- Submit informal project proposal for your midterm project.
+
+- DataCamp chapter on "NumPy" (deadline June 26 - 2 weeks time).
+
+- Quiz 4 on DataCamp and textbook content (functions/packages).
+
+- Simple home programming assignment on functions and packages.
+
+- Read/work through "Functions and Interfaces" (chapter 4 of the
+  textbook with a Colab notebook). This is fun: graphics!
+
+As always for the textbook assignments, the best way is to either read
+the book and/or play through the Colab notebook - 30 minutes tops (not
+counting the exercises).
+
+* Closing prayer
+
+[[../img/o_most_holy_heart_of_jesus.png]]
+
+* Footnotes
+
+[fn:1] If programming makes you feel passionate, good for you. This is
+a problem-solving activity, and it comes with some emotions, sure, but
+programmers usually don't talk about these because doing that doesn't
+really serve any purpose and is rather likely to reduce your focus. In
+particular do *not* "think of the computer as an employee," as the
+author suggests. Instead, consider it a tool that you're trying to
+master. Getting lost in emotions when you fail to hammer a nail into a
+wall gets you nowhere IMHO (and I'm saying this as a trained coach
+and psychotherapist).
