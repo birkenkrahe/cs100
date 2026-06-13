@@ -22,3 +22,5 @@ reveal.js
 #ignore archive
 #*#
 *_archive
+# ignore Jupyter checkpoints
+.ipynb_checkpoints/
