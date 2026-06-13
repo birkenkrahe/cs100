@@ -1,0 +1,246 @@
+#+TITLE: User-Defined Functions and Packages
+#+STARTUP: overview hideblocks indent entitiespretty:
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :results output :exports both :python python3
+
+* Overview
+
+Learn to define your own functions, read a traceback, and get a first
+look at NumPy arrays — using data from today's solemnity of the Sacred
+Heart of Jesus.
+
+Skills: ~def~, parameters, arguments, docstrings, ~__main__~, tracebacks,
+~import numpy as np~, ~np.array()~, ~np.mean()~, ~np.min()~, ~np.max()~.
+
+* Step 1: Anatomy of a function
+
+A function groups reusable code under a name. Here is the smallest
+useful example — a greeting:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  def greeting(greet, name):
+      """Print a greeting for a given person.
+      greet: a greeting string e.g. 'Hello'
+      name: a name string e.g. 'Marcus'
+      """
+      print(greet + ", " + name + "!")
+
+  greeting("God bless you", "Christina")
+  greeting("Praised be Jesus Christ", "everyone")
+#+end_src
+
+#+RESULTS:
+: God bless you, Christina!
+: Praised be Jesus Christ, everyone!
+
+Every function definition has the same parts:
+
+| Part       | In this example             | Comment    |
+|------------+-----------------------------+------------|
+| keyword    | ~def~                         | Protected  |
+| name       | ~greeting~                    | Namespace  |
+| parameters | ~greet~, ~name~                 | No default |
+| colon      | ~:~                           | Delimiter  |
+| body       | ~print(greet + ", " + name)~  | Scope      |
+| docstring  | the triple-quoted string    | Comment    |
+| call       | ~greeting("Hello", "Marcus")~ | Variables  |
+| arguments  | ~"Hello"~, ~"Marcus"~           | Strings    |
+
+- *Parameters* belong to the *definition*; *arguments* belong to the *call*.
+- The *body* is indented — Python uses indentation to know what's
+  inside.
+- The *docstring* is optional but good practice: ~help(greeting)~ shows
+  it.
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  help(greeting)
+#+end_src
+
+#+RESULTS:
+: Help on function greeting in module __main__:
+:
+: greeting(greet, name='Joe')
+:     Print a greeting for a given person.
+:     greet: a greeting string e.g. 'Hello'
+:     name: a name string e.g. 'Marcus'
+
+* Step 2: Traceback and pythontutor.com
+
+When your code crushes, Python shows you the whole chain of calls
+that led there, in the order of calls (stacked). This is called a
+*traceback*.
+
+Copy the code above. Change ~name~ to ~names~ in the body — a one-letter
+typo — and run it:
+
+#+begin_src python :tangle ../src/greeting.py :results output :exports both :session *Python* :python python3
+  def greeting(greet, name):
+      print(greet + ", " + names + "!")  # NameError: names not defined
+
+  def main():
+      greeting("Hello", "Marcus")
+
+  if __name__ == "__main__":
+      main()
+#+end_src
+
+#+begin_src bash :results output :exports both
+  cd ../src
+  python3 greeting.py 2>&1
+#+end_src
+
+#+RESULTS:
+: Traceback (most recent call last):
+:   File "/home/aletheia/GitHub/admin/summer26/cs100/src/greeting.py", line 8, in <module>
+:     main()
+:   File "/home/aletheia/GitHub/admin/summer26/cs100/src/greeting.py", line 5, in main
+:     greeting("Hello", "Marcus")
+:   File "/home/aletheia/GitHub/admin/summer26/cs100/src/greeting.py", line 2, in greeting
+:     print(greet + ", " + names + "!")  # NameError: names not defined
+: NameError: name 'names' is not defined. Did you mean: 'name'?
+
+Python prints a *traceback* — read it bottom to top:
+
+#+begin_example
+NameError: name 'names' is not defined    ← what went wrong
+  greeting(...)                            ← where it happened
+  main()                                   ← who called it
+  <module>                                 ← the top-level script
+#+end_example
+
+- The error is always at the bottom — start there.
+- Each line above it is one step back up the call chain (the "stack").
+- Python often suggests a fix: /Did you mean: 'name'?/
+
+There is a way to visualize this rather nicely: 
+
+Open [[https://pythontutor.com/python-debugger.html][pythontutor.com]], paste the working ~greeting~ code, and step
+through it. You will see ~__main__~ → ~main()~ → ~greeting()~ appear as
+live stack frames — the traceback made visual.
+
+* Step 3: NumPy preview — Sacred Heart data
+
+Today is the Solemnity of the Sacred Heart of Jesus. Here are six
+milestones in the history of the devotion:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  years = [1673, 1675, 1856, 1899, 1925, 1956]
+  labels = [
+      "First apparition to St. Margaret Mary",
+      "The Great Apparition — origin of the feast",
+      "Feast extended to the universal Church",
+      "Leo XIII consecrates the world",
+      "Canonization of St. Margaret Mary",
+      "Haurietis Aquas (Pius XII)",
+  ]
+  print(years)
+  print(2026 - years[0], "years since the first apparition")
+#+end_src
+
+#+RESULTS:
+: [1673, 1675, 1856, 1899, 1925, 1956]
+: 353 years since the first apparition
+
+To compute how many years ago each event was, you would need a loop -
+or repeat the last line for every element of the list =years=. ~NumPy~
+removes that need — convert the list to an array first:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  import numpy as np
+  years_np = np.array(years)
+  print(type(years_np))
+  years_ago = 2026 - years_np
+  print(years_ago)
+#+end_src
+
+#+RESULTS:
+: <class 'numpy.ndarray'>
+: [353 351 170 127 101  70]
+
+- One arithmetic expression applies to all six values at once.
+- That is the NumPy payoff: vectorization, no loop, no repetition.
+
+Now summarise the data with three functions:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  print("Most recent:", np.min(years_ago), "years ago")
+  print("Oldest:     ", np.max(years_ago), "years ago")
+  print("Average:    ", round(np.mean(years_ago), 1), "years ago")
+#+end_src
+
+#+RESULTS:
+: Most recent: 70 years ago
+: Oldest:      353 years ago
+: Average:     195.3 years ago
+
+- ~np.min()~, ~np.max()~, ~np.mean()~ work on the whole array in one call.
+- ~type(years_np)~ → ~numpy.ndarray~ — a new type you will explore next week.
+
+* Bonus: What is ~__main__~?
+
+The textbook mentions it at the beginning of chapter 3:
+
+"~__main()__~ is the name of the module that contains the function
+=print_lyrics=." - *But what does that mean?*
+
+Short answer:
+#+begin_quote
+Every Python file gets an automatic label called ~name~. The double
+underscores mean that it's Python stuff, not user stuff.
+
+When you run code directly in Colab, or in a terminal, Python sets
+~name~ to the special value ~main~, and all functions you define, live
+in it.
+
+This will be relevant later when you want to ~import~ your own files,
+and when your code base is so large that you need to split it across
+multiple files.
+#+end_quote
+
+Here's a code example with the ~greeting~ function:
+#+begin_src python :results output :exports both :session *Python* :python python3
+  def greeting(greet, name):
+      """Print a greeting for a given person.
+      greet: a greeting string e.g. 'Hello'
+      name: a name string e.g. 'Marcus'
+      """
+      print(greet + ", " + name + "!")
+
+  def main():
+      greeting("God bless you", "Christina")
+      greeting("Praised be Jesus Christ", "everyone")
+
+  if __name__ == "__main__":
+      main()
+#+end_src
+
+#+RESULTS:
+: God bless you, Christina!
+: Praised be Jesus Christ, everyone!
+
+* Summary
+
+- ~def~ defines a function; the body must be indented
+- Parameters are placeholders in the definition; arguments are the
+  values passed at the call
+- A docstring documents what the function does; ~help()~ displays it
+- A traceback lists the call chain from ~<module>~ down to the error;
+  read it bottom to top
+- ~import numpy as np~ loads NumPy; ~np.array()~ converts a list to an array
+- Array arithmetic applies to every element at once — no loop needed
+- ~np.min()~, ~np.max()~, ~np.mean()~ compute statistics on the whole array
+
+* Glossary
+
+| Term          | Meaning                                                       |
+|---------------+---------------------------------------------------------------|
+| ~def~           | Keyword that starts a function definition                     |
+| parameter     | Variable name in the function definition                      |
+| argument      | Value passed to the function at the call site                 |
+| docstring     | String literal at the top of a function body; shown by ~help()~ |
+| ~__main__~      | The name Python gives to the file being run directly          |
+| traceback     | The call chain Python prints when a runtime error occurs      |
+| stack frame   | One function's local variables and position in the chain      |
+| ~import~        | Makes a package available in the current script               |
+| ~numpy.ndarray~ | NumPy's array type — stores elements of one type              |
+| vectorized    | Operation that applies to every element of an array at once   |
