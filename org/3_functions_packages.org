@@ -17,7 +17,7 @@ Skills: ~def~, parameters, arguments, docstrings, ~__main__~, tracebacks,
 A function groups reusable code under a name. Here is the smallest
 useful example — a greeting:
 
-#+begin_src python :results output :exports both :session *Python* :python python3
+#+begin_src python :tangle ../src/greeting.py :results output :exports both :session *Python* :python python3
   def greeting(greet, name):
       """Print a greeting for a given person.
       greet: a greeting string e.g. 'Hello'
@@ -84,6 +84,9 @@ typo — and run it:
       main()
 #+end_src
 
+#+RESULTS:
+: Hello, Marcus!
+
 #+begin_src bash :results output :exports both
   cd ../src
   python3 greeting.py 2>&1
@@ -96,8 +99,8 @@ typo — and run it:
 :   File "/home/aletheia/GitHub/admin/summer26/cs100/src/greeting.py", line 5, in main
 :     greeting("Hello", "Marcus")
 :   File "/home/aletheia/GitHub/admin/summer26/cs100/src/greeting.py", line 2, in greeting
-:     print(greet + ", " + names + "!")  # NameError: names not defined
-: NameError: name 'names' is not defined. Did you mean: 'name'?
+:     print(g + ", " + name + "!")  # NameError: names not defined
+: NameError: name 'name' is not defined
 
 Python prints a *traceback* — read it bottom to top:
 
