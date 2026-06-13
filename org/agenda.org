@@ -8,10 +8,10 @@
 * Prayers
 ** Opening Prayer (Standard)
 #+attr_html: :width 550px :float nil:
-[[../img/opening_prayers.png]]
+[[../../img/opening_prayers.png]]
 ** Closing Prayer (Aquinas)
 #+attr_html: :width 550px :float nil:
-[[../img/closing_prayers.png]]
+[[../../img/closing_prayers.png]]
 ** Why these prayers?
 
 - *The "Our Father"*, because we learn everything through him.
@@ -378,7 +378,7 @@ Amen.
 
 * CANCELLED Week 3 - [Moving] Variables & Types (chapter 2)
 * Week 4 - Solemnity of the Sacred Heart of Jesus / Functions and Packages
-* Plan
+** Plan
 
 | Activity                                     | Min |
 |----------------------------------------------+-----|
@@ -399,11 +399,11 @@ Amen.
 | Closing prayer                               |   1 |
 |----------------------------------------------+-----|
 
-* Opening prayer
+** Opening prayer
 
 [[../img/memorare_to_the_Sacred_Heart_of_Jesus.png]]
 
-* Projects (midterm/final)
+** Projects (midterm/final)
 
 - 20% of your grade comes from two projects one at midterm, one before
   the end.
@@ -448,7 +448,7 @@ Amen.
 - Estimated time: 1 hr for the proposal, 4-6 hours for the prototype
   (spread out over 3 weeks).
 
-* Caveat
+** Caveat
 
 Don't believe everything you read[fn:1]:
 #+begin_quote
@@ -457,8 +457,8 @@ emotions. If you are struggling with a difficult bug, you might feel
 angry, sad, or embarrassed." Downey (ch 1)
 #+end_quote
 
-* Review: Quiz / Assignments
-** Submission rules
+** Review: Quiz / Assignments
+*** Submission rules
 
 - For all URL uploads, you need to *share* the Colab file with *anyone
   who has the link* so that I can grade it!
@@ -469,7 +469,7 @@ angry, sad, or embarrassed." Downey (ch 1)
 - The quizzes assume that you have either read the respective chapter
   in the textbook or (better) clicked your way through the notebook.
 
-** Quiz 2 (Python basics)
+*** Quiz 2 (Python basics)
 
 1. What does ='Well, ' + "it's a small " + 'world.'= produce?
 
@@ -519,13 +519,13 @@ If you got (1) wrong, you get an extra point. Everybody gets an extra
 point for (2). Unfortunately, I cannot add points to the gradebook, so
 this will have to be done at the end of the term if you need it.
 
-** Programming assignment: Paystub calculator
+*** Programming assignment: Paystub calculator
 
 - A solution is available at [[https://tinyurl.com/paystub-solution][tinyurl.com/paystub-solution]]
 
 - Any questions on this assignment?
 
-** Quiz 3 (variables and statements)
+*** Quiz 3 (variables and statements)
 
 - A student writes =primt("hello")= - what type of error is this?
   #+attr_html: :width 600px :float nil:
@@ -541,7 +541,7 @@ this will have to be done at the end of the term if you need it.
   :   File "<string>", line 1, in <module>
   : NameError: name 'primt' is not defined. Did you mean: 'print'?
 
-** Programming assignment
+*** Programming assignment
 
 - Part 1: compute the volume of a sphere given its radius.
   #+attr_html: :width 400px :float nil:
@@ -551,7 +551,7 @@ this will have to be done at the end of the term if you need it.
   #+attr_html: :width 400px :float nil:
   [[../img/unit_circle.png]]
 
-** DataCamp - Python lists (reference and copy)
+*** DataCamp - Python lists (reference and copy)
 
 - Python lists: mutable, ordered, heterogenous sequence.
   #+begin_src python :results output :exports both :session *Python* :python python3
@@ -568,7 +568,7 @@ this will have to be done at the end of the term if you need it.
 
   #+end_src
 
-* Variables and Statements (extension)
+** Variables and Statements (extension)
 
 - What happens when a number is assigned to a variable: =n = 17= ?
   #+begin_quote
@@ -611,7 +611,7 @@ this will have to be done at the end of the term if you need it.
     print(x)
   #+end_src
 
-* PRACTICE Warm up practice: Compute Euler's number (~e~)
+** PRACTICE Warm up practice: Compute Euler's number (~e~)
 
 Open colab.research.google.com.
 
@@ -668,7 +668,7 @@ along if you like.
 
     #+end_src
 
-* PRACTICE User-defined functions and Packages (extension and practice)
+** PRACTICE User-defined functions and Packages (extension and practice)
 
 - Step 1: Anatomy of a function
 - Step 2: Traceback and Pythontutor.com
@@ -680,7 +680,7 @@ Open the Colab starter notebook:
 Complete notebook: 
 [[https://tinyurl.com/functions-packages-complete][tinyurl.com/functions-packages-complete]]
 
-* Next assignments (June 19th)
+** Next assignments (June 19th)
 
 - Submit informal project proposal for your midterm project.
 
@@ -697,7 +697,7 @@ As always for the textbook assignments, the best way is to either read
 the book and/or play through the Colab notebook - 30 minutes tops (not
 counting the exercises).
 
-* Closing prayer
+** Closing prayer
 
 [[../img/o_most_holy_heart_of_jesus.png]]
 
