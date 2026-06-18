@@ -1,0 +1,259 @@
+#+TITLE: Pay Stub Calculator (Homework)
+#+STARTUP: overview hideblocks indent entitiespretty:
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :results output :exports both :python python3
+
+* Overview
+
+Build a simple pay stub calculator using the Python skills from class:
+variables, arithmetic operators, ~type()~, ~round()~, ~str()~, ~len()~,
+string repetition, and boolean comparisons.
+
+Everything you need was covered in the [[https://github.com/birkenkrahe/cs100/blob/main/org/2_pythagorean.org][Pythagorean theorem session]].
+The pattern is the same: define variables, chain computations, produce
+readable output.
+
+* Task
+
+Given an hourly rate and hours worked, compute and print:
+1. Gross pay (before tax)
+2. Tax amount at a 20% rate
+3. Net pay (take-home)
+
+Expected output for 40 hours at $15.00/hour with 20% tax:
+
+#+begin_example
+Gross pay:  $600.0
+Tax (20%):  $120.0
+Net pay:    $480.0
+#+end_example
+
+* Step 1: Define your starting values
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  hourly_rate = 15.
+  hours_worked = 40
+  print(type(hourly_rate))
+  print(type(hours_worked))  
+#+end_src
+
+#+RESULTS:
+: <class 'float'>
+: <class 'int'>
+
+- What types are ~hourly_rate~ and ~hours_worked~?
+- It does not matter which is ~float~ and which is ~int~: Python
+  auto-converts when mixing types in arithmetic.
+
+* Step 2: Compute gross pay
+
+Gross pay = hourly rate × hours worked.
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  gross_pay = hourly_rate * hours_worked
+  print(gross_pay)
+#+end_src
+
+#+RESULTS:
+: 600.0
+
+- Check the type of ~gross_pay~ with ~type()~ and print it. What do you get?
+- The expected output shows ~$600.0~, but you may be getting ~600~ instead. Why?
+- Fix it: go back to Step 1 and change ~hourly_rate~ so the result becomes a ~float~.
+- Rule: ~float~ × ~int~ gives ~float~; ~int~ × ~int~ gives ~int~.
+
+* Step 3: Tax rate
+
+Set ~tax_rate~ to 20% and print it. The expected result is ~0.2~.
+
+#+begin_src python :results none :exports both :session *Python* :python python3
+  tax_rate = 0.2
+#+end_src
+
+- 20% means 20 per 100 — write it as a decimal, not a whole number.
+- Then compute ~tax_amount = gross_pay * tax_rate~ and print it.
+
+#+begin_src python :results output :exports both :session *Python* :python python3 
+  tax_amount = gross_pay * tax_rate
+  print(tax_amount)
+#+end_src
+
+#+RESULTS:
+: 120.0
+
+* Step 4: Net pay
+
+Net pay is gross pay minus tax amount.
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  net_pay = gross_pay - tax_amount
+  print(net_pay)
+#+end_src
+
+#+RESULTS:
+: 480.0
+
+* Step 5: Rounding and floating-point noise
+
+~round()~ does not control how many digits are displayed — it guards against
+floating-point noise. Try this first:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  print(0.1 + 0.2)
+  print(round(0.1 + 0.2, 2))
+#+end_src
+
+#+RESULTS:
+: 0.30000000000000004
+: 0.3
+
+- Floats are stored in binary and sometimes accumulate tiny errors.
+- ~round(value, 2)~ keeps at most 2 decimal places, removing the noise.
+- For our pay values the numbers are already clean, so ~round()~ changes
+  nothing visible — but it is good practice for real-world money
+  calculations.
+
+* Step 6: Readable output
+
+Print a formatted pay stub using string concatenation and ~str()~. The
+result should look like this:
+#+begin_example
+  Gross pay:  $600.0
+  Tax (20%):  $120.0
+  Net pay:    $480.0
+#+end_example
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  print("Gross pay: $" + str(gross_pay))
+  print("Tax (20%): $" + str(tax_amount))
+  print("Net pay:   $" + str(net_pay))
+#+end_src
+
+#+RESULTS:
+: Gross pay: $600.0
+: Tax (20%): $120.0
+: Net pay:   $480.0
+
+* Step 7: Add a title and separator
+
+Add a title line and a separator that automatically matches its length
+(see the Pythagorean example from class) by defining a ~string~ variable
+=title= and a =separator= with the ~len()~ of =title=. The output should look
+like this:
+#+begin_example
+ --------
+ PAY STUB
+ --------
+ Gross pay:  $600.0
+ Tax (20%):  $120.0
+ Net pay:    $480.0
+ --------
+#+end_example
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  title = "Weekly Pay Stub"
+  separator = '-' * len(title)
+  print(separator)
+  print(title)
+  print(separator)
+  print("Gross pay: $" + str(gross_pay))
+  print("Tax (20%): $" + str(tax_amount))
+  print("Net pay:   $" + str(net_pay))
+  print(separator)  
+#+end_src
+
+#+RESULTS:
+: ---------------
+: Weekly Pay Stub
+: ---------------
+: Gross pay: $600.0
+: Tax (20%): $120.0
+: Net pay:   $480.0
+: ---------------
+
+- Change ~title~ to ~"Weekly Pay Stub"~ and rerun — does the separator adjust?
+- What does ~len(title)~ return for each?
+
+* Step 8: Booleans — is the pay reasonable?
+
+Comparison operators return ~True~ or ~False~.
+
+Use ~print()~ to show the result of each comparison below:
+- is net pay greater than zero?
+- is net pay greater than gross pay?
+- does the tax amount equal gross pay times tax rate?
+  
+#+begin_src python :results output :exports both :session *Python* :python python3
+  print(net_pay > 0)
+  print(net_pay > gross_pay)
+  print(tax_amount == gross_pay * tax_rate)
+#+end_src
+
+#+RESULTS:
+: True
+: False
+: True
+
+* Step 9: Investigate a type error
+
+Change ~hours_worked~ to the string ~"40"~ (with quotes) and rerun only
+the gross pay computation:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  hours_worked = "40"
+  print(hourly_rate * hours_worked)
+#+end_src
+
+#+RESULTS:
+
+- What error do you get? Read the message carefully.
+- Use ~type(hours_worked)~ to confirm what Python sees.
+- Change ~hours_worked~ back to ~40~ before continuing.
+
+* Step 10: Try your own values
+
+Change ~hourly_rate~ and ~hours_worked~ to values that apply to you or
+someone you know. Rerun and verify the output makes sense.
+
+* Checklist
+
+Before submitting, confirm your script:
+- [ ] Uses named variables for every value (no magic numbers in formulas)
+- [ ] Sets ~tax_rate~ as a decimal, not a percentage
+- [ ] Rounds all money values to 2 decimal places
+- [ ] Prints all three lines of output with ~$~ signs
+- [ ] Includes a title and separator using ~len()~ and ~*~
+- [ ] Includes at least one boolean comparison with ~print()~
+- [ ] Runs without errors from top to bottom
+
+* Summary
+
+- Gross pay = ~hourly_rate * hours_worked~
+- Percentages are decimals: 20% → ~0.20~, not ~20~
+- ~float * int~ gives a ~float~
+- ~round(value, 2)~ rounds money to the nearest cent
+- ~str()~ converts numbers to strings for output with ~+~
+- Chain variables: each result feeds the next computation
+- ~len(s)~ returns the number of characters in string ~s~
+- ~"x" * n~ repeats a string ~n~ times
+- Comparisons (~>~, ~<~, ~==~, etc.) return a ~bool~: ~True~ or ~False~
+
+* Glossary
+
+| Term        | Meaning                                              |
+|-------------+------------------------------------------------------|
+| gross pay   | Total pay before any deductions                      |
+| net pay     | Take-home pay after deductions                       |
+| tax rate    | Fraction of income paid as tax (0.20 = 20%)          |
+| ~*~         | Multiplication operator                              |
+| ~-~         | Subtraction operator                                 |
+| ~round()~   | Rounds a float to a given number of decimal places   |
+| ~str()~     | Converts a number to a string                        |
+| ~type()~    | Returns the data type of a value                     |
+| ~float~     | Number with a decimal point                          |
+| ~int~       | Whole number without a decimal point                 |
+| TypeError   | Error raised when an operation gets the wrong type   |
+| ~bool~      | Boolean type: ~True~ or ~False~                      |
+| ~len()~     | Returns the number of characters in a string         |
+| ~*~         | Repeats a string when used with a string and ~int~   |
+| comparison  | Expression using ~>~, ~<~, ~==~, etc.; returns ~bool~ |

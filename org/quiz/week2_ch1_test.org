@@ -1,0 +1,333 @@
+#+TITLE: CSC 100 — Week 2 Quiz
+#+AUTHOR: Marcus Birkenkrahe, PhD
+#+SUBTITLE: Think Python Ch 1 · DataCamp "Introduction to Python" Ch 1
+#+STARTUP: overview hideblocks indent entitiespretty
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :results output :exports both :noweb yes
+* Week 2 Quiz: Programming as a Way of Thinking
+:PROPERTIES:
+:SOURCES:  Think Python Ch 1 · DataCamp "Introduction to Python" Ch 1
+:AUTHOR:   Marcus Birkenkrahe, PhD
+:END:
+
+Note to students: This quiz is not a memory test. If you are unsure
+about a question, open a Colab notebook and try it out — that is
+exactly the kind of engagement with the language we are looking for.
+The goal is learning, not guessing, or memorizing.
+
+** Section 1: Recall (Q1–Q15)
+
+*** Q1. What symbol does Python use for multiplication?
+
+- ( ) =x=
+- ( ) =×=
+- (x) =*=
+- ( ) =•=
+
+*** Q2. What is the result of =6 * 7=?
+
+- ( ) 13
+- ( ) 67
+- ( ) 76
+- (x) 42
+
+*** Q3. Which operator performs integer (floor) division in Python?
+
+- ( ) =/=
+- (x) =//=
+- ( ) =%=
+- ( ) =div=
+
+*** Q4. What does the =**= operator do in Python?
+
+- ( ) Multiplies two numbers
+- (x) Performs exponentiation
+- ( ) Computes a bitwise XOR
+- ( ) Returns the remainder
+
+*** Q5. What are the two numeric types introduced in Chapter 1?
+
+- ( ) =number= and =decimal=
+- (x) =int= and =float=
+- ( ) =integer= and =real=
+- ( ) =short= and =long=
+
+*** Q6. What does the =type()= function do?
+
+- ( ) Converts a value to a different type
+- ( ) Returns the name of a variable
+- (x) Returns the type of a value
+- ( ) Checks whether two values are equal
+
+*** Q7. Which of the following is a string in Python?
+
+- ( ) =42=
+- ( ) =3.14=
+- (x) ='Hello'=
+- ( ) =True=
+
+*** Q8. What function returns the number of characters in a string?
+
+- ( ) =size()=
+- ( ) =count()=
+- ( ) =length()=
+- (x) =len()=
+
+*** Q9. What symbol begins a comment in Python?
+
+- ( ) =//=
+- ( ) =--=
+- (x) =#=
+- ( ) =/*=
+
+*** Q10. What are programming errors called, and what is finding them called?
+
+- ( ) Faults; testing
+- (x) Bugs; debugging
+- ( ) Errors; tracing
+- ( ) Mistakes; fixing
+
+*** Q11. Which of the four basic Python types represents logical values?
+
+- ( ) =str=
+- ( ) =int=
+- ( ) =float=
+- (x) =bool=
+
+*** Q12. What are the only two valid values of a Python =bool=?
+
+- ( ) =yes= and =no=
+- ( ) =0= and =1=
+- (x) =True= and =False=
+- ( ) =true= and =false=
+
+*** Q13. What does the =abs()= function compute?
+
+- ( ) The square root of a number
+- (x) The absolute value of a number
+- ( ) The rounded value of a number
+- ( ) The integer part of a number
+
+*** Q14. Natural languages are languages that:
+
+- ( ) Were designed for mathematical notation
+- ( ) Were created by programmers for computing
+- (x) Evolved naturally and were not formally designed
+- ( ) Are always unambiguous
+
+*** Q15. Which type of error causes Python to stop before the program runs?
+
+- ( ) Runtime error
+- ( ) Semantic error
+- ( ) Logical error
+- (x) Syntax error
+
+** Section 2: Comprehension (Q16–Q28)
+
+*** Q16. What is the result of =84 / 2= in Python?
+
+- ( ) =42=
+- (x) =42.0=
+- ( ) =41=
+- ( ) =TypeError=
+
+*** Q17. What is the result of =85 // 2=?
+
+- ( ) 42.5
+- ( ) 43
+- (x) 42
+- ( ) 85.0
+
+*** Q18. What is the value of =7 ** 2 - 7=?
+
+- ( ) 0
+- ( ) 98
+- ( ) 49
+- (x) 42
+
+*** Q19. What is the result of =5 * (6 + 12)=?
+
+- ( ) 42
+- ( ) 72
+- (x) 90
+- ( ) 102
+
+*** Q20. What does =7 ^ 2= evaluate to in Python?
+
+- ( ) 49
+- ( ) 14
+- (x) 5
+- ( ) SyntaxError
+
+*** Q21. What is the result of ='Ha' * 3=?
+
+- ( ) ='Ha Ha Ha'=
+- (x) ='HaHaHa'=
+- ( ) ='Ha3'=
+- ( ) =TypeError=
+
+*** Q22. What does ='Well, ' + "it's a small " + 'world.'= produce?
+
+- ( ) A TypeError because you cannot mix quote styles
+- (x) ="Well, it's a small world."=
+- ( ) ='Well, its a small world.'=
+- ( ) Three separate strings
+
+*** Q23. What does =type('126')= return?
+
+- ( ) =int=
+- ( ) =float=
+- (x) =str=
+- ( ) =number=
+
+*** Q24. What happens when you evaluate =1,000,000= in Python?
+
+- ( ) The integer 1000000
+- ( ) A syntax error
+- ( ) The float 1000000.0
+- (x) The tuple =(1, 0, 0)=
+
+*** Q25. What is the result of =int(42.9)=?
+
+- ( ) 43
+- ( ) 42.9
+- (x) 42
+- ( ) TypeError
+
+*** Q26. A variable =is_good= is assigned the value =True=. What type is it?
+
+- ( ) =str=
+- ( ) =int=
+- (x) =bool=
+- ( ) =float=
+
+*** Q27. Which property best distinguishes formal from natural languages?
+
+- ( ) Formal languages are more redundant
+- ( ) Formal languages rely on context to resolve meaning
+- (x) Formal languages are unambiguous and literal
+- ( ) Formal languages evolved without deliberate design
+
+*** Q28. What is a runtime error also called?
+
+- ( ) A bug
+- ( ) A semantic error
+- (x) An exception
+- ( ) A syntax error
+
+** Section 3: Application (Q29–Q36)
+
+*** Q29. What does the following print?
+
+#+BEGIN_EXAMPLE python
+print(type(42))
+#+END_EXAMPLE
+
+- ( ) =42=
+- ( ) =float=
+- ( ) =int=
+- (x) =<class 'int'>=
+
+*** Q30. What does the following produce?
+
+#+BEGIN_EXAMPLE python
+'Spam, ' * 4
+#+END_EXAMPLE
+
+- ( ) ='Spam, Spam, Spam, Spam'=
+- (x) ='Spam, Spam, Spam, Spam, '=
+- ( ) ='Spam4'=
+- ( ) =TypeError=
+
+*** Q31. What kind of error is the following, and why?
+
+#+BEGIN_EXAMPLE python
+'126' / 3
+#+END_EXAMPLE
+
+- ( ) Syntax error — the =/= operator is written incorrectly
+- ( ) Semantic error — the result is wrong but Python runs it
+- (x) Runtime error — the =/= operator does not support =str= and =int=
+- ( ) No error — the result is =42=
+
+*** Q32. What is the output of this code?
+
+#+BEGIN_EXAMPLE python
+half = 0.5
+intro = "Hello!"
+is_good = True
+print(type(half))
+#+END_EXAMPLE
+
+- ( ) =<class 'bool'>=
+- ( ) =<class 'int'>=
+- ( ) =<class 'str'>=
+- (x) =<class 'float'>=
+
+*** Q33. A student writes =abs 42= instead of =abs(42)=. What happens?
+
+- ( ) Python returns 42 silently
+- (x) Python raises a SyntaxError
+- ( ) Python raises a RuntimeError
+- ( ) Python treats it as a semantic error
+
+*** Q34. What does the following evaluate to?
+
+#+BEGIN_EXAMPLE python
+int('101', 2)
+#+END_EXAMPLE
+
+- ( ) 101
+- ( ) 1012
+- (x) 5
+- ( ) TypeError
+
+*** Q35. A student writes =abs= on its own line. It runs without error but computes nothing. What kind of error is this?
+
+- ( ) Syntax error
+- ( ) Runtime error
+- (x) Semantic error
+- ( ) No error — it is correct
+
+*** Q36. What is the output of the following?
+
+#+BEGIN_EXAMPLE python
+intro = "Hello! How are you?"
+doubleintro = intro + intro
+print(doubleintro)
+#+END_EXAMPLE
+
+- ( ) ='Hello! How are you? Hello! How are you?'=
+- ( ) ='Hello! How are you!Hello! How are you?'=
+- (x) =Hello! How are you?Hello! How are you?=
+- ( ) TypeError
+
+** Section 4: Tricky / Edge Cases (Q37–Q40)
+
+*** Q37. In some languages =^= means exponentiation. What does =7 ^ 2= mean in Python?
+
+- ( ) 49 — it is exponentiation in Python too
+- (x) 5 — it is a bitwise XOR operation
+- ( ) 14 — it is multiplication by 2
+- ( ) SyntaxError — =^= is not a legal Python operator
+
+*** Q38. A student writes =True = 5=. What most likely happens?
+
+- ( ) Python stores 5 and =True= now equals 5
+- (x) Python raises a SyntaxError because =True= is a keyword
+- ( ) Python silently ignores the assignment
+- ( ) Python raises a RuntimeError
+
+*** Q39. What does =round(42.5)= return in Python?
+
+- ( ) 43
+- (x) 42
+- ( ) 42.5
+- ( ) It depends on the platform
+
+*** Q40. A student uses backtick quotes: =`Hello`=. What happens?
+
+- ( ) Python treats it as a comment
+- ( ) Python accepts it as equivalent to single quotes
+- (x) Python raises a SyntaxError
+- ( ) Python returns the string without the backticks
