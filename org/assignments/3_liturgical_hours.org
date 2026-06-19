@@ -1,0 +1,84 @@
++TITLE: Assignment: The Liturgical Hours — Functions & Loops
+#+AUTHOR: Marcus Birkenkrahe
+#+SUBTITLE: CS 100 - Chapter 3 Homework
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+
+* Assignment: The Liturgical Hours (Ch. 3)
+
+Due: 19th June, 11:59 PM
+
+Submit: Paste your Colab notebook SHARE LINK (Anyone with link ->
+Viewer) as a reply to this Teams post.
+
+** Goal
+
+Practice writing and calling your own functions - the core skill from
+Think Python Ch. 3.
+
+** Task
+
+The /Liturgia Horarum/ (Divine Office) divides the day into canonical
+hours of prayer. Your job: write one function per hour, then a single
+function that runs through the whole day.
+
+1. Write a separate function for each of these hours:
+
+   | Function | Time     | Label                  |
+   |----------+----------+------------------------|
+   | lauds    | 6:00 AM  | Morning praise         |
+   | terce    | 9:00 AM  | Mid-morning prayer     |
+   | sext     | 12:00 PM | Midday prayer          |
+   | nones    | 3:00 PM  | Mid-afternoon prayer   |
+   | vespers  | 6:00 PM  | Evening prayer         |
+   | compline | 9:00 PM  | Night prayer           |
+
+   Each function takes no arguments and prints ONE line in this
+   format:
+
+   #+begin_example
+    Lauds    - 6:00 AM  - Morning praise
+   #+end_example
+
+   Include a *docstring* (one line is enough) describing what each
+   function does.
+
+2. Write a function called =pray_day()= that calls all six functions, in
+   order, so that running =pray_day()= prints the full schedule.
+
+3. Call =pray_day()= once at the end of your notebook.
+
+4. Challenge: You can also call =pray_day()= in a =main()= function but
+   then you need to add this at the end of your script so that Python
+   knows that you want to run =main()= directly.
+   #+begin_example python
+   if __name__ == "__main__":
+       main()
+   #+end_example
+
+** Extension (optional, for fun / extra practice - not graded)
+
+Pick ONE:
+
+- Add a parameter to each function, e.g. =lauds(language="Latin")=,
+  so it can print either "Lauds" or "Laudes" depending on the
+  argument.
+
+- Look up "Prime" (the canonical hour suppressed after Vatican II)
+  and write a =prime()= function. Decide - and add a comment
+  explaining - whether =pray_day()= should call it.
+
+** Submission Checklist
+
+- [ ] Notebook runs top to bottom without errors (Runtime > Run all)
+- [ ] 6 functions, each with a docstring, each printing one line
+- [ ] =pray_day()= calls all 6 in order
+- [ ] =pray_day()= is called once at the bottom
+- [ ] Sharing set to "Anyone with the link - Viewer"
+- [ ] Link posted in MS Teams
+
+** Hint
+
+If you get stuck, re-read the =print_lyrics= example from Ch. 3 - your
+functions follow exactly the same pattern: a name, no parameters,
+a print statement (or two) in the body.
