@@ -376,28 +376,28 @@ now and in the our of our death.
 Amen.
 #+end_quote
 
-* CANCELLED Week 3 - [Moving] Variables & Types (chapter 2)
-* Week 4 - Solemnity of the Sacred Heart of Jesus / Functions and Packages
+* DONE Week 3 - [Moving] Variables & Types (chapter 2)
+* DONE Week 4 - Solemnity of the Sacred Heart of Jesus / Functions and Packages
 ** Plan
 
-| Activity                                     | Min |
-|----------------------------------------------+-----|
-| Opening prayer                               |   1 |
-| Projects intro (proposal)                    |   5 |
-| Review: Quiz 2 (Python basics)               |   5 |
-| Review: Paystub solution                     |   5 |
-| Review: Quiz 3 (variables and statements)    |   5 |
-| Review: Programming assignment (sphere/trig) |   5 |
-| Review: Python lists                         |   5 |
-| Variables & Statements (extension)           |  10 |
-| Warm-up: Euler's number (code-along)         |  10 |
-| Functions: Anatomy of a function             |  10 |
-| Functions: Traceback → pythontutor.com       |  10 |
-| Packages: NumPy preview                      |  10 |
-| Next assignments                             |   3 |
-| Checkout (takeaway)                          |   1 |
-| Closing prayer                               |   1 |
-|----------------------------------------------+-----|
+| Activity                                     | Min |   |
+|----------------------------------------------+-----+---|
+| Opening prayer                               |   1 | x |
+| Projects intro (proposal)                    |   5 | x |
+| Review: Quiz 2 (Python basics)               |   5 | x |
+| Review: Paystub solution                     |   5 | x |
+| Review: Quiz 3 (variables and statements)    |   5 | x |
+| Review: Programming assignment (sphere/trig) |   5 | x |
+| Review: Python lists                         |   5 | x |
+| Variables & Statements (extension)           |  10 | x |
+| Warm-up: Euler's number (code-along)         |  10 | x |
+| Functions: Anatomy of a function             |  10 | x |
+| Functions: Traceback → pythontutor.com       |  10 | x |
+| Packages: NumPy preview                      |  10 |   |
+| Next assignments                             |   3 | x |
+| Checkout (takeaway)                          |   1 | x |
+| Closing prayer                               |   1 | x |
+|----------------------------------------------+-----+---|
 
 ** Opening prayer
 
@@ -672,12 +672,12 @@ along if you like.
 
 - Step 1: Anatomy of a function
 - Step 2: Traceback and Pythontutor.com
-- Step 3: NumPy preview 
+- Step 3: NumPy preview
 
 Open the Colab starter notebook:
 [[https://tinyurl.com/functions-packages-starter][tinyurl.com/functions-packages-starter]]
 
-Complete notebook: 
+Complete notebook:
 [[https://tinyurl.com/functions-packages-complete][tinyurl.com/functions-packages-complete]]
 
 ** Next assignments (June 19th)
@@ -701,7 +701,286 @@ counting the exercises).
 
 [[../img/o_most_holy_heart_of_jesus.png]]
 
-* Footnotes
+* DONE Week 5 - Interface and Implementation / ~JupyTurtle~ graphics
+
+| Activity                           | Min |   |
+|------------------------------------+-----+---|
+| Opening prayer                     |   1 | x |
+| Update: Current assignments        |   5 | x |
+| Projects: Review of your proposals |  15 | x |
+| Interface design                   |  60 | x |
+| Next assignments                   |   5 | x |
+| Checkout (takeaway)                |   5 | x |
+| Closing prayer                     |   1 | x |
+|------------------------------------+-----+---|
+
+** Opening prayer
+
+[[../img/memorare_to_the_Sacred_Heart_of_Jesus.png]]
+
+** Update
+
+- I added one bonus assignment "Five easy pieces"
+- I added one programming assignment "Simple function exercises"
+- I added grading categories and weights
+- Bonus assignments are now listed as 0 points - added at end
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  [print(_) for _ in dir(list)]
+#+end_src
+
+#+RESULTS:
+#+begin_example
+__add__
+__class__
+__class_getitem__
+__contains__
+__delattr__
+__delitem__
+__dir__
+__doc__
+__eq__
+__format__
+__ge__
+__getattribute__
+__getitem__
+__gt__
+__hash__
+__iadd__
+__imul__
+__init__
+__init_subclass__
+__iter__
+__le__
+__len__
+__lt__
+__mul__
+__ne__
+__new__
+__reduce__
+__reduce_ex__
+__repr__
+__reversed__
+__rmul__
+__setattr__
+__setitem__
+__sizeof__
+__str__
+__subclasshook__
+append
+clear
+copy
+count
+extend
+index
+insert
+pop
+remove
+reverse
+sort
+#+end_example
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  l = [1,2,"jim"]
+  l.clear()
+  print(l)
+  help(len)
+  help(list.remove)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[]
+Help on built-in function len in module builtins:
+
+len(obj, /)
+    Return the number of items in a container.
+
+Help on method_descriptor:
+
+remove(self, value, /)
+    Remove first occurrence of value.
+
+    Raises ValueError if the value is not present.
+#+end_example
+
+** Projects: Review of your proposals
+
+- Tell us about your project!
+- I will give everyone individual feedback.
+- Did you answer to the assignment requirements?
+- Did you provide sources? (Included software?)
+- How much time did you spend?
+- What's your confidence index? (0-10)
+- Do you have any questions?
+- Ask any questions in the General messages or via chat
+
+** Review: Functions and Interfaces (ch 4)
+
+- Summarize what you took away from this chapter?
+
+  #+begin_quote
+  - *Encapsulation* — wrap repeated code into a named function
+    (e.g. =square()=)
+  - *Generalization* — replace a magic number with a parameter
+    (e.g. =square() → square(length)=)
+  - *Interface vs. implementation* — the caller needs to know what a
+    function does and what to pass it, not how it works inside
+    (e.g. calling =polygon(t, n, length)= without knowing the angle
+    math)
+  - *Refactoring* — improving a function's design after it already
+    works, without changing what it does
+  - *Development plan* — encapsulate, then generalize, then refactor: a
+    repeatable process, not a one-shot
+  - Begin with the simplest version of your problem -> add functionality
+    -> now you will begin to need function -> generalize -> refactoring
+  - *Process* becomes *workflow* when you control the development
+  - *Magic numbers* — unexplained literal values in code that should
+    usually become parameters or named constants
+  #+end_quote
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  print("Marcus" + " B") # print needs 0 or n arguments
+#+end_src
+
+#+RESULTS:
+: Marcus B
+
+** PRACTICE Interface design: Rosary
+
+- Open the Colab notebook: [[https://tinyurl.com/rosary-starter][tinyurl.com/rosary-starter]]
+- Make a copy
+- Code along with me
+
+** Next assignments
+
+- Quiz on this week's content
+- Home programming assignment: "Full rosary!" (Refactoring)
+- DataCamp lesson on "NumPy" due
+- Read/work through chapter 5 of the textbook (Conditionals)
+- Remember midterm project is due on Friday, July 3rd
+
+** Take aways
+
+- Encapsulation
+- Functions that share no logic don't need to be bundled
+- Rosary as a composition of functions
+- Coding for Catholics
+- Generalize by turning numbers into parameters
+- Change by degree (does not touch logic) vs. by kind (algorithm)
+
+** Closing prayer
+
+[[../img/o_most_holy_heart_of_jesus.png]]
+
+* Week 6 - Conditionals and Recursion
+
+| Activity                          | Min |   |
+|-----------------------------------+-----+---|
+| Opening prayer                    |   1 |   |
+| Post-mortem: ~remove~ vs ~len~ vs ~del~ |  10 |   |
+| Projects: Review (proposals)      |  15 |   |
+| Conditionals and recursion        |  60 |   |
+| Next assignments                  |   5 |   |
+| Checkout (takeaway)               |   5 |   |
+| Closing prayer                    |   1 |   |
+|-----------------------------------+-----+---|
+
+* Post-mortem: Three ways Python lets you act on a list
+
+[[https://teams.cloud.microsoft/l/message/19:xwJm5Zf90mdM34VuFWBGyX-ofNKhU9JQ7Wbrr55uYSE1@thread.tacv2/1781961912939?tenantId=0a354b0e-92d3-45a0-8b54-df786cb36e0f&groupId=10bc88e3-971f-4b60-ae54-c90368bd6d8c&parentMessageId=1781961912939&teamName=CS%20100&channelName=General%20messages&createdTime=1781961912939][[posted to General Messages, 6/20/2026]​]]
+
+Jim Primbs opened the question by noting that Python lists have
+methods like ~.remove()~, but getting the length requires a separate
+function, ~len()~, and deleting an element requires the ~del~ statement
+followed by the element name — prompting his core question: "Why all
+the differences? That seems confusing to me."
+
+Restated more precisely, the question is:
+#+begin_quote
+~list~ has ~.remove()~ as a method - isn't ~len~ also a method, and why is
+~del~ neither a method nore a function but something else entirely?
+#+end_quote
+
+The short answer: 
+#+begin_quote
+Python lists have one type-specific method, ~.remove()~, but calls
+~len()~, which calls ~list~'s ~__len__~, and a language statement for ~del~,
+which calls ~list~'s ~__delitem__~. So the three are different kinds of
+construct, not an arbitrary inconsistency but a design feature. The
+confusion stems from the layers of abstraction heaped on.
+#+end_quote
+
+Here is the longer answer:
+
+1. ~x.remove()~ is a *method*. A function that belongs to a specific type,
+   called with dot notation. It only exists because ~list~ and a few
+   other containers (like ~set~) chose to write it. There is no general
+   Python-wide idea of "remove" that every type shares. It just lives
+   where it was defined, as one of ~list~'s own attributes, which is why
+   you find ~remove~ sitting in ~dir(list)~ for you to all directly.
+
+2. ~len()~ is a *function that hands the real work off to the object
+   itself* (this is also called "dispatch"). It does not know how to
+   measure anything. When you call =len(x)=, it asks =x= "How long are
+   you?" by calling the hidden method ~__len__~. Every type that wants
+   to support ~len~ - ~list~, ~dict~, ~set~ and so on - implements its own
+   ~__len__~ that know how to count its own contents. So ~len~ is a thin
+   front door (an interface!) while the actual counting logic (the
+   implementation!) lives inside each type.
+
+3. =del x[i]= or =del x= is neither a function nor a method but an
+   instruction built into the language. It's a keyword like =if= or
+   =return= (hence no parentheses). Keywords are recognized by Python
+   before your code even runs, not looked up as objects at runtime. So
+   when you write =del x[i]=, Python does not go searching for something
+   called ~del~ on =x=, but it just knows, from the word itself, what do
+   to: quietly turn it into a call to =x='s own hidden ~__delitem__~
+   method. That's also why ~del~ can never show up in a ~dir~ list. ~dir~
+   lists an object's attributes, and ~del~ is neither an attribute nor
+   even an object!
+
+*Why does Python do it this way?*
+
+It's not arbitrary. Python is sorting things into three buckets based
+on how widely shared the operation is:
+- *Keywords* (~del~) are for things so fundamental to the language that
+  they get baked into the grammar itself, like ~if~ or ~for~.
+- *Functions* (~len()~) are for operations that almost every container
+  wants to support in exactly the same way. Instead of making you
+  remember a different way each time, you get one shared function.
+- *Methods* (~.remove()~) are for operations that only make sense for some
+  types, and often don't even mean the same things across them:
+  removing the first match by value has a meaning for ~list~ but not for
+  ~dict~ (dictionary).
+
+This was fun to research - thanks for the question - I hope it is a
+little clearer now. Programming language construction is a large field
+in its own right (and a lot more transparent than natural language
+evolution).
+
+*References*
+
+1. Python Software Foundation. [[https://docs.python.org/3/reference/datamodel.html#special-method-names][The Python Language Reference — Data
+   Model, §3.3 Special Method Names]]
+2. Python Software Foundation. [[https://docs.python.org/3/library/functions.html#len][The Python Standard Library — Built-in
+   Functions: len()]]
+3. Python Software Foundation. [[https://docs.python.org/3/reference/simple_stmts.html#the-del-statement][The Python Language Reference — Simple
+   Statements: The del statement]]
+4. Python Software Foundation. [[https://docs.python.org/3/library/functions.html#dir][The Python Standard Library — Built-in
+   Functions: dir()]]
+5. Python Software Foundation. [[https://docs.python.org/3/tutorial/datastructures.html#more-on-lists][The Python Tutorial — Data Structures:
+   More on Lists]]
+
+Further reading: 
+- Downey, A. (2024). Think Python, 3rd ed. O'Reilly Media — Ch. 4
+  (functions), Ch. 10 (lists).
+- Ramalho, L. (2022). Fluent Python, 2nd ed. O'Reilly Media — Ch. 1,
+  "The Python Data Model."
+- Lutz, M. (2013). Learning Python, 5th ed. O'Reilly Media — Ch. 30,
+  "Operator Overloading."
+
+** Footnotes
 
 [fn:1] If programming makes you feel passionate, good for you. This is
 a problem-solving activity, and it comes with some emotions, sure, but

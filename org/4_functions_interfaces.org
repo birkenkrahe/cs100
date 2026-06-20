@@ -1,0 +1,379 @@
+#+TITLE: Functions and Interfaces
+#+STARTUP: overview hideblocks indent entitiespretty:
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :results output :exports both :python python3
+
+* Objectives
+
+Understand and practice:
+- *Interface design* - functions working together
+- *Encapsulation* - wrapping code in functions
+- *Generalization* - replace numbers with parameters
+- *Refactoring* - reorganize working code
+- *Workflow* - encapsulate-generalize-refactor cycle
+- *Docstrings* - function interface information
+
+* Problem 1
+
+Write four functions: =our_father()=, =hail_mary()=, =glory_be()=, and
+=fatima().= Each one, when called, should print the opening line of the
+corresponding prayer (one line is enough).
+
+** Different in kind or different in value?
+
+- Before you write the code: Why four separate functions instead of
+  one function that takes the prayer name as a parameter, like
+  =pray(name)=.
+
+- How would the implementation of =pray(name)= for example for Our
+  Father look like?
+
+  #+begin_example python
+  def pray(name):
+     if (name == "Our Father"):
+        print("Our Father...")
+     elif (name == "Hail Mary"):
+        print("Hail Mary...")
+     elif (name == "Fatima"):
+        print("O my Jesus...")
+     else:
+        print("Glory be...")
+  #+end_example
+
+- This is not generalization, it's just four unrelated chunks of code
+  stapled together, picked apart by string comparison. Nothing is
+  shared between the branches - no common loop or parameter that
+  varies in degree. Each if-branch does something completely different
+  from the others.
+
+- Compare with the jupyturtle example in the textbook. Nobody is
+  tempted to write this because =forward= and =left= don't share a shape:
+  they cause different state changes, different operations.
+  #+begin_example python
+  def move(t, kind, value):
+     if kind == "forward":
+         t.forward(value)
+     elif kind == "left":
+         t.left(value)
+  #+end_example
+
+- You're building out the Rosary functions further and want to add the
+  Sign of the Cross, which opens and closes the Rosary, and the
+  Apostles' Creed, which is said once at the very beginning, right
+  after the Sign of the Cross. A student in your class writes this
+  instead of two different functions:
+  #+begin_example python
+  def opening(name):
+      if name == "cross":
+          print("In the name of the Father...")
+      elif name == "creed":
+          print("I believe in God...")
+  #+end_example
+
+- Question: does the variation change a value, or change the
+  algorithm? - Decide whether =opening(name)= is good design or not.
+
+  *Answer*: This is bad design because it changes the algorithm - what
+  the function delivers, and =cross()= and =credo()= don't share a
+  shape. Instead what we want is always the =cross()= first and the
+  =credo()= second.
+
+- Another example: the Mass has many different Prefaces (Advent, Lent,
+  Easter, Ordinary Time, etc.), but they all occupy the same
+  structural slot in the Eucharistic Prayer and follow the same
+  pattern — opening dialogue, proper text, transition into the
+  Sanctus. What changes is the text for the season, not the steps. So
+  they vary in degree, not in kind, and it makes sense to bundle them
+  into one function parameterized by season/feast.
+
+- Remember:
+  #+begin_quote
+  When deciding whether to write one parameterized function or several
+  separate functions, ask: does the variation between cases change a
+  value, or does it change the algorithm? If every case follows the
+  same sequence of steps and only the content plugged into those steps
+  differs, that's variation in degree — one function,
+  parameterized. If the cases require fundamentally different steps or
+  logic, that's variation in kind — separate functions. Bundling
+  different-in-kind operations behind a single dispatcher doesn't
+  generalize anything; it hides unrelated logic behind one name,
+  making code harder to read and easier to break silently.
+  #+end_quote
+
+** Solution
+
+#+name: hail_mary_1
+#+begin_src python :results none
+  def our_father():
+      print("Our Father, who art in heaven...")
+
+  def hail_mary():
+      print("Hail Mary, full of grace...")
+
+  def fatima():
+      print("O my Jesus, forgive us our sins...")
+
+  def glory_be():
+      print("Glory be to the Father...")
+#+end_src
+
+* Problem 2
+
+Using the functions from Problem 1, write =decade()= — a function that
+prays one decade of the Rosary: Our Father once, Hail Mary ten times,
+Glory Be, then the Fátima prayer. Call =decade()= once.
+
+This is *encapsulation*: you are grouping the four prayer calls into a
+single named function that captures what a decade is.
+
+** Solution
+
+#+name: decade_enc
+#+begin_src python :results output
+  def decade():
+      our_father()
+      for i in range(10):
+          hail_mary()
+      glory_be()
+      fatima()
+
+  decade()
+#+end_src
+
+#+RESULTS: decade_enc
+: Our Father, who art in heaven...
+: Hail Mary, full of grace...
+: Hail Mary, full of grace...
+: Hail Mary, full of grace...
+: Hail Mary, full of grace...
+: Hail Mary, full of grace...
+: Hail Mary, full of grace...
+: Hail Mary, full of grace...
+: Hail Mary, full of grace...
+: Hail Mary, full of grace...
+: Hail Mary, full of grace...
+: Glory be to the Father...
+: O my Jesus, forgive us our sins...
+
+* Problem 3
+
+Take your =decade()= from Problem 2 and generalize it: replace the
+hardcoded =10= with a parameter =n= with default value =10=, so it can be
+called as =decade()= for a full decade or =decade(n=1)= for a shortened
+form. Run your code for =n=1=.
+
+This is *generalization*: adding a parameter turns a function that does
+one specific thing into a function that does a family of related things.
+
+Before you write it: where's the *magic number*, and is 10 something
+that should stay hardcoded inside =decade()=, or does it belong as a
+parameter?
+
+Apply the test from before — when you imagine calling =decade()= for
+different purposes (a full decade vs. a shortened devotional form some
+people pray vs. whatever else), does the number of Hail Marys vary in
+degree, or would changing it actually change what =decade()= is?
+
+#+begin_quote
+*Answer*: The shape of a decade is fixed: one Our Father, the Hail Mary
+repeated, one Glory Be, one Fatima prayer. Only the number of Hail
+Marys varies in degree (10 for a full decade, fewer for a shortened
+form); the structure around it does not change. So the number of Hail
+Marys belongs as a parameter on =decade()=, not as a hardcoded 10, and
+not as a parameter on the other functions.
+#+end_quote
+
+** Solution
+
+#+name: decade_gen
+#+begin_src python :results output
+  def decade(n=10):
+      our_father()
+      for i in range(n):
+          hail_mary()
+      glory_be()
+      fatima()
+
+  def main():
+      decade(n=1)
+
+  if __name__ == "__main__":
+      main()
+#+end_src
+
+#+RESULTS: decade_gen
+: Our Father, who art in heaven...
+: Hail Mary, full of grace...
+: Glory be to the Father...
+: O my Jesus, forgive us our sins...
+
+* Problem 4
+
+In the Rosary, each decade is prayed for a specific *mystery* — a scene
+from the life of Christ or Mary that is announced before the decade
+begins (e.g. "The First Sorrowful Mystery: The Agony in the
+Garden"). Add a =mystery= parameter to =decade()= so that it prints the
+mystery name before praying, then calls the same sequence as before.
+
+Before you write it: is =mystery= a parameter for the same reason =n= is?
+Apply the kind-vs-degree test: does =mystery= change the *structure* of
+what =decade()= does, or only a *value* plugged into one line?
+
+#+begin_quote
+=mystery= is a degree change, not a kind change: it does not alter the
+structure of what =decade()= does (Our Father → Hail Marys → Glory Be →
+Fátima). It only plugs a different string into one printed line. So it
+belongs as a parameter, for the same reason =n= does — but unlike =n=,
+there is no sensible default, so it has none.
+#+end_quote
+
+** Solution
+
+#+name: decade_mystery
+#+begin_src python :results output
+  def decade(mystery, n=10):
+      print(mystery)
+      our_father()
+      for i in range(n):
+          hail_mary()
+      glory_be()
+      fatima()
+
+  def main():
+      decade("The First Sorrowful Mystery: The Agony in the Garden", n=1)
+
+  if __name__ == "__main__":
+      main()
+#+end_src
+
+#+RESULTS: decade_mystery
+: The First Sorrowful Mystery: The Agony in the Garden
+: Our Father, who art in heaven...
+: Hail Mary, full of grace...
+: Glory be to the Father...
+: O my Jesus, forgive us our sins...
+
+* Problem 5
+
+Write =rosary(mysteries)= — a function that prays a full set of 5
+decades. It takes one argument: a list of 5 mystery names. Loop through
+the list and call =decade()= for each.
+
+First define the mystery set for the Sorrowful Mysteries in list
+=sorrowful=, then call =rosary(sorrowful)=. Use =n=1= to keep output short.
+
+** Solution
+
+#+name: rosary_sorrowful
+#+begin_src python :results output
+  sorrowful = [
+      "The First Sorrowful Mystery: The Agony in the Garden",
+      "The Second Sorrowful Mystery: The Scourging at the Pillar",
+      "The Third Sorrowful Mystery: The Crowning with Thorns",
+      "The Fourth Sorrowful Mystery: The Carrying of the Cross",
+      "The Fifth Sorrowful Mystery: The Crucifixion and Death of Jesus",
+  ]
+
+  def rosary(mysteries):
+      for mystery in mysteries:
+          decade(mystery, n=1)
+
+  def main():
+      rosary(sorrowful)
+
+  if __name__ == "__main__":
+      main()
+#+end_src
+
+#+RESULTS: rosary_sorrowful
+#+begin_example
+The First Sorrowful Mystery: The Agony in the Garden
+Our Father, who art in heaven...
+Hail Mary, full of grace...
+Glory be to the Father...
+O my Jesus, forgive us our sins...
+The Second Sorrowful Mystery: The Scourging at the Pillar
+Our Father, who art in heaven...
+Hail Mary, full of grace...
+Glory be to the Father...
+O my Jesus, forgive us our sins...
+The Third Sorrowful Mystery: The Crowning with Thorns
+Our Father, who art in heaven...
+Hail Mary, full of grace...
+Glory be to the Father...
+O my Jesus, forgive us our sins...
+The Fourth Sorrowful Mystery: The Carrying of the Cross
+Our Father, who art in heaven...
+Hail Mary, full of grace...
+Glory be to the Father...
+O my Jesus, forgive us our sins...
+The Fifth Sorrowful Mystery: The Crucifixion and Death of Jesus
+Our Father, who art in heaven...
+Hail Mary, full of grace...
+Glory be to the Father...
+O my Jesus, forgive us our sins...
+#+end_example
+
+* Design Analysis
+
+Look at what we built, bottom up:
+
+| Problem | Function                          | Concept                   | Calls          |
+|---------+-----------------------------------+---------------------------+----------------|
+| 1       | =our_father()=, =hail_mary()=, ...  | Primitives                | nothing        |
+| 2       | =decade()=                          | Encapsulation             | the four above |
+| 3       | =decade(n=10)=                      | Generalization (count)    | the four above |
+| 4       | =decade(mystery, n=10)=             | Generalization (name)     | the four above |
+| 5       | =rosary(mysteries)=                 | Composition               | =decade()=     |
+
+This is a *function hierarchy*: each level calls the one below it and
+knows nothing about the levels above. =rosary()= does not know what a
+Hail Mary is; =decade()= does not know how many decades make a Rosary.
+Each function has a clean *interface* — what it takes and what it does —
+and hides its *implementation* from the caller.
+
+The parallel to the textbook's =jupyturtle= case is direct:
+
+| Turtle               | Rosary                              |
+|----------------------+-------------------------------------|
+| =forward()=, =left()=  | =our_father()=, =hail_mary()=, ...    |
+| =polygon(n, length)=   | =decade(mystery, n=10)=             |
+| =circle(radius)=       | =rosary(mysteries)=                 |
+
+In both cases: start with primitives, encapsulate a repeated pattern,
+generalize with parameters, then compose into higher-level functions.
+The caller at the top passes in the data (a mystery list, a radius);
+the functions below handle the work.
+
+* Docstrings
+
+A docstring is a triple-quoted string at the top of a function body
+that documents what the function does and what its parameters mean.
+=help()= displays it. Good docstrings describe the *interface* — what to
+pass in and what to expect — not the implementation.
+
+Here are the key functions with docstrings added:
+
+#+begin_src python :results none
+  def decade(mystery, n=10):
+      """Pray one decade of the Rosary.
+
+      mystery: string, the name of the mystery to announce
+      n: int, number of Hail Marys (default 10 for a full decade)
+      """
+      print(mystery)
+      our_father()
+      for i in range(n):
+          hail_mary()
+      glory_be()
+      fatima()
+
+  def rosary(mysteries):
+      """Pray one set of five decades of the Rosary.
+
+      mysteries: list of 5 strings, one mystery name per decade
+      """
+      for mystery in mysteries:
+          decade(mystery)
+#+end_src
+
