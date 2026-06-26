@@ -1,0 +1,147 @@
+#+TITLE: Assignment: The Full Rosary — Refactoring
+#+AUTHOR: Marcus Birkenkrahe
+#+SUBTITLE: CS 100 - Chapter 4 Homework
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+
+* Assignment: The Full Rosary (Ch. 4)
+
+Due: June 26, 8 PM CDT (6 pm PDT)
+
+Submit: Paste your Colab notebook SHARE LINK (Anyone with link →
+Viewer) as a reply to this Teams post.
+
+** Goal
+
+Practice *refactoring*: reorganizing working code when building the next
+level of a function hierarchy reveals a gap you could not have
+anticipated upfront.
+
+** Context
+
+In class you built Problems 1–5: four prayer primitives, =decade()=
+(encapsulation), =decade(n=10)= (generalization), =decade(mystery, n=10)=
+(generalization), and =rosary(mysteries)= (composition). Start your
+notebook with that code — copy it [[https://colab.research.google.com/drive/1xPJSi7JOvU8PsysLncOwnWDKJu1TK5y3?usp=sharing][from the (completed) class Colab
+notebook]].
+
+** Task
+
+Now write =full_rosary()= — a function that prays all four mystery sets
+(Joyful, Sorrowful, Glorious, Luminous) in sequence, printing a header
+before each set:
+
+#+begin_example
+--- The Joyful Mysteries ---
+#+end_example
+
+Try to write it using your =rosary()= from class. You will immediately
+hit a problem: =rosary()= has no way to print the set name.
+
+This is the *refactoring* moment — just like the textbook's =polyline()=,
+which only became necessary when trying to write =arc()=. Go back and
+rewrite =rosary()= to accept a second parameter =name=, so it prints a
+header before looping through the decades:
+
+#+begin_example python
+rosary("The Joyful Mysteries", joyful)
+#+end_example
+
+You already have =sorrowful= from class. Add =joyful=, =glorious=, and
+=luminous= (the Luminous Mysteries, added by John Paul II in 2002), then
+write =full_rosary()= to call =rosary()= four times.
+
+*Expected output* (abbreviated — with =n=1= for brevity):
+
+#+begin_example
+--- The Joyful Mysteries ---
+The First Joyful Mystery: The Annunciation
+Our Father, who art in heaven...
+Hail Mary, full of grace...
+Glory be to the Father...
+O my Jesus, forgive us our sins...
+...
+--- The Sorrowful Mysteries ---
+...
+--- The Glorious Mysteries ---
+...
+--- The Luminous Mysteries ---
+...
+#+end_example
+
+** Extension (ungraded bonus)
+
+Instead of printing all the prayers, write counting versions of
+=decade()= and =rosary()= that return the number of Hail Marys prayed
+instead of printing. Then verify:
+
+#+begin_example python
+print(full_rosary())   # should print 200
+#+end_example
+
+This previews the =return= keyword, covered in ThinkPython chapter 6.
+
+** Submission Checklist
+
+- [ ] Notebook runs top to bottom without errors (Runtime > Run all)
+- [ ] All four prayer primitives from class are present
+- [ ] =rosary(name, mysteries)= refactored to accept a name parameter
+- [ ] =joyful=, =sorrowful=, =glorious=, =luminous= defined as lists
+- [ ] =full_rosary()= calls =rosary()= four times
+- [ ] Sharing set to "Anyone with the link - Viewer"
+- [ ] Link posted in MS Teams
+
+
+* Solution
+
+Write a function =full_rosary()= that prays all four mystery sets
+(Joyful, Sorrowful, Glorious, Luminous) in sequence, printing a header
+before each set.
+
+The code so far, in one block, complete with docstrings:
+#+begin_src python :results output :exports both :session *Python* :python python3
+  # Functions definitions
+  def our_father():
+    """Print the first line of Our Father.
+    """
+    print("Our Father, who art in heaven...")
+
+  def hail_mary():
+    """Print the first line of the Hail Mary
+         """
+    print("Hail Mary, full of grace...")
+
+  def fatima():
+    """Print the first line of the Fatima prayer
+         """
+    print("O my Jesus, forgive us our sins...")
+
+  def glory_be():
+    """Print the first line of the Glory Be
+         """
+    print("Glory be to the Father...")
+
+  def decade(mystery, n=10):
+    """Pray one decade of the rosary.
+
+       mystery: string, the name of the mystery to announce
+         n: int, number of Hail Marys (default 10 for full decade)
+         """
+    print(mystery)
+    our_father()
+    for i in range(n):
+      hail_mary()
+      glory_be()
+      fatima()
+
+  def rosary(mysteries):
+    """Pray one set of five decades of the Rosary.
+
+       mysteries: list of 5 strings, one mystery name per decade
+    """
+    for mystery in mysteries:
+      decade(mystery)
+
+#+end_src
+
+#+RESULTS:
