@@ -873,28 +873,38 @@ remove(self, value, /)
 
 [[../img/o_most_holy_heart_of_jesus.png]]
 
-* Week 6 - Conditionals and Recursion
+* Week 6 - Conditionals and Recursion / NumPy
 
-| Activity                          | Min |   |
-|-----------------------------------+-----+---|
-| Opening prayer                    |   1 |   |
-| Post-mortem: ~remove~ vs ~len~ vs ~del~ |  10 |   |
-| Projects: Review (proposals)      |  15 |   |
-| Conditionals and recursion        |  60 |   |
-| Next assignments                  |   5 |   |
-| Checkout (takeaway)               |   5 |   |
-| Closing prayer                    |   1 |   |
-|-----------------------------------+-----+---|
+| Activity                           | Min |     |
+|------------------------------------+-----+-----|
+| Opening prayer                     |   1 | x   |
+| Post-mortem: ~remove~ vs ~len~ vs ~del~  |   5 | x   |
+| Projects: Review (proposals)       |   5 | x   |
+| Review: Chapter 5 / DataCamp NumPy |  35 | x   |
+| Code along: Liturgical Prayers     |  35 | (x) |
+| Next assignments                   |   1 | x   |
+| Checkout (takeaway)                |   5 | x   |
+| Closing prayer                     |   1 |  x  |
+|------------------------------------+-----+-----|
 
-* Post-mortem: Three ways Python lets you act on a list
+** Opening prayer
 
-[[https://teams.cloud.microsoft/l/message/19:xwJm5Zf90mdM34VuFWBGyX-ofNKhU9JQ7Wbrr55uYSE1@thread.tacv2/1781961912939?tenantId=0a354b0e-92d3-45a0-8b54-df786cb36e0f&groupId=10bc88e3-971f-4b60-ae54-c90368bd6d8c&parentMessageId=1781961912939&teamName=CS%20100&channelName=General%20messages&createdTime=1781961912939][[posted to General Messages, 6/20/2026]​]]
+[[../img/memorare_to_the_Sacred_Heart_of_Jesus.png]]
 
-Jim Primbs opened the question by noting that Python lists have
-methods like ~.remove()~, but getting the length requires a separate
-function, ~len()~, and deleting an element requires the ~del~ statement
-followed by the element name — prompting his core question: "Why all
-the differences? That seems confusing to me."
+** Update - housekeeping
+
+- All remaining DataCamp lessons assigned (July 3-Aug 28):
+  1) Intermediate Python: Pandas, dictionaries, loops, control flow
+  2) Lambda functions and error-handling 
+  3) Python Toolbox: iterators, comprehensions, generators
+
+- All assignments and quizzes until June 19 graded.
+
+- If you submitted and have 0 points: Share your submission.
+
+** Post-mortem: Three ways Python lets you act on a list
+
+TLDR version:
 
 Restated more precisely, the question is:
 #+begin_quote
@@ -902,85 +912,214 @@ Restated more precisely, the question is:
 ~del~ neither a method nore a function but something else entirely?
 #+end_quote
 
-The short answer: 
-#+begin_quote
-Python lists have one type-specific method, ~.remove()~, but calls
-~len()~, which calls ~list~'s ~__len__~, and a language statement for ~del~,
-which calls ~list~'s ~__delitem__~. So the three are different kinds of
-construct, not an arbitrary inconsistency but a design feature. The
-confusion stems from the layers of abstraction heaped on.
-#+end_quote
+1. ~x.remove()~ is a *method* that belongs to the ~list~ type and you call
+   it with the dot-notation.
+   
+2. ~len()~ is a *function*, an interface to the hidden function ~__len__~
+   and works for all objects that chose to implement length counting.
+   
+3. ~del~ is a built-in *keyword* that works on any object using the hidden
+   ~__delitem__~ function.
 
-Here is the longer answer:
+These three represent three levels of operations of different
+impact. The language could also have one function for everything, but
+the price of giving up this abstraction would be much duplication and
+waste of resources.
 
-1. ~x.remove()~ is a *method*. A function that belongs to a specific type,
-   called with dot notation. It only exists because ~list~ and a few
-   other containers (like ~set~) chose to write it. There is no general
-   Python-wide idea of "remove" that every type shares. It just lives
-   where it was defined, as one of ~list~'s own attributes, which is why
-   you find ~remove~ sitting in ~dir(list)~ for you to all directly.
+Full version [[https://teams.cloud.microsoft/l/message/19:xwJm5Zf90mdM34VuFWBGyX-ofNKhU9JQ7Wbrr55uYSE1@thread.tacv2/1781961912939?tenantId=0a354b0e-92d3-45a0-8b54-df786cb36e0f&groupId=10bc88e3-971f-4b60-ae54-c90368bd6d8c&parentMessageId=1781961912939&teamName=CS%20100&channelName=General%20messages&createdTime=1781961912939][posted to General Messages, 6/20/2026]]
 
-2. ~len()~ is a *function that hands the real work off to the object
-   itself* (this is also called "dispatch"). It does not know how to
-   measure anything. When you call =len(x)=, it asks =x= "How long are
-   you?" by calling the hidden method ~__len__~. Every type that wants
-   to support ~len~ - ~list~, ~dict~, ~set~ and so on - implements its own
-   ~__len__~ that know how to count its own contents. So ~len~ is a thin
-   front door (an interface!) while the actual counting logic (the
-   implementation!) lives inside each type.
+** Project review: Proposals feedback
 
-3. =del x[i]= or =del x= is neither a function nor a method but an
-   instruction built into the language. It's a keyword like =if= or
-   =return= (hence no parentheses). Keywords are recognized by Python
-   before your code even runs, not looked up as objects at runtime. So
-   when you write =del x[i]=, Python does not go searching for something
-   called ~del~ on =x=, but it just knows, from the word itself, what do
-   to: quietly turn it into a call to =x='s own hidden ~__delitem__~
-   method. That's also why ~del~ can never show up in a ~dir~ list. ~dir~
-   lists an object's attributes, and ~del~ is neither an attribute nor
-   even an object!
+- Keep it simple, keep it stupid.
+- The purpose is the (well-documented) journey.
+- You need to provide your sources.
+- You need to own up to your specific use of AI.
+- To share: ways to work locally with Python and Jupyter
 
-*Why does Python do it this way?*
+** Review: Refactoring assignment
 
-It's not arbitrary. Python is sorting things into three buckets based
-on how widely shared the operation is:
-- *Keywords* (~del~) are for things so fundamental to the language that
-  they get baked into the grammar itself, like ~if~ or ~for~.
-- *Functions* (~len()~) are for operations that almost every container
-  wants to support in exactly the same way. Instead of making you
-  remember a different way each time, you get one shared function.
-- *Methods* (~.remove()~) are for operations that only make sense for some
-  types, and often don't even mean the same things across them:
-  removing the first match by value has a meaning for ~list~ but not for
-  ~dict~ (dictionary).
+- What was the last session about (apart from the Rosary :-)?
+  #+begin_quote
+  1. *Interface design* involves writing functions that *encapsulate*
+     algorithms (= steps to take to solve a problem)
+  2. When a function contains variable or constant numbers, it can be
+     *generalized* by replacing the numbers with variables that become
+     parameters of the function.
+  3. The user calls functions with (or without) arguments based on his
+     knowledge of the *interface* (function name and parameters).
+  4. The function body contains the *implementation*, and the user does
+     not need to know about anything except the interface.
+  5. When a program with multiple functions works, it can often be
+     optimized by *refactoring* - restructuring existing working code to
+     reduce duplication and improve reuse, without changing what the
+     program does.
+  #+end_quote
 
-This was fun to research - thanks for the question - I hope it is a
-little clearer now. Programming language construction is a large field
-in its own right (and a lot more transparent than natural language
-evolution).
+- The working code (test for n=1):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    # Functions definitions
+    def our_father():
+      """Print the first line of Our Father.
+      """
+      print("Our Father, who art in heaven...")
 
-*References*
+    def hail_mary():
+      """Print the first line of the Hail Mary
+           """
+      print("Hail Mary, full of grace...")
 
-1. Python Software Foundation. [[https://docs.python.org/3/reference/datamodel.html#special-method-names][The Python Language Reference — Data
-   Model, §3.3 Special Method Names]]
-2. Python Software Foundation. [[https://docs.python.org/3/library/functions.html#len][The Python Standard Library — Built-in
-   Functions: len()]]
-3. Python Software Foundation. [[https://docs.python.org/3/reference/simple_stmts.html#the-del-statement][The Python Language Reference — Simple
-   Statements: The del statement]]
-4. Python Software Foundation. [[https://docs.python.org/3/library/functions.html#dir][The Python Standard Library — Built-in
-   Functions: dir()]]
-5. Python Software Foundation. [[https://docs.python.org/3/tutorial/datastructures.html#more-on-lists][The Python Tutorial — Data Structures:
-   More on Lists]]
+    def fatima():
+      """Print the first line of the Fatima prayer
+           """
+      print("O my Jesus, forgive us our sins...")
 
-Further reading: 
-- Downey, A. (2024). Think Python, 3rd ed. O'Reilly Media — Ch. 4
-  (functions), Ch. 10 (lists).
-- Ramalho, L. (2022). Fluent Python, 2nd ed. O'Reilly Media — Ch. 1,
-  "The Python Data Model."
-- Lutz, M. (2013). Learning Python, 5th ed. O'Reilly Media — Ch. 30,
-  "Operator Overloading."
+    def glory_be():
+      """Print the first line of the Glory Be
+           """
+      print("Glory be to the Father...")
 
-** Footnotes
+    def decade(mystery, n=10):
+      """Pray one decade of the rosary.
+
+         mystery: string, the name of the mystery to announce
+           n: int, number of Hail Marys (default 10 for full decade)
+           """
+      print(mystery)
+      our_father()
+      for i in range(n):
+        hail_mary()
+      glory_be()
+      fatima()
+
+    def rosary(mysteries):
+      """Pray one set of five decades of the Rosary.
+
+         mysteries: list of 5 strings, one mystery name per decade
+      """
+      for mystery in mysteries:
+        decade(mystery,n=1)
+
+    # main program
+    def main():
+      # Sorrowful mystery:
+      sorrowful = [
+        "The First Sorrowful Mystery: The Agony in the Garden",
+        "The Second Sorrowful Mystery: The Scourging at the Pillar",
+        "The Third Sorrowful Mystery: The Crowning with Thorns",
+        "The Fourth Sorrowful Mystery: The Carrying of the Cross",
+        "The Fifth Sorrowful Mystery: The Crucifixion and Death of Jesus",
+      ]
+
+      # Pray the Sorrowful mystery:
+      rosary(sorrowful)
+
+    # main guard
+    if __name__ == "__main__":
+      main()
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  The First Sorrowful Mystery: The Agony in the Garden
+  Our Father, who art in heaven...
+  Hail Mary, full of grace...
+  Glory be to the Father...
+  O my Jesus, forgive us our sins...
+  The Second Sorrowful Mystery: The Scourging at the Pillar
+  Our Father, who art in heaven...
+  Hail Mary, full of grace...
+  Glory be to the Father...
+  O my Jesus, forgive us our sins...
+  The Third Sorrowful Mystery: The Crowning with Thorns
+  Our Father, who art in heaven...
+  Hail Mary, full of grace...
+  Glory be to the Father...
+  O my Jesus, forgive us our sins...
+  The Fourth Sorrowful Mystery: The Carrying of the Cross
+  Our Father, who art in heaven...
+  Hail Mary, full of grace...
+  Glory be to the Father...
+  O my Jesus, forgive us our sins...
+  The Fifth Sorrowful Mystery: The Crucifixion and Death of Jesus
+  Our Father, who art in heaven...
+  Hail Mary, full of grace...
+  Glory be to the Father...
+  O my Jesus, forgive us our sins...
+  #+end_example
+
+- The solution:
+  1) Rewrite =rosary()= to accept a =mystery_name= parameter
+  2) Add the remaining mysteries as lists
+  3) Write =full_rosary()= as four calls to =rosary()=
+     #+begin_example python
+     def full_rosary():
+         rosary2("--- The Joyful Mysteries ---", joyful)
+         rosary2("--- The Sorrowful Mysteries ---", sorrowful)
+         rosary2("--- The Glorious Mysteries ---", glorious)
+         rosary2("--- The Luminous Mysteries ---", luminous)
+     #+end_example
+  4) Add the four mysteries as a list of two-element lists
+  5) Rewrite =full_rosary()= as a loop over =rosary2()=
+     #+begin_example python
+     def full_rosary2():
+         for pair in mysteries:
+             rosary2(pair[0],pair[1])
+     #+end_example
+
+- If you did not manage to solve/submit this, try again, be extra
+  verbose in your notebook, and submit for 50% of the points.
+
+- We'll discuss the solution to the extension (with ~return~) next time
+  because it is a good preparation for chapter 6 (functions with
+  ~return~) - reading assignment for July 8 (not July 1).
+
+** New Assignments
+
+- *Quiz:* Conditionals, Recursion, NumPy.
+- Submit a *solution to exercises 1 + 2* from chapter 5 textbook
+- *Work on your project* (deadline Friday July 3rd)
+- *No new book chapter* assigned this week!
+
+** Warm up coding: What's wrong with this code?
+
+- Open this notebook and make a copy:
+  [[https://tinyurl.com/conditionals-recursion-numpy][tinyurl.com/conditionals-recursion-numpy]]
+
+- Let's review textbook and DataCamp content.
+
+- Find out what's wrong with the code, then fix it.
+
+- The solution is available on GitHub (review/ folder).
+
+** Code along lecture: Liturgical Hours Revisited
+
+- Objectives:
+  1. Use =//= (integer division) and =%= (modulus) to extract components
+     from a raw integer value (e.g. hours and minutes from seconds).
+  2. Write a chained conditional (=if= / =elif= / =else=) to classify a
+     value into one of several named categories.
+  3. Apply =//= and =%= element-wise across a NumPy array.
+  4. Construct a boolean mask from a NumPy array and use it to subset
+     the array.
+  5. Combine two boolean conditions on a NumPy array using =&=.
+
+- Open the starter notebook and code along:
+  [[https://tinyurl.com/liturgical-prayers-starter][tinyurl.com/liturgical-prayers-starter]]
+
+- The solution notebook is available on GitHub.
+
+** Take aways today?
+
+- When recursion is valuable (you need a recursive problem)
+- There is a modifiable system parameter for maximum recursion
+- Fractals are exemplary recursive structures
+- Guessing (or knowing) error codes (to build guardrails)
+
+** Closing prayer
+
+[[../img/o_most_holy_heart_of_jesus.png]]
+
+* Footnotes
 
 [fn:1] If programming makes you feel passionate, good for you. This is
 a problem-solving activity, and it comes with some emotions, sure, but
@@ -991,3 +1130,4 @@ author suggests. Instead, consider it a tool that you're trying to
 master. Getting lost in emotions when you fail to hammer a nail into a
 wall gets you nowhere IMHO (and I'm saying this as a trained coach
 and psychotherapist).
+

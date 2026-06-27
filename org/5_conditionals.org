@@ -1,0 +1,180 @@
+#+TITLE: Code-Along: Liturgy of the Hours Classifier
+#+SUBTITLE: CSC 100 — Chapter 5 & NumPy
+#+AUTHOR: Marcus Birkenkrahe
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :python python3 :results output :exports both
+
+* Introduction
+
+The Church divides the day into fixed prayer times called the
+*Canonical Hours*. Given a time of day in seconds since midnight, we
+want to know which hour it belongs to.
+
+We will use:
+- =//= and =%= to extract hours and minutes from raw seconds
+- =numpy= to work with an array of timestamps at once
+- a chained conditional to classify a single time
+
+* Part 1: Integer division and modulus
+
+Suppose someone begins prayer at second 25,320 since midnight.
+What time is that?
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+seconds_since_midnight = 25320
+
+hours = seconds_since_midnight // 3600
+remaining = seconds_since_midnight % 3600
+minutes = remaining // 60
+secs = remaining % 60
+
+print(hours, "h", minutes, "m", secs, "s")
+#+end_src
+
+#+RESULTS:
+: 7 h 2 m 0 s
+
+* Part 2: Classify a single time with a chained conditional
+
+The canonical hours (simplified, Latin Rite):
+
+| Hour    | Approx. time |
+|---------+--------------|
+| Vigils  | 2:30 AM      |
+| Lauds   | 5:30 AM      |
+| Prime   | 6:00 AM      |
+| Terce   | 9:00 AM      |
+| Sext    | 12:00 PM     |
+| None    | 3:00 PM      |
+| Vespers | 6:00 PM      |
+| Compline| 9:00 PM      |
+
+Call =canonical_hour()= on the =hours= result of the previous exercise to
+test it. The answer should be: =Prime=.
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+def canonical_hour(h):
+    if h < 2:
+        print("Night (before Vigils)")
+    elif h < 5:
+        print("Vigils")
+    elif h < 6:
+        print("Lauds")
+    elif h < 9:
+        print("Prime")
+    elif h < 12:
+        print("Terce")
+    elif h < 15:
+        print("Sext")
+    elif h < 18:
+        print("None")
+    elif h < 21:
+        print("Vespers")
+    else:
+        print("Compline")
+
+canonical_hour(hours)
+#+end_src
+
+#+RESULTS:
+: Prime
+
+* Part 3: A NumPy array of timestamps
+
+Now suppose we record the prayer times of seven monks over one week
+— one timestamp per day, in seconds since midnight.
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+import numpy as np
+
+# Seconds since midnight for 7 prayer times
+timestamps = np.array([9720, 25320, 32400, 43200,
+                       54000, 64800, 75600])
+
+# Extract hour of day for each timestamp
+prayer_hours = timestamps // 3600
+prayer_minutes = (timestamps % 3600) // 60
+
+print("Hours:  ", prayer_hours)
+print("Minutes:", prayer_minutes)
+#+end_src
+
+#+RESULTS:
+: Hours:   [ 2  7  9 12 15 18 21]
+: Minutes: [42  2  0  0  0  0  0]
+
+#+begin_quote
+What does =//= do to every element? What does =%= do?
+#+end_quote
+
+#+begin_quote
+*Answer:* =//= and =%= apply element-wise to every element in the array
+simultaneously — that's the core NumPy behavior students learned from
+DataCamp. Instead of looping over each timestamp manually, NumPy
+broadcasts the operation across the entire array at once, returning a
+new array of the same shape.
+
+So =timestamps // 3600= divides every element by 3600 and takes the
+integer part, giving the hour for each timestamp. And =timestamps %
+3600= gives the remainder after removing full hours from each element,
+which is then used to extract minutes.
+#+end_quote
+
+How is this different to the non-NumPy code from earlier?
+#+begin_quote
+*Answer:* in plain Python you would need an explitit loop. NumPy loops
+ internally in optimized C code (fast!). This is also called
+ vectorization. Mentally, however, you have to look at the array in
+ NumPy as a single object you do arithmetic on rather than aas a
+ container you have to iterate over.
+#+end_quote
+
+* Part 4: Boolean subsetting — who prays during Terce?
+
+Terce is prayed between 6 AM (hour 6) and 9 AM (hour 9).
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  terce_mask = (prayer_hours >= 6) & (prayer_hours < 9)
+  print("Terce mask:      ", terce_mask)
+  print("Terce timestamps:", timestamps[terce_mask])
+#+end_src
+
+#+RESULTS:
+: Terce mask:       [False  True False False False False False]
+: Terce timestamps: [25320]
+
+#+begin_quote
+How many monks prayed during Terce? What is the =&= operator doing here?
+#+end_quote
+
+#+begin_src python :results output :exports both :session *Python* :python python3 
+  print(timestamps)
+  print(prayer_hours)
+#+end_src
+
+#+RESULTS:
+: [ 9720 25320 32400 43200 54000 64800 75600]
+: [ 2  7  9 12 15 18 21]
+
+#+begin_quote
+ *Answer:* The Terce window is hour >= 6 and hour < 9. Only one monk
+ prayed during that time.
+#+end_quote
+
+* Part 5: Extend (try this)
+
+Modify the boolean mask to find all timestamps that fall during
+*Vespers* (18:00–21:00). How many are there?
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+    # your code here
+    vespers_mask = (prayer_hours >= 18) & (prayer_hours < 21)
+
+    print("Vespers mask:      ", vespers_mask)
+    print("Vespers timestamps:", timestamps[vespers_mask])
+#+end_src
+
+#+RESULTS:
+: Vespers mask:       [False False False False False  True False]
+: Vespers timestamps: [64800]
