@@ -1,0 +1,411 @@
+#+TITLE: What's Wrong With This Code?
+#+SUBTITLE: CSC 100 — Review Exercises
+#+AUTHOR: Marcus Birkenkrahe
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+* Objectives
+
+- Open this notebook and make a copy:
+  [[https://tinyurl.com/conditionals-recursion-numpy][tinyurl.com/conditionals-recursion-numpy]]
+
+- Let's review textbook and DataCamp content.
+
+- Find out what's wrong with the code, then fix it.
+
+* Chapter 5 — Conditionals and Recursion
+
+** 1 What's wrong with this code?
+
+The output should be: =Number of Holy Sacraments=
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  x = 7
+  if x = 7:
+      print("Number of Holy Sacraments.")
+#+end_src
+
+#+begin_quote
+~SyntaxError~: There is no condition: The ~if~ statement is followed by an
+assignment =x=7= instead of a logical comparison (resulting in a boolean
+value).
+
+To fix, write x==7 instead of x=7 after ~if~.
+#+end_quote
+
+Fix it:
+#+begin_src python :results output :exports both :session *Python* :python python3 
+  x = 7
+  if x == 7:
+      print("Number of Holy Sacraments.")
+#+end_src
+
+#+RESULTS:
+: Number of Holy Sacraments
+
+** 2 What's wrong with this code?
+
+The output should be: =B=.
+#+begin_src python :session *Python* :python python3 :results none :exports both
+  grade = 85
+  if grade => 90:
+      print("A")
+  elif grade => 80:
+      print("B")
+  else:
+      print("C")
+#+end_src
+
+#+begin_quote
+~SyntaxError~ yet again. Relational operator is wrong: It's >= and not
+=>.  This is a chained ~if~ statement. The cases should all be mutually
+exclusive (alas, Python does not check this and exits at the first
+match).
+#+end_quote
+
+Fix it:
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  grade = 85
+  if grade >= 90:
+      print("A")
+  elif grade >= 80:
+      print("B")
+  else:
+      print("C")
+#+end_src
+
+#+RESULTS:
+: B
+
+** 3 What's wrong with this code?
+
+The output should be "You may vote":
+#+begin_src python :session *Python* :python python3 :results output :exports both
+age = 18
+if age > 18:
+    print("You may vote.")
+else:
+    print("You may not vote.")
+#+end_src
+
+#+RESULTS:
+: You may not vote.
+
+#+begin_quote
+No compile-time error, and no run-time error but a semantic or logic
+error: The boundary value =age = 18= is not included.
+#+end_quote
+
+Fix it:
+#+begin_src python :session *Python* :python python3 :results output :exports both
+age = 18
+if age >= 18:
+    print("You may vote.")
+else:
+    print("You may not vote.")
+#+end_src
+
+#+RESULTS:
+: You may vote.
+
+** 4 What's wrong with this code?
+
+Expected output:
+#+begin_example
+5
+4
+3
+2
+1
+0
+#+end_example
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+def countdown(n):
+    print(n)
+    countdown(n - 1)
+
+countdown(5)
+#+end_src
+
+Actual output: 
+#+begin_example
+5
+4
+3
+2
+1
+0
+-1
+-2
+...
+-985
+#+end_example
+
+#+begin_quote
+This is a ~RecursionError~: "Maximum recursion depth exceeded while
+calling a Python object". There is no *base case* for the recursion - a
+conditional case in a recursive function that does not make a
+recursive call.
+
+To fix it, break recursion off when n < 0.
+#+end_quote
+
+Fix it:
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  def countdown(n):
+      if n >= 0:
+          print(n)
+          countdown(n - 1)
+      
+  countdown(5)
+#+end_src
+
+#+RESULTS:
+: 5
+: 4
+: 3
+: 2
+: 1
+: 0
+
+In the book, the countdown ends with "Blastoff!" instead of zero, and
+the recursion breaks off at n = 0:
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  def countdown2(n):
+      if n <= 0:
+          print("Blastoff!")
+          return
+      print(n)
+      countdown2(n - 1)
+      
+  countdown2(5)
+#+end_src
+
+#+RESULTS:
+: 5
+: 4
+: 3
+: 2
+: 1
+: Blastoff!
+
+What's so great about recursion anyway?
+#+begin_quote
+Honestly, nothing. It's hard to wrap your head around. But it's easier
+and natural when the problem itself is defined recursively - tree
+traversals, fractals, factorials, etc. Loops are better for flat
+iteration:
+#+end_quote
+#+begin_src python :results output :exports both :session *Python* :python python3 
+  def countdown3(n):
+      for i in range(n+1):
+          print(5-i)
+
+  countdown3(5)
+#+end_src
+
+#+RESULTS:
+: 5
+: 4
+: 3
+: 2
+: 1
+: 0
+
+** 5 What's wrong with this code?
+
+#+begin_src python :tangle ../../src/review.py :noeval :python python3
+age = input("How old are you?\n")
+if age >= 18:
+    print("Adult")
+else:
+    print("Minor")
+#+end_src
+
+#+begin_quote
+This is a runtime error at the comparison age >= 18 because the
+operator >= is not defined for a comparison between a string (=age=) and
+a number (18).
+#+end_quote
+
+#+begin_src bash :results output :exports both
+  cd ../../src
+  echo "18" | python3 review.py 2>&1
+#+end_src
+
+#+RESULTS:
+: How old are you?
+: Traceback (most recent call last):
+:   File "/home/aletheia/GitHub/admin/summer26/cs100/src/review.py", line 2, in <module>
+:     if age >= 18:
+: TypeError: '>=' not supported between instances of 'str' and 'int'
+
+Fix it:
+#+begin_src python :tangle ../../src/review2.py :noeval :python python3
+age = int(input("How old are you?\n"))
+if age >= 18:
+    print("Adult")
+else:
+    print("Minor")
+#+end_src
+
+#+begin_src bash :results output :exports both
+  cd ../../src
+  echo "18" | python3 review2.py 2>&1
+#+end_src
+
+#+RESULTS:
+: How old are you?
+: Adult
+
+* NumPy — DataCamp Chapter 4
+
+** What's wrong with this code?
+
+The result should be the =bmi= for each of the 5 individuals.
+#+begin_src python :session *Python* :python python3 :results none :exports both
+height = [1.73, 1.68, 1.71, 1.89, 1.79]
+weight = [65.4, 59.2, 63.6, 88.4, 68.7]
+bmi = weight / height ** 2
+print(bmi)
+#+end_src
+
+#+begin_quote
+You get a ~TypeError~ because ~**~ is not supported for the ~list~ type.
+Fix: turn the lists into NumPy arrays
+#+end_quote
+
+Fix it:
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  import numpy as np
+  height = np.array([1.73, 1.68, 1.71, 1.89, 1.79])
+  weight = np.array([65.4, 59.2, 63.6, 88.4, 68.7])
+  bmi = weight / height ** 2
+  print(bmi)
+#+end_src
+
+#+RESULTS:
+: [21.85171573 20.97505669 21.75028214 24.7473475  21.44127836]
+
+** What's wrong with this code?
+
+Output should be the values of the array doubled.
+#+begin_src python :session *Python* :python python3 :results none :exports both
+import numpy as np
+scores = np.array([95, 87, "N/A", 76, 88])
+print(scores * 2)
+#+end_src
+
+#+begin_quote
+~TypeError~: NumPy arrays (unlike lists) can only hold one type. The
+string ="N/A"= forces the entire array to the =string= data
+type. Multiplying by 2 concatenates strings instead of doubling
+numering values.
+
+Fix: Use ~np.nan~ for missing numeric values.
+#+end_quote
+
+Fix it:
+#+begin_src python :session *Python* :python python3 :results output :exports both
+import numpy as np
+scores = np.array([95, 87, np.nan, 76, 88])
+print(scores * 2)
+#+end_src
+
+#+RESULTS:
+: [190. 174.  nan 152. 176.]
+
+** What's wrong with this code?
+
+Output should be: 21.44.
+#+begin_src python :session *Python* :python python3 :results none :exports both
+import numpy as np
+bmi = np.array([21.85, 20.97, 21.75, 24.74, 21.44])
+print(bmi[5])
+#+end_src
+
+#+begin_quote
+This is an ~IndexError~ because =bmi[5]= is out of bounds.
+
+Fix: if you want the last element, use 4 or -1.
+#+end_quote
+
+Fix it:
+#+begin_src python :session *Python* :python python3 :results output :exports both
+import numpy as np
+bmi = np.array([21.85, 20.97, 21.75, 24.74, 21.44])
+print(bmi[-1])
+#+end_src
+
+#+RESULTS:
+: 21.44
+
+** What's wrong with this code?
+
+Output should be the height and weight of the second person.
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  import numpy as np
+  np_2d = np.array([[1.73, 1.68, 1.71, 1.89, 1.79],
+                    [65.4, 59.2, 63.6, 88.4, 68.7]])
+  print(np_2d[1])
+  print(np_2d[1,:])  
+#+end_src
+
+#+RESULTS:
+: [65.4 59.2 63.6 88.4 68.7]
+: [65.4 59.2 63.6 88.4 68.7]
+
+#+begin_quote
+Semantic error. This is a 2x5 matrix. =np_2d[1]= selects the second row
+(same as =np_2d[1,:]=) but we want the elements of the 2nd column. Fix:
+print =np_2d[:,1]= (all rows, second column).
+#+end_quote
+
+Fix it:
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  import numpy as np
+  np_2d = np.array([[1.73, 1.68, 1.71, 1.89, 1.79],
+                    [65.4, 59.2, 63.6, 88.4, 68.7]])
+  print(np_2d[:,1])
+#+end_src
+
+#+RESULTS:
+: [ 1.68 59.2 ]
+
+** What's wrong with this code?
+
+The output should be the average height, which is stored in the first
+column (expected value is 1.65): 
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  import numpy as np
+  np_person = np.array([[1.64, 71.78],
+                        [1.37, 63.35],
+                        [1.60, 55.09],
+                        [1.89, 88.40],
+                        [1.75, 68.72]])
+  mean_height = np.mean(np_person)
+  print(mean_height)
+#+end_src
+
+#+RESULTS:
+: 35.559000000000005
+
+#+begin_quote
+Semantic error: 5 x 2 matrix. =np.mean(np_person)= computes the average
+over all values. What you want is to select all rows of the first
+column: =np_person[:,0]=
+#+end_quote
+
+Fix it:
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  import numpy as np
+  np_person = np.array([[1.64, 71.78],
+                        [1.37, 63.35],
+                        [1.60, 55.09],
+                        [1.89, 88.40],
+                        [1.75, 68.72]])
+  mean_height = np.mean(np_person[:,0])
+  print(mean_height)
+#+end_src
+
+#+RESULTS:
+: 1.65
