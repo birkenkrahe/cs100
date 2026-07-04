@@ -873,19 +873,19 @@ remove(self, value, /)
 
 [[../img/o_most_holy_heart_of_jesus.png]]
 
-* Week 6 - Conditionals and Recursion / NumPy
+* DONE Week 6 - Conditionals and Recursion / NumPy
 
-| Activity                           | Min |     |
-|------------------------------------+-----+-----|
-| Opening prayer                     |   1 | x   |
-| Post-mortem: ~remove~ vs ~len~ vs ~del~  |   5 | x   |
-| Projects: Review (proposals)       |   5 | x   |
-| Review: Chapter 5 / DataCamp NumPy |  35 | x   |
-| Code along: Liturgical Prayers     |  35 | (x) |
-| Next assignments                   |   1 | x   |
-| Checkout (takeaway)                |   5 | x   |
-| Closing prayer                     |   1 |  x  |
-|------------------------------------+-----+-----|
+| Activity                           | Min |   |       |
+|------------------------------------+-----+---+-------|
+| Opening prayer                     |   1 | x |       |
+| Post-mortem: ~remove~ vs ~len~ vs ~del~  |   5 | x |       |
+| Projects: Review (proposals)       |   5 | x |       |
+| Review: Chapter 5 / DataCamp NumPy |  35 | x |       |
+| Code along: Liturgical Prayers     |  35 | x | video |
+| Next assignments                   |   1 | x |       |
+| Checkout (takeaway)                |   5 | x |       |
+| Closing prayer                     |   1 | x |       |
+|------------------------------------+-----+---+-------|
 
 ** Opening prayer
 
@@ -1076,7 +1076,7 @@ Full version [[https://teams.cloud.microsoft/l/message/19:xwJm5Zf90mdM34VuFWBGyX
 ** New Assignments
 
 - *Quiz:* Conditionals, Recursion, NumPy.
-- Submit a *solution to exercises 1 + 2* from chapter 5 textbook
+- New DataCamp lesson ~matplotlib~ (creating graphs)
 - *Work on your project* (deadline Friday July 3rd)
 - *No new book chapter* assigned this week!
 
@@ -1118,6 +1118,168 @@ Full version [[https://teams.cloud.microsoft/l/message/19:xwJm5Zf90mdM34VuFWBGyX
 ** Closing prayer
 
 [[../img/o_most_holy_heart_of_jesus.png]]
+
+
+* Week 7 - Matplotlib - Midterm project 
+
+** Opening prayer
+
+LITANY OF THE MOST PRECIOUS BLOOD ([[https://www.usccb.org/prayers/litany-most-precious-blood][usccb.org]])
+
+ Lord, have mercy  *Lord, have mercy*
+ Christ, have mercy  *Christ, have mercy*
+ Lord, have mercy  *Lord, hav mercy*
+       
+ God our Father in heaven  *Have mercy on us*
+ God the Son, Redeemer of the world  *Have mercy on us*
+ God the Holy Spirit  *Have mercy on us*
+ Holy Trinity, one God  *Have mercy on us*
+ 
+ Blood of Christ, only Son of the Father  *Be our salvation*
+ Blood of Christ, incarnate Word  *Be our salvation*
+ Blood of Christ, of the new and eternal covenant  *Be our salvation*
+ Blood of Christ, that spilled to the ground  *Be our salvation*
+ Blood of Christ, that flowed at the scourging  *Be our salvation*
+ Blood of Christ, dripping from the thorns  *Be our salvation*
+ Blood of Christ, shed on the cross  *Be our salvation*
+ Blood of Christ, the price of our redemption  *Be our salvation*
+ Blood of Christ, our only claim to pardon  *Be our salvation*
+ Blood of Christ, our blessing cup  *Be our salvation*
+ Blood of Christ, in which we are washed  *Be our salvation*
+ Blood of Christ, torrent of mercy  *Be our salvation*
+ Blood of Christ, that overcomes evil  *Be our salvation*
+ Blood of Christ, strength of the martyrs  *Be our salvation*
+ Blood of Christ, endurance of the saints  *Be our salvation*  
+ Blood of Christ, that makes the barren fruitful  *Be our salvation*
+ Blood of Christ, protection of the threatened  *Be our salvation*  
+ Blood of Christ, comfort of the weary  *Be our salvation*  
+ Blood of Christ, solace of the mourner  *Be our salvation*  
+ Blood of Christ, hope of the repentant  *Be our salvation*  
+ Blood of Christ, consolation of the dying  *Be our salvation*  
+ Blood of Christ, our peace and refreshment  *Be our salvation*
+ Blood of Christ, our pledge of life  *Be our salvation*  
+ Blood of Christ, by which we pass to glory  *Be our salvation*
+ Blood of Christ, most worthy of honor  *Be our salvation*
+ 
+ Lamb of God, you take away the sins of the world  *Have mercy on us*
+ Lamb of God, you take away the sins of the world  *Have mercy on us*  
+ Lamb of God, you take away the sins of the world  *Have mercy on us*
+ 
+ Lord, you redeemed us by your blood.  *You have made us a kingdom to serve our God.*
+
+ *Amen*.
+
+** Updates - housekeeping
+
+- The July 3 deadline is for an (ungraded) prototype.
+
+- Rather than submit this for my eyes only, submit to the General
+  Channel so that everyone can see your results and comment on them.
+
+- The last week will be presentation week. You have max 10-15 minutes
+  to present followed by 5 minutes discussion.
+
+- 10-15 minutes is very tight. You have to rehearse your presentation
+  well.
+
+- Please reserve 2 hours for the last class so that we can accommodate
+  everyone.
+
+- *Any questions on the projects?*
+
+** Review Quiz 4
+
+#+attr_html: :width 600px :float nil: 
+[[../img/quiz_4_import_numpy.png]]
+
+The reasons for preferring ~import numpy~:
+1. Namespace pollution (=array= name collision likely)
+2. Readability (=array= from different packages)
+
+#+attr_html: :width 600px :float nil: 
+[[../img/quiz_4_import.png]]
+
+Once you ~import~ the ~array~ module on its own, the dot notation will no
+longer work - =array= now is on its own. But you want it, even though
+it's more to write.
+
+#+attr_html: :width 600px :float nil: 
+[[../img/quiz_4_index().png]]
+
+#+begin_src python :results output :exports both :session *Python* :python python3 
+  spam = [23, 45, 67]
+  print(spam.index(45))
+  print(spam[1])
+#+end_src
+
+#+RESULTS:
+: 1
+: 45
+
+** Review Quiz 5
+
+#+attr_html: :width 600px :float nil: 
+[[../img/quiz_5_composition.png]]
+
+Encapsulation means that whatever was available everywhere before
+(global scope) is now hidden in the function implementation (local
+scope), and you can only get to it through the function interface.
+
+#+attr_html: :width 600px :float nil: 
+[[../img/quiz_5_generalization.png]]
+
+Making a function call another function is called composition. It
+means building more complex behavior out of simpler pieces (like a
+composition in music).
+
+#+attr_html: :width 600px :float nil: 
+[[../img/quiz_5_magic_number.png]]
+
+A named constant is typically a global object.
+
+#+attr_html: :width 400px :float nil: 
+[[../img/quiz_5_default_parameter.png]]
+
+In =decade(n=10)=, n=10 is the default for =n= irrespective what goes on
+inside the function =decade= (difference interface vs. implementation).
+
+#+attr_html: :width 400px :float nil: 
+[[../img/quiz_5_docstring.png]]
+
+Think about why people call the ~help()~ function.
+
+** Matplotlib code-along and practice
+
+- Code along lecture: We're going to go through the creation of the
+  GapMinder plot as shown in DataCamp.
+
+- Open the starter file and code along: [[https://tinyurl.com/matplotlib-ipynb][tinyurl.com/matplotlib-ipynb]]
+
+- Full file is available in GitHub (6_matplotlib.org).
+
+- 
+
+** New assignments
+
+- Home assignment: plot the pilgrim's path
+- Quiz on Matplotlib
+- Read chapter 6 in the textbook (functions with ~return~)
+- Complete the next DataCamp chapter "Dictionaries & Pandas"
+
+** Take aways
+** Closing prayer
+
+Let us pray.
+
+O God, who by the Precious Blood of your Only Begotten Son
+have redeemed the whole world,
+preserve in us the work of your mercy,
+so that, ever honoring the mystery of our salvation,
+we may merit to obtain its fruits.
+Through Christ our Lord.
+
+*Amen.*
+
 
 * Footnotes
 

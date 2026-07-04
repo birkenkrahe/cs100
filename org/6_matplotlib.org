@@ -1,0 +1,815 @@
+#+TITLE: Code-Along: Basic Plots with Matplotlib
+#+SUBTITLE: CS 100 — Intermediate Python, Chapter 1
+#+AUTHOR: Marcus Birkenkrahe (with Claude)
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :python python3 :results output :exports both
+* Objectives
+
+- Data visualization using the GapMinder dataset
+- Choosing the right plot (line, scatter, histogram)
+- Customizing plots
+
+* Data visualization
+
+Data visualization serves two purposes in data science:
+- *Explore* your data: the better you understand it, the better your insights
+- *Report* your insights: a good plot lets the data tell its own story
+
+The choice of visualization depends on:
+- The *data* you have
+- The *story* you want to tell
+
+To start, let's plot some simple lists and interpret them.
+
+Import the graphics library:
+#+begin_src python :results none :session *Python* :python python3
+  import matplotlib.pyplot as plt
+#+end_src
+
+Define two lists and plot them "thoughtlessly":
+#+begin_src python :file ../img/gp1.png :results file graphics output :exports both :session *Python* :python python3
+  year = [1950, 1970, 1990, 2010]
+  pop = [2.519, 3.692, 5.263, 6.972]
+
+  plt.clf()
+  plt.plot(year,pop)
+  plt.savefig("../img/gp1.png") # or plt.show()
+#+end_src
+
+#+RESULTS:
+[[file:../img/gp1.png]]
+
+What does this line plot show? What does it not show?
+#+begin_quote
+*Answer*:
+- Four data points connected by a line.
+- The world population growth in billions between 1950 and 2010, based
+  on a sample of four years.
+- It does not show anything that happened in between.
+#+end_quote
+
+A scatter plot shows the sample data only. Now you have to imagine the
+line. 
+#+begin_src python :file ../img/gp2.png :results file graphics output :exports both :session *Python* :python python3
+  plt.clf()
+  plt.scatter(year,pop)
+  plt.savefig("../img/gp2.png") # or plt.show()
+#+end_src
+
+#+RESULTS:
+[[file:../img/gp2.png]]
+
+When does a line plot make sense? When does a scatter plot make sense?
+#+begin_quote
+*Answer:* A line plot makes sense whenever the points are, in fact,
+ connected. This is a time series - a sequence of values ordered by
+ time. A scatter plot is always the basis of a line plot. When the
+ points are not connected, a line plot will be meaningless. 
+#+end_quote
+
+Example:
+#+begin_src python :file ../img/gp3.png :results file graphics output :exports both :session *Python* :python python3
+  year = [19.50, 19.70, 18.9, 19.55, 18.49]
+  pop = [2.519, 3.692, 4, 5.263, 6.972]
+
+  plt.clf()
+  plt.scatter(year,pop)
+  plt.savefig("../img/gp3.png") # or plt.show()
+#+end_src
+
+#+RESULTS:
+[[file:../img/gp3.png]]
+
+These are just a bunch of random points - the pattern that was present
+in the population vs. year data is lost. Change the plot to a scatter
+plot to only see the data.
+
+* Line plot, scatter plot, log scale transformation
+
+- Get the full GapMinder dataset. For the story behind this dataset,
+  see [[https://www.gapminder.org/about/about-gapminder/history/][here]]. I got the dataset for this exercise from [[https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv][here]]. This is the
+  "classic" dataset that only contains 6 columns.
+
+- For now, we're only going to work with a smaller dataset limited to
+  the year 2007. It contains six variables for 142 countries
+  #+begin_src python :results none :exports both :session *Python* :python python3
+    import pandas as pd
+    
+    df = pd.read_csv("../data/gapminder.csv", index_col=0)
+  #+end_src
+  
+- You should take a look at the data itself, and run some basic
+  commands - these only work because =df= is formatted as a ~pandas~
+  DataFrame:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(df.info()) # structural information
+    print(df.head()) # show first few lines
+    print(df.describe()) # show some statistical properties
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  <class 'pandas.core.frame.DataFrame'>
+  Index: 142 entries, 11 to 1703
+  Data columns (total 6 columns):
+   #   Column      Non-Null Count  Dtype  
+  ---  ------      --------------  -----  
+   0   country     142 non-null    object 
+   1   year        142 non-null    int64  
+   2   population  142 non-null    float64
+   3   cont        142 non-null    object 
+   4   life_exp    142 non-null    float64
+   5   gdp_cap     142 non-null    float64
+  dtypes: float64(3), int64(1), object(2)
+  memory usage: 7.8+ KB
+  None
+          country  year  population      cont  life_exp       gdp_cap
+  11  Afghanistan  2007  31889923.0      Asia    43.828    974.580338
+  23      Albania  2007   3600523.0    Europe    76.423   5937.029526
+  35      Algeria  2007  33333216.0    Africa    72.301   6223.367465
+  47       Angola  2007  12420476.0    Africa    42.731   4797.231267
+  59    Argentina  2007  40301927.0  Americas    75.320  12779.379640
+           year    population    life_exp       gdp_cap
+  count   142.0  1.420000e+02  142.000000    142.000000
+  mean   2007.0  4.402122e+07   67.007423  11680.071820
+  std       0.0  1.476214e+08   12.073021  12859.937337
+  min    2007.0  1.995790e+05   39.613000    277.551859
+  25%    2007.0  4.508034e+06   57.160250   1624.842248
+  50%    2007.0  1.051753e+07   71.935500   6124.371108
+  75%    2007.0  3.121004e+07   76.413250  18008.835640
+  max    2007.0  1.318683e+09   82.603000  49357.190170
+  #+end_example
+
+- We can already learn a lot from this output but today we want to
+  explore it visually with ~matplotlib~.
+
+- Plot life expectancy vs. GDP per capita:
+  #+begin_src python :file ../img/gp4.png :results file graphics output :exports both :session *Python* :python python3
+    plt.clf()
+    plt.plot(df.gdp_cap,gpm.life_exp)
+    plt.savefig("gp4.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/gp4.png]]
+
+- Just as discussed before: the lines are not helpful here because the
+  points are in no way connected to each other: The life expectancy
+  and GDP of one country is not related to that of another (at least
+  not in a simple way).
+
+- Plot same quantities as scatter plot with half transparency (=alpha=
+  parameter):
+  #+begin_src python :file ../img/gp5.png :results file graphics output :exports both :session *Python* :python python3
+    plt.clf()
+    plt.scatter(df.gdp_cap,gpm.life_exp,alpha=0.5)
+    plt.savefig("../img/gp5.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/gp5.png]]
+
+- You notice how the points are spread out across a vast range - the
+  GDP per capita between different countries is very different. We can
+  transform this and pull the points apart (for better readability) by
+  applying a logarithmit transformation to the x-axis values.
+
+- Plot semi-logarithmic transform of =gdp_cap= by adding the command
+  =plt.xscale('log')= (base 10 by default - this means 10,000 becomes 4
+  because log10(10000)=4).
+  #+begin_src python :file ../img/gp6.png :results file graphics output :exports both :session *Python* :python python3
+    plt.clf()
+    plt.scatter(gpm.gdp_cap,gpm.life_exp,alpha=0.5)
+    plt.xscale('log')
+    plt.savefig("../img/gp6.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/gp6.png]]
+
+* Histograms
+
+- Greek roots: 'histos' (mast or upright) and 'gramma' (drawing or
+  record) - an upright drawing.
+
+- Python's ~hist~ help is unfortunately not very clear.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(help(plt.hist))
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  Help on function hist in module matplotlib.pyplot:
+
+  hist(x: 'ArrayLike | Sequence[ArrayLike]', bins: 'int | Sequence[float] | str | None' = None, range: 'tuple[float, float] | None' = None, density: 'bool' = False, weights: 'ArrayLike | None' = None, cumulative: 'bool | float' = False, bottom: 'ArrayLike | float | None' = None, histtype: "Literal['bar', 'barstacked', 'step', 'stepfilled']" = 'bar', align: "Literal['left', 'mid', 'right']" = 'mid', orientation: "Literal['vertical', 'horizontal']" = 'vertical', rwidth: 'float | None' = None, log: 'bool' = False, color: 'ColorType | Sequence[ColorType] | None' = None, label: 'str | Sequence[str] | None' = None, stacked: 'bool' = False, *, data=None, **kwargs) -> 'tuple[np.ndarray | list[np.ndarray], np.ndarray, BarContainer | Polygon | list[BarContainer | Polygon]]'
+      Compute and plot a histogram.
+
+      This method uses `numpy.histogram` to bin the data in *x* and count the
+      number of values in each bin, then draws the distribution either as a
+      `.BarContainer` or `.Polygon`. The *bins*, *range*, *density*, and
+      ,*weights* parameters are forwarded to `numpy.histogram`.
+
+      If the data has already been binned and counted, use `~.bar` or
+      `~.stairs` to plot the distribution::
+
+          counts, bins = np.histogram(x)
+          plt.stairs(counts, bins)
+
+      Alternatively, plot pre-computed bins and counts using ``hist()`` by
+      treating each bin as a single point with a weight equal to its count::
+
+          plt.hist(bins[:-1], bins, weights=counts)
+
+      The data input *x* can be a singular array, a list of datasets of
+      potentially different lengths ([*x0*, *x1*, ...]), or a 2D ndarray in
+      which each column is a dataset. Note that the ndarray form is
+      transposed relative to the list form. If the input is an array, then
+      the return value is a tuple (*n*, *bins*, *patches*); if the input is a
+      sequence of arrays, then the return value is a tuple
+      ([*n0*, *n1*, ...], *bins*, [*patches0*, *patches1*, ...]).
+
+      Masked arrays are not supported.
+
+      Parameters
+      ----------
+      x : (n,) array or sequence of (n,) arrays
+          Input values, this takes either a single array or a sequence of
+          arrays which are not required to be of the same length.
+
+      bins : int or sequence or str, default: :rc:`hist.bins`
+          If *bins* is an integer, it defines the number of equal-width bins
+          in the range.
+
+          If *bins* is a sequence, it defines the bin edges, including the
+          left edge of the first bin and the right edge of the last bin;
+          in this case, bins may be unequally spaced.  All but the last
+          (righthand-most) bin is half-open.  In other words, if *bins* is::
+
+              [1, 2, 3, 4]
+
+          then the first bin is ``[1, 2)`` (including 1, but excluding 2) and
+          the second ``[2, 3)``.  The last bin, however, is ``[3, 4]``, which
+          ,*includes* 4.
+
+          If *bins* is a string, it is one of the binning strategies
+          supported by `numpy.histogram_bin_edges`: 'auto', 'fd', 'doane',
+          'scott', 'stone', 'rice', 'sturges', or 'sqrt'.
+
+      range : tuple or None, default: None
+          The lower and upper range of the bins. Lower and upper outliers
+          are ignored. If not provided, *range* is ``(x.min(), x.max())``.
+          Range has no effect if *bins* is a sequence.
+
+          If *bins* is a sequence or *range* is specified, autoscaling
+          is based on the specified bin range instead of the
+          range of x.
+
+      density : bool, default: False
+          If ``True``, draw and return a probability density: each bin
+          will display the bin's raw count divided by the total number of
+          counts *and the bin width*
+          (``density = counts / (sum(counts) * np.diff(bins))``),
+          so that the area under the histogram integrates to 1
+          (``np.sum(density * np.diff(bins)) == 1``).
+
+          If *stacked* is also ``True``, the sum of the histograms is
+          normalized to 1.
+
+      weights : (n,) array-like or None, default: None
+          An array of weights, of the same shape as *x*.  Each value in
+          ,*x* only contributes its associated weight towards the bin count
+          (instead of 1).  If *density* is ``True``, the weights are
+          normalized, so that the integral of the density over the range
+          remains 1.
+
+      cumulative : bool or -1, default: False
+          If ``True``, then a histogram is computed where each bin gives the
+          counts in that bin plus all bins for smaller values. The last bin
+          gives the total number of datapoints.
+
+          If *density* is also ``True`` then the histogram is normalized such
+          that the last bin equals 1.
+
+          If *cumulative* is a number less than 0 (e.g., -1), the direction
+          of accumulation is reversed.  In this case, if *density* is also
+          ``True``, then the histogram is normalized such that the first bin
+          equals 1.
+
+      bottom : array-like, scalar, or None, default: None
+          Location of the bottom of each bin, i.e. bins are drawn from
+          ``bottom`` to ``bottom + hist(x, bins)`` If a scalar, the bottom
+          of each bin is shifted by the same amount. If an array, each bin
+          is shifted independently and the length of bottom must match the
+          number of bins. If None, defaults to 0.
+
+      histtype : {'bar', 'barstacked', 'step', 'stepfilled'}, default: 'bar'
+          The type of histogram to draw.
+
+          - 'bar' is a traditional bar-type histogram.  If multiple data
+            are given the bars are arranged side by side.
+          - 'barstacked' is a bar-type histogram where multiple
+            data are stacked on top of each other.
+          - 'step' generates a lineplot that is by default unfilled.
+          - 'stepfilled' generates a lineplot that is by default filled.
+
+      align : {'left', 'mid', 'right'}, default: 'mid'
+          The horizontal alignment of the histogram bars.
+
+          - 'left': bars are centered on the left bin edges.
+          - 'mid': bars are centered between the bin edges.
+          - 'right': bars are centered on the right bin edges.
+
+      orientation : {'vertical', 'horizontal'}, default: 'vertical'
+          If 'horizontal', `~.Axes.barh` will be used for bar-type histograms
+          and the *bottom* kwarg will be the left edges.
+
+      rwidth : float or None, default: None
+          The relative width of the bars as a fraction of the bin width.  If
+          ``None``, automatically compute the width.
+
+          Ignored if *histtype* is 'step' or 'stepfilled'.
+
+      log : bool, default: False
+          If ``True``, the histogram axis will be set to a log scale.
+
+      color : :mpltype:`color` or list of :mpltype:`color` or None, default: None
+          Color or sequence of colors, one per dataset.  Default (``None``)
+          uses the standard line color sequence.
+
+      label : str or list of str, optional
+          String, or sequence of strings to match multiple datasets.  Bar
+          charts yield multiple patches per dataset, but only the first gets
+          the label, so that `~.Axes.legend` will work as expected.
+
+      stacked : bool, default: False
+          If ``True``, multiple data are stacked on top of each other If
+          ``False`` multiple data are arranged side by side if histtype is
+          'bar' or on top of each other if histtype is 'step'
+
+      Returns
+      -------
+      n : array or list of arrays
+          The values of the histogram bins. See *density* and *weights* for a
+          description of the possible semantics.  If input *x* is an array,
+          then this is an array of length *nbins*. If input is a sequence of
+          arrays ``[data1, data2, ...]``, then this is a list of arrays with
+          the values of the histograms for each of the arrays in the same
+          order.  The dtype of the array *n* (or of its element arrays) will
+          always be float even if no weighting or normalization is used.
+
+      bins : array
+          The edges of the bins. Length nbins + 1 (nbins left edges and right
+          edge of last bin).  Always a single array even when multiple data
+          sets are passed in.
+
+      patches : `.BarContainer` or list of a single `.Polygon` or list of such objects
+          Container of individual artists used to create the histogram
+          or list of such containers if there are multiple input datasets.
+
+      Other Parameters
+      ----------------
+      data : indexable object, optional
+          If given, the following parameters also accept a string ``s``, which is
+          interpreted as ``data[s]`` (unless this raises an exception):
+
+          ,*x*, *weights*
+
+      ,**kwargs
+          `~matplotlib.patches.Patch` properties
+
+      See Also
+      --------
+      hist2d : 2D histogram with rectangular bins
+      hexbin : 2D histogram with hexagonal bins
+      stairs : Plot a pre-computed histogram
+      bar : Plot a pre-computed histogram
+
+      Notes
+      -----
+
+      .. note::
+
+          This is the :ref:`pyplot wrapper <pyplot_interface>` for `.axes.Axes.hist`.
+
+      For large numbers of bins (>1000), plotting can be significantly
+      accelerated by using `~.Axes.stairs` to plot a pre-computed histogram
+      (``plt.stairs(*np.histogram(data))``), or by setting *histtype* to
+      'step' or 'stepfilled' rather than 'bar' or 'barstacked'.
+
+  None
+  #+end_example
+
+- Easier to read: [[https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html][online documentation at matplotlib.org]]
+  #+attr_html: :width 600px :float nil:
+  [[../../../../img/histhelp.png]]
+
+- There is only one positional, non-default argument (~x~).
+
+- In the ~hist~ function signature, ~bins=None~ is not the default value:
+  it's a signal to defer resolution. ~None~ triggers a lookup against:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    import matplotlib
+    print(matplotlib.rcParams['hist.bins'])
+  #+end_src
+
+  #+RESULTS:
+  : 10
+
+- ~rc~ stands for "runtime configuration". You can use it to look up
+  other stack values:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(matplotlib.rcParams['figure.figsize'])
+  #+end_src
+
+  #+RESULTS:
+  : [6.4, 4.8]
+
+- For plots that render through a ~matplotlib~ ~Axes~, any keyword
+  defaulting to ~None~ is worth suspecting as an ~rcParams~ sentinel
+  rather than "no value" (~seaborn~, ~pandas~, ~scikit-learn~).
+
+- Example
+  #+begin_src python :file hist.png :results file graphics output :exports both :session *Python* :python python3
+    values = [0,0.6,1.4,1.6,2.2,2.5,2.6,3.2,3.5,3.9,4.2,6]
+    plt.hist(values,bins=3,edgecolor="white")
+    plt.savefig("hist.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:hist.png]]
+
+* Choose the right plot
+
+How do you choose the right plot type?
+
+#+begin_quote
+*Answer:* It depends on the type of your data and on what you want to do
+ with the plot.
+
+ Examples:
+ 1) If your data are continuous numeric values (real numbers), for
+    example grades, and you're curious their distribution - are they
+    all good, or all bad, or somewhere in between? - a *histogram* is
+    your answer.
+
+ 2) If you have recorded your grades over time and you want to know if
+    you're getting better or worse grades as time goes by, you want a
+    *line plot*. That's time series data.
+
+ 3) If you have two continuous numeric variables (pairs of real
+    numbers), for example the hours you studied and your exam scores
+    after each study session, a *scatter plot* is your answer.
+#+end_quote
+
+* Customization
+
+We're returning to GapMinder for an extended example of customization.
+
+Plot customization includes:
+- [X] Plot types (line, bar, hist, scatter, box, pie, etc.)
+- [X] Titles, axis labels
+- [X] Tick marks (position, labels, rotation, formatting)
+- [ ] Legends
+- [X] Colors, colormaps
+- [ ] Line/marker styles (width, style, marker shape)
+- [X] Annotations (text, arrows)
+- [X] Axis limits and scale (linear/log)
+- [X] Gridlines
+- [ ] Figure size, DPI
+- [ ] Subplot layout (multiple panels, spacing)
+- [ ] Spines (visibility, position)
+- [ ] Saving/export format
+
+* Gapminder example
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  df = df.reset_index(drop=True)
+  df.info()
+#+end_src
+
+#+RESULTS:
+#+begin_example
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 142 entries, 0 to 141
+Data columns (total 6 columns):
+ #   Column      Non-Null Count  Dtype  
+---  ------      --------------  -----  
+ 0   country     142 non-null    object 
+ 1   year        142 non-null    int64  
+ 2   population  142 non-null    float64
+ 3   cont        142 non-null    object 
+ 4   life_exp    142 non-null    float64
+ 5   gdp_cap     142 non-null    float64
+dtypes: float64(3), int64(1), object(2)
+memory usage: 6.8+ KB
+#+end_example
+
+Start with the basic plot, then refine it piece by piece: We want to
+plot life expectancy (in years) as a function of GDP per capita (in USD).
+
+You have to pick the right plot to do this.
+
+Store the variables you work with, for convenience & look at them.
+#+begin_src python :results output :exports both :session *Python* :python python3 
+  gdp_cap = df['gdp_cap']
+  life_exp = df['life_exp']
+  print(gdp_cap)
+  print(life_exp)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+0        974.580338
+1       5937.029526
+2       6223.367465
+3       4797.231267
+4      12779.379640
+           ...     
+137     2441.576404
+138     3025.349798
+139     2280.769906
+140     1271.211593
+141      469.709298
+Name: gdp_cap, Length: 142, dtype: float64
+0      43.828
+1      76.423
+2      72.301
+3      42.731
+4      75.320
+        ...  
+137    74.249
+138    73.422
+139    62.698
+140    42.384
+141    43.487
+Name: life_exp, Length: 142, dtype: float64
+#+end_example
+
+Now the plot: Make a scatter plot and, as you learnt earlier,
+log-transform it.
+#+begin_src python :file ../img/labels.png :results file graphics output :exports both :session *Python* :python python3
+  plt.clf()
+  plt.scatter(gdp_cap,life_exp)
+  plt.xscale('log')
+  plt.savefig("../img/labels.png")
+#+end_src
+
+#+RESULTS:
+[[file:../img/labels.png]]
+
+* Axis labels
+
+- Add x and y labels and a title:
+  #+begin_src python :file labels2.png :results file graphics output :exports both :session *Python* :python python3
+    # Strings
+    xlab = "GDP per Capita [USD]"
+    ylab = "Life Expectancy [years]"
+    title = "World Development in 2007"
+    # Labeled, titled scatter plot, log scale
+    plt.scatter(gdp_cap,life_exp)
+    plt.xscale('log')
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
+    plt.title(title)
+    plt.savefig("labels2.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:labels2.png]]
+
+* Ticks and tick labels
+
+- Currently, the GDP is coded in multiples of 10^3 and 10^4 - we
+  transform the x-axis tick values and their labels:
+  #+begin_src python :results none :exports both :session *Python* :python python3
+    tick_val = [1000, 10_000,10_0000]
+    tick_lab = ['1k', '10k', '100k']
+  #+end_src
+
+- Now plot using these as arguments for ~plt.xticks()~
+  #+begin_src python :file ../img/ticks.png :results file graphics output :exports both :session *Python* :python python3
+    # Strings
+    xlab = "GDP per Capita [USD]"
+    ylab = "Life Expectancy [years]"
+    title = "World Development in 2007"
+    # Labeled, titled scatter plot, log scale
+    plt.scatter(gdp_cap,life_exp)
+    plt.xscale('log')
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
+    plt.title(title)
+    plt.xticks(tick_val,tick_lab)
+    plt.savefig("../img/ticks.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/ticks.png]]
+
+* Point sizes
+
+- We want to change the size of the dots in the plot to correspond to
+  the population of each country. This means we're effectively adding
+  a 3rd dimension to the plot.
+
+- The population for each of 142 countries in 2007 is available:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    df.info()
+    print(df['population'])
+    pop = df['population']
+    print(type(pop))
+    print(pop.info())
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  <class 'pandas.core.frame.DataFrame'>
+  RangeIndex: 142 entries, 0 to 141
+  Data columns (total 6 columns):
+   #   Column      Non-Null Count  Dtype  
+  ---  ------      --------------  -----  
+   0   country     142 non-null    object 
+   1   year        142 non-null    int64  
+   2   population  142 non-null    float64
+   3   cont        142 non-null    object 
+   4   life_exp    142 non-null    float64
+   5   gdp_cap     142 non-null    float64
+  dtypes: float64(3), int64(1), object(2)
+  memory usage: 6.8+ KB
+  0      31889923.0
+  1       3600523.0
+  2      33333216.0
+  3      12420476.0
+  4      40301927.0
+            ...    
+  137    85262356.0
+  138     4018332.0
+  139    22211743.0
+  140    11746035.0
+  141    12311143.0
+  Name: population, Length: 142, dtype: float64
+  <class 'pandas.core.series.Series'>
+  <class 'pandas.core.series.Series'>
+  RangeIndex: 142 entries, 0 to 141
+  Series name: population
+  Non-Null Count  Dtype  
+  --------------  -----  
+  142 non-null    float64
+  dtypes: float64(1)
+  memory usage: 1.2 KB
+  None
+  #+end_example
+
+- The ~s~ parameter in the ~scatter~ plotting function takes the variable
+  that is used to resize the dots. However, the values are very large,
+  so a first attempt leads to all dots being very large - essentially
+  one large blue dot:
+  #+begin_src python :file ../img/sizes.png :results file graphics output :exports both :session *Python* :python python3
+    # Strings
+    xlab = "GDP per Capita [USD]"
+    ylab = "Life Expectancy [years]"
+    title = "World Development in 2007"
+    # Labeled, titled scatter plot, log scale
+    plt.scatter(gdp_cap,life_exp, s = pop)
+    plt.xscale('log')
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
+    plt.title(title)
+    plt.xticks(tick_val,tick_lab)
+    plt.savefig("../img/sizes.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/sizes.png]]
+
+- We need to divide =pop= down to millions to avoid drawing too large,
+  and then double each value for greater visibility:
+  #+begin_src python :results none :exports both :session *Python* :python python3 
+    sizes = 2 * pop / 1e6
+  #+end_src
+
+- Now we can plot and use the opacity parameter ~alpha~ for overlapping
+  scatter points, and change the ~color~ to =darkgreen= for visibility:
+  #+begin_src python :file ../img/sizes2.png :results file graphics output :exports both :session *Python* :python python3
+    # Strings
+    xlab = "GDP per Capita [USD]"
+    ylab = "Life Expectancy [years]"
+    title = "World Development in 2007"
+    # Labeled, titled scatter plot, log scale
+    plt.scatter(gdp_cap,life_exp, s = sizes, alpha=0.6, color="darkgreen")
+    plt.xscale('log')
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
+    plt.title(title)
+    plt.xticks(tick_val,tick_lab)
+    plt.savefig("../img/sizes2.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/sizes2.png]]
+
+* Colors
+
+- To make the map even more telling, we use the =cont= feature of the
+  data to color each country according to its continent.
+  
+- However, you cannot pass =continent= straight to the ~c~ parameter of
+  ~plt.plot~ because =continent= is categorical:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    cont = df['cont']
+    cont.info()
+  #+end_src
+
+  #+RESULTS:
+  : <class 'pandas.core.series.Series'>
+  : RangeIndex: 142 entries, 0 to 141
+  : Series name: cont
+  : Non-Null Count  Dtype 
+  : --------------  ----- 
+  : 142 non-null    object
+  : dtypes: object(1)
+  : memory usage: 1.2+ KB
+
+- How many unique =continent= values are there?
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    print(cont.unique())
+  #+end_src
+
+  #+RESULTS:
+  : ['Asia' 'Europe' 'Africa' 'Americas' 'Oceania']
+
+- The color parameter accepts either color strings (like "red"), or
+  numeric values passed through a colormap. We can build a color map
+  as a dictionary of keys (the =continent= name), and values (the
+  color):
+  #+begin_src python :results none :exports both :session *Python* :python python3 
+    continent_colors = {
+        'Asia': 'red',
+        'Europe': 'green',
+        'Africa': 'blue',
+        'Americas': 'yellow',
+        'Oceania': 'black'
+        }
+  #+end_src
+
+- Now we build the list with the map:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    colors = []
+    continent = list(cont) # extract continent, store in list
+    for c in continent:
+        colors.append(continent_colors[c])
+    print([colors[1],colors[-1]])
+    print(len(colors))
+  #+end_src  
+
+  #+RESULTS:
+  : ['green', 'blue']
+  : 142
+
+- Ready to plot in color:
+  #+begin_src python :file ../img/colors.png :results file graphics output :exports both :session *Python* :python python3
+    # Strings
+    xlab = "GDP per Capita [USD]"
+    ylab = "Life Expectancy [years]"
+    title = "World Development in 2007"
+    # Labeled, titled scatter plot, log scale
+    plt.scatter(gdp_cap,life_exp, s = sizes, alpha=0.6, c=colors)
+    plt.xscale('log')
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
+    plt.title(title)
+
+    plt.xticks(tick_val,tick_lab)
+
+    plt.savefig("../img/colors.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/colors.png]]
+
+* Text
+
+- With the ~plt.text()~ function, you can add text anywhere on your
+  plot. We add the names of the two largest blobs for India and China:
+  #+begin_src python :file ../img/textplot.png :results file graphics output :exports both :session *Python* :python python3
+    # Strings
+    xlab = "GDP per Capita [USD]"
+    ylab = "Life Expectancy [years]"
+    title = "World Development in 2007"
+    # Labeled, titled scatter plot, log scale
+    plt.scatter(gdp_cap,life_exp, s = sizes, alpha=0.6, c=colors)
+    plt.xscale('log')
+    plt.xlabel(xlab)
+    plt.ylabel(ylab)
+    plt.title(title)
+    plt.xticks(tick_val,tick_lab)
+
+    plt.text(1900,70, 'India')
+    plt.text(3900,78, 'China')    
+
+    plt.savefig("../img/textplot.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/textplot.png]]
+
