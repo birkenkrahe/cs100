@@ -179,7 +179,6 @@ Now rebuild the histogram with 10 bins instead of 5.
 
   #+RESULTS:
   : Max bin: 26.6 to 31.2.
-
 * Part 4: Customization — Making the story clear
 
 Redraw the line plot from Part 1, but this time add:
@@ -317,6 +316,8 @@ country.
         'Oceania': "blue"
     }
   #+end_src
+
+  #+RESULTS:
 
 - The =colors= list is created with a loop over =continent=, which is
   aligned with the other lists:
