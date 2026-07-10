@@ -73,14 +73,14 @@ Plot the number of =pilgrims= over time.
 Redraw the same data as a scatter plot instead of a line chart.
 
 - To make a scatter plot, replace =plot= with =scatter=.
-  #+begin_src python :file ../../img/plt1.png :results file graphics output :exports both :session *Python* :python python3
+  #+begin_src python :file ../../img/plt2.png :results file graphics output :exports both :session *Python* :python python3
     plt.clf()
     plt.scatter(year, pilgrims)
     plt.savefig("../../img/plt2.png")
   #+end_src
 
   #+RESULTS:
-  [[file:../../img/plt1.png]]
+  [[file:../../img/plt2.png]]
 
 - Which is more honest here — the line or the scatter plot? We have only 11 measurements spanning 37 years. What does the line imply that the data may not support?
   #+begin_quote
