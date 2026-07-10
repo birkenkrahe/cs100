@@ -1,0 +1,374 @@
+#+TITLE: Code-Along: Camino de Santiago — Visualizing Pilgrimage Data
+#+SUBTITLE: CS 100 — Intermediate Python, Chapter 1: Matplotlib
+#+AUTHOR: Marcus Birkenkrahe
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :python python3 :results output :exports both
+
+* Introduction
+
+The Camino de Santiago (Way of Saint James) is one of the world's
+oldest pilgrimage routes, ending at the Cathedral of Santiago de
+Compostela in northwest Spain. Every year, the Pilgrim Office records
+how many pilgrims complete the journey.
+
+We will use this real dataset to practice three things:
+- drawing =line plots= and =scatter plots= with matplotlib
+- building a =histogram= to explore a distribution
+- =customizing= a plot so the data tells its own story
+
+* Part 1: Line plot — Pilgrims over time
+
+The list =year= contains selected years from 1985 to 2022. The list
+=pilgrims= contains the number of pilgrims who received their
+certificate of completion (the /Compostela/) that year.
+
+Plot the number of =pilgrims= over time.
+
+#+begin_src python :results none :exports both :session *Python* :python python3
+  year     = [1985, 1990, 1993, 1995, 2000, 2004, 2010, 2013, 2015, 2019, 2022]
+  pilgrims = [2491, 4918, 99436, 19821, 55004, 179944, 272412, 215880, 262516, 347578, 438016]
+#+end_src
+
+- Import ~matplotlib.pyplot~ as ~plt~, then plot =pilgrims= against =year= as
+  a line chart and display it.
+
+  #+begin_src python :results none :exports both :session *Python* :python python3
+    import matplotlib.pyplot as plt
+  #+end_src
+
+- =pilgrims= is the dependent variable (y-axis, second argument to
+  [[https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot][plot]]), and =year= is the independent variable (x-axis, first argument
+  to ~plot~). This is a time series, so a line plot is appropriate.
+
+  #+begin_src python :file ../../img/plt1.png :results file graphics output :exports both :session *Python* :python python3
+    plt.clf() # prepare empty plot
+    plt.plot(year, pilgrims)  # plot x = year, y = pilgrims
+    plt.savefig("../../img/plt1.png")  # display plot points
+  #+end_src
+
+  #+RESULTS:
+  [[file:../../img/plt1.png]]
+
+- Do you notice anything unusual in the plot? What might explain it?
+  #+begin_quote
+  There is a peak in the number of pilgrims at around 1993 and a dip
+  between 2013-15.  Surprisingly, COVID does not seem to have
+  affected the numbers!
+
+  As for the peak/dip, I'll ask AI for enlightenment!
+  #+end_quote
+
+  Google Gemini:
+  #+begin_quote
+  The peaks in pilgrim numbers in 1993 and 2010 are likely due to them
+  being 'Holy Years' or 'Jacobean Years' (Xacobeo). These are years when
+  July 25th (Feast of Saint James) falls on a Sunday, offering pilgrims
+  special indulgences and traditionally leading to a significant
+  increase in pilgrim numbers.
+  #+end_quote
+
+* Part 2: Scatter plot
+
+Redraw the same data as a scatter plot instead of a line chart.
+
+- To make a scatter plot, replace =plot= with =scatter=.
+  #+begin_src python :file ../../img/plt1.png :results file graphics output :exports both :session *Python* :python python3
+    plt.clf()
+    plt.scatter(year, pilgrims)
+    plt.savefig("../../img/plt2.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../../img/plt1.png]]
+
+- Which is more honest here — the line or the scatter plot? We have only 11 measurements spanning 37 years. What does the line imply that the data may not support?
+  #+begin_quote
+  The scatter plot is always more "honest" in the sense that the line
+  interpolates between known data points, i.e. it predicts points but
+  without a model having learnt anything. The implication is always that
+  there are data points on the line. But only a regression analysis
+  could furnish those.
+  #+end_quote
+
+* Part 3: Histogram — Age distribution of pilgrims
+
+The Pilgrim Office also records ages. The list =ages= below is a
+representative sample of 22 pilgrims from a 2019 survey.
+
+Build a histogram with 5 bins and display it.
+
+#+begin_src python :results none :exports both :session *Python* :python python3
+  ages = [22, 25, 27, 28, 29, 31, 33, 35, 36, 38,
+          41, 43, 45, 47, 48, 51, 53, 55, 58, 62, 65, 68]
+#+end_src
+
+- The histogram method in ~plt~ is ~hist~. It takes a continuous numeric
+  distribution like =ages= as its first argument and the number of ~bins~
+  as its second argument, and to make it more readable, I add the
+  ~edgecolor~ parameter.
+  #+begin_src python :file ../../img/plt3.png :results file graphics output :exports both :session *Python* :python python3
+    plt.clf()
+    plt.hist(ages,bins=5,edgecolor="white")
+    plt.savefig("../../img/plt3.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../../img/plt3.png]]
+
+  - Which age group walks the Camino most? Does this surprise you?
+    #+begin_quote
+    With 5 bins over the range 22–68, the youngest bin (roughly ages
+    22–31) has the highest count — 6 of the 22 sampled pilgrims fall
+    there. The 40s are also well represented. This may surprise anyone
+    who pictures the Camino as a retirement journey; in practice, many
+    walkers are young adults at a life crossroads or career
+    transition.
+    #+end_quote
+
+  - To be sure, ~return~ the values for ~counts~ (an array of bar
+    heights - shows how many values in each bin), and ~bin_edges~ (an
+    array of boundary values of length ~len(counts)+1~):
+    #+begin_src python :results output :exports both :session *Python* :python python3
+      counts, bin_edges, _ = plt.hist(ages,bins=5)
+      print(counts)
+      print(bin_edges)
+    #+end_src
+
+    #+RESULTS:
+    : [6. 4. 5. 4. 3.]
+    : [22.  31.2 40.4 49.6 58.8 68. ]
+
+    To get the bin edges, use ~np.argmax~ that returns the index of the
+    maximum bin value:
+    #+begin_src python :results output :exports both :session *Python* :python python3
+      import numpy as np
+      i = np.argmax(counts)
+      print(f"Max bin: {bin_edges[i]:.1f} to {bin_edges[i+1]:.1f}.")
+    #+end_src
+
+    #+RESULTS:
+    : Max bin: 22.0 to 31.2.
+
+Now rebuild the histogram with 10 bins instead of 5.
+
+#+begin_src python :file ../../img/plt4.png :results file graphics output :exports both :session *Python* :python python3
+  plt.clf()
+  plt.hist(ages,bins=10,edgecolor="white") # 10 is the default
+  plt.savefig("../../img/plt4.png")
+#+end_src
+
+#+RESULTS:
+[[file:../../img/plt4.png]]
+
+- More bins reveal finer detail but can make the distribution look
+  choppy. Fewer bins give a smoother shape but hide detail. Which
+  tells a clearer story here?
+
+  #+begin_quote
+  The larger (default) binsize 10 shows more clearly, which age range
+  dominates the pilgrimage - it's the age range 26.6 to 31.2. But
+  ultimately the choice of bins depends on the data and the story you
+  want to tell.
+  #+end_quote
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    counts, bin_edges, _ = plt.hist(ages,bins=10)
+    i = np.argmax(counts)
+    print(f"Max bin: {bin_edges[i]:.1f} to {bin_edges[i+1]:.1f}.")
+  #+end_src
+
+  #+RESULTS:
+  : Max bin: 26.6 to 31.2.
+
+* Part 4: Customization — Making the story clear
+
+Redraw the line plot from Part 1, but this time add:
+- an x-axis label: ="Year"=
+- a y-axis label: ="Pilgrims (Compostelas issued)"=
+- a title: ="Camino de Santiago — Annual Pilgrim Counts"=
+
+#+begin_src python :file ../../img/plt5.png :results file graphics output :exports both :session *Python* :python python3
+  plt.clf()
+  plt.plot(year,pilgrims)
+  plt.xlabel("Year")
+  plt.ylabel("Pilgrims (Compostela issued)")
+  plt.title("Camino de Santiago - Annual Pilgrim Counts")
+  plt.savefig("../../img/plt5.png")
+#+end_src
+
+#+RESULTS:
+[[file:../../img/plt5.png]]
+
+Now add =yticks= so the y-axis shows ="0"=, ="100K"=, ="200K"=, ="300K"=,
+and ="400K"= instead of raw numbers.
+
+- To do this, I define two lists (of the same length) for the tick
+  values and the tick labels:
+  #+begin_src python :file ../../img/plt6.png :results file graphics output :exports both :session *Python* :python python3
+    ytick_val = [0,100_000,200_000,300_000,400_000]
+    ytick_lab = ["0","100K","200K","300K","400K"]
+    plt.clf()
+    plt.plot(year,pilgrims)
+    plt.xlabel("Year")
+    plt.ylabel("Pilgrims (Compostela issued)")
+    plt.yticks(ytick_val, ytick_lab)
+    plt.title("Camino de Santiago - Annual Pilgrim Counts")
+    plt.savefig("../../img/plt6.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../../img/plt6.png]]
+
+Finally, create two new lists with early data (before 1985), prepend
+them to =year= and =pilgrims= using =+=, and redraw the customized plot.
+
+New list values:
+#+begin_src python :results none :exports both :session *Python* :python python3
+  early_years    = [1970, 1975, 1980]
+  early_pilgrims = [683, 1819, 1807]
+#+end_src
+
+- Lists can just be extended:
+  #+begin_src python :results none :exports both :session *Python* :python python3
+    year_new = early_years + year
+    pilgrims_new = early_pilgrims + pilgrims
+  #+end_src
+
+- Plot with these values using the latest customized code, adapting
+  the tick changes, too:
+  #+begin_src python :file ../../img/plt7.png :results file graphics output :exports both :session *Python* :python python3
+    ytick_val_new = [0,100_000,200_000,300_000,400_000]
+    ytick_lab_new = ["0","100K","200K","300K","400K"]
+    plt.clf()
+    plt.plot(year_new,pilgrims_new)
+    plt.xlabel("Year")
+    plt.ylabel("Pilgrims (Compostela issued)")
+    plt.yticks(ytick_val_new, ytick_lab_new)
+    plt.title("Camino de Santiago - Annual Pilgrim Counts")
+    plt.savefig("../../img/plt7.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../../img/plt7.png]]
+
+
+How does adding the 1970s data change what the plot communicates?
+#+begin_quote
+The Camino's modern revival began in the late 1980s, driven partly by
+[[https://www.supersummary.com/the-pilgrimage/summary/][Paulo Coelho's /The Pilgrimage/ (1987)]] and by priest-scholar [[https://caminotravelcenter.com/blog/who-was-elias-valina-follow-the-yellow-arrow/][Elías
+Valiña Sampedro]], who painted the yellow arrows that still mark the
+route today. The numbers since 2000 reflect a remarkable spiritual and
+cultural renewal — and a data story that needs all its points to be told.
+#+end_quote
+
+* Part 5: Who walks the Camino? — Bubble chart by country
+
+So far you have plotted a single variable over time. Now we add two
+more dimensions: how wealthy a country is (GDP per capita) on the
+x-axis, and how many pilgrims it sends on the y-axis — with dot size
+proportional to the country's population and dot colour showing the
+continent of origin.
+
+The data below are the top 15 pilgrim-sending countries in 2019:
+
+#+begin_src python :results none :exports both :session *Python* :python python3
+  countries   = ['Spain','Italy','Germany','USA','Portugal','France',
+                 'Brazil','South Korea','UK','Netherlands','Ireland',
+                 'Australia','Canada','Poland','Argentina']
+  pilgrims_19 = [147566, 23741, 22868, 22417, 17848, 16378,
+                 10271,  9103,  8437,  6960,  5744,
+                 4873,   4861,  4658,  3868]
+  gdp_cap     = [29600, 33200, 46500, 65300, 23400, 40500,
+                 8700,  31800, 42400, 52400, 78800,
+                 55100, 46200, 15700, 9900]
+  population  = [46.9,  60.4,  83.1,  328.2, 10.3,  67.0,
+                 211.1, 51.7,  66.8,  17.3,  4.9,
+                 25.5,  37.6,  38.0,  44.9]   # millions
+  continent   = ['Europe','Europe','Europe','Americas','Europe','Europe',
+                 'Americas','Asia','Europe','Europe','Europe',
+                 'Oceania','Americas','Europe','Americas']
+#+end_src
+
+Create a =sizes= list by multiplying each value in =population= by 2
+(population is already in millions, so no further scaling is needed).
+Then build a =colour= dictionary that maps each continent name to a
+=colour= string, and use it to create a =colors= list — one colour per
+country.
+
+- =sizes= is for the ~s~ parameter that controls the size of points in the
+  scatter plot according to population. Since lists do not vectorize,
+  the list has to be converted to an array.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    sizes = np.array(population)*2
+    print(len(sizes))
+  #+end_src
+
+  #+RESULTS:
+  : 15
+
+- The =colour= map associates a continent with a color for use with the
+  ~c~ parameter that marks points with different color according to
+  continent.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    colour = {
+        'Europe': "green",
+        'Americas': "red",
+        'Asia': "yellow",
+        'Oceania': "blue"
+    }
+  #+end_src
+
+- The =colors= list is created with a loop over =continent=, which is
+  aligned with the other lists:
+  #+begin_src python :results none :exports both :session *Python* :python python3
+    colors = [] # you can't call list.append() on a non-existing list
+    for c in continent:
+        colors.append(colour[c]) # finds key and puts value in list
+  #+end_src
+
+Make a scatter plot with =gdp_cap= on the x-axis, =pilgrims_19= on the
+y-axis, and the parameters =s=sizes=, =c=colors=, and =alpha=0.7=.
+Apply a log scale to the x-axis and add readable x-tick labels
+(="10k"=, ="50k"=, ="100k"=), axis labels, and a title.
+
+- Solution:
+  #+begin_src python :file ../../img/plt8.png :results file graphics output :exports both :session *Python* :python python3
+    xtick_val = [10_000,50_000,100_000]
+    xtick_lab = ["10K","50K","100K"]
+    plt.clf()
+    plt.scatter(gdp_cap,pilgrims_19,s=sizes,c=colors,alpha=0.7)
+    plt.xscale('log')
+    plt.xlabel("GDP per capita [USD]")
+    plt.ylabel("Pilgrims (Compostela issues)")
+    plt.title("Camino de Santiago - Pilgrim Counts")
+    plt.xticks(xtick_val,xtick_lab)
+    plt.savefig("../../img/plt8.png")
+  #+end_src
+
+  #+RESULTS:
+  [[file:../../img/plt8.png]]
+
+- What pattern do you see between a country's wealth and how many
+  pilgrims it sends? Which continents are represented? Does Spain's
+  position on the chart surprise you?
+
+  #+begin_quote
+  There's little to no relationship between wealth and pilgrim
+  count. The two wealthiest countries in the data, Ireland ($78.8K)
+  and Australia ($55.1K), send relatively few pilgrims, while Spain —
+  at a middling $29.6K — sends by far the most. Proximity and cultural
+  connection to the Camino seem to matter more than GDP.
+
+  Europe dominates the dataset (Spain, Italy, Germany, Portugal, France,
+  UK, Netherlands, Ireland, Poland), with a handful from the Americas
+  (USA, Brazil, Canada, Argentina), one from Asia (South Korea), and one
+  from Oceania (Australia).
+
+  Spain's position stands out: it sends over 6x as many pilgrims as the
+  next-highest country (Italy), despite unremarkable GDP and population.
+  That's less surprising once you remember Spain is the Camino's home
+  country — its own citizens make up a large share of the total, so the
+  chart is really mixing "where pilgrims come from" with "where the
+  Camino is."
+  #+end_quote
+
