@@ -4,7 +4,6 @@
 #+STARTUP: overview hideblocks indent entitiespretty:
 #+attr_html: :width 600px :float nil:
 [[../img/breughel_babel_1563.jpg]]
-
 * Prayers
 ** Opening Prayer (Standard)
 #+attr_html: :width 550px :float nil:
@@ -1119,8 +1118,7 @@ Full version [[https://teams.cloud.microsoft/l/message/19:xwJm5Zf90mdM34VuFWBGyX
 
 [[../img/o_most_holy_heart_of_jesus.png]]
 
-
-* Week 7 - Matplotlib - Midterm project 
+* DONE Week 7 - Matplotlib - Midterm project 
 
 ** Opening prayer
 
@@ -1248,6 +1246,13 @@ inside the function =decade= (difference interface vs. implementation).
 
 Think about why people call the ~help()~ function.
 
+** New assignments
+
+- Home assignment: plot the pilgrim's path "Camino de Santiago"
+- Quiz on Matplotlib
+- Read chapter 6 in the textbook (functions with ~return~)
+- Complete the next DataCamp chapter "Dictionaries & Pandas"
+
 ** Matplotlib code-along and practice
 
 - Code along lecture: We're going to go through the creation of the
@@ -1257,16 +1262,16 @@ Think about why people call the ~help()~ function.
 
 - Full file is available in GitHub (6_matplotlib.org).
 
-- 
-
-** New assignments
-
-- Home assignment: plot the pilgrim's path
-- Quiz on Matplotlib
-- Read chapter 6 in the textbook (functions with ~return~)
-- Complete the next DataCamp chapter "Dictionaries & Pandas"
+- I will share a video with the remainder of the lecture if we don't
+  get through it.
 
 ** Take aways
+
+- ~pandas.info()~ for structural info on DataFrame
+- The plot type depends (mostly) on the shape/nature of your data
+- ~alpha~ value to control opacity (~**kwargs~)
+- Changing the colors with a colormap (aka dictionary)
+
 ** Closing prayer
 
 Let us pray.
@@ -1279,6 +1284,124 @@ we may merit to obtain its fruits.
 Through Christ our Lord.
 
 *Amen.*
+
+* Week 8 - Function ~return~ values, dictionaries and DataFrames
+
+| Activity                                                           | Min |   |   |
+|--------------------------------------------------------------------+-----+---+---|
+| Opening prayer                                                     |   1 |   |   |
+| Hindsight is 20/20: choice of book                                 |   5 |   |   |
+| Review: Home assignment "Camino de Santiago"                       |   5 |   |   |
+| Review: Textbook ch. 6 - What's wrong with this code               |   6 |   |   |
+| Code along: return values, pure functions, incremental development |  65 |   |   |
+| New assignments                                                    |   1 |   |   |
+| Checkout (takeaway)                                                |   5 |   |   |
+| Closing prayer                                                     |   1 |   |   |
+|--------------------------------------------------------------------+-----+---+---|
+
+** Hindsight is 20/20 - Choice of book
+
+*Question: How has your reading experience in this course been so far?*
+
+My view now:
+- I don't think that "ThinkPython" was the best choice for a textbook.
+
+- I don't like the flow of any of the chapters or the examples.
+
+- At least it's free (online anyway) and comes with notebooks.
+
+- Alas, it's too late to do anything about it except stop it.
+
+- For absolute beginners, "[[https://learncodethehardway.com/client/#/product/learn-python-the-hard-way-5e-2023/][Learn Python the Hard Way]]" is better.
+
+- It's not expenseive and comes with a digital copy & videos for $22.
+
+- For those who already know a little programming "Python Crash
+  Course" (2023) may be better ($20-$30)
+
+- I also like the (free) "Automate the Boring Stuff with Python".
+
+- For the scientifically minded: "Intro to Programming w/Python"
+  (2016) by Sedgewick et al. (heavy on algorithms/data structures)
+
+- Of course, you don't really need a book unless you like books
+
+** Review: Home assignment "Camino de Santiago"
+
+- This was a parallel to last week's lecture & code along.
+  
+- You can find a well commented solution in Colab:
+  [[https://tinyurl.com/pilgrim-path-solution][tinyurl.com/pilgrim-path-solution]]
+
+- If you don't submit an assignment on time, you lose 50% of the
+  points. But you should still try to solve it.
+
+** Review: Textbook ch. 6 - What's wrong with this code?
+
+Find out if you actually read the chapter — three "what's wrong with
+this code" questions, each targeting a specific pitfall the chapter
+calls out by name.
+
+- What does this print, and why?
+  #+begin_example python
+  def sign(n):
+      if n > 0:
+          return "positive"
+      elif n < 0:
+          return "negative"
+
+  print(sign(0))
+  #+end_example
+  #+begin_quote
+  Prints ~None~ — no branch catches =n == 0=, so the function falls off
+  the end and implicitly returns ~None~.
+  #+end_quote
+
+- This crashes. What's the actual bug?
+  #+begin_example python
+  def double(n):
+      print(n * 2)
+
+  result = double(5)
+  print(result + 1)
+  #+end_example
+  #+begin_quote
+  ~double()~ never ~return~s, so =result= is ~None~; =None + 1= raises a
+  ~TypeError~. ~print()~ displays a value, it doesn't hand it back to the
+  caller.
+  #+end_quote
+
+- This works, but the chapter would flag one line as bad style. Which
+  line, and why?
+  #+begin_example python
+  def is_even(n):
+      return n % 2 == 0
+
+  def describe(n):
+      if is_even(n) == True:
+          return "even"
+      else:
+          return "odd"
+  #+end_example
+  #+begin_quote
+  =if is_even(n) == True:= — =is_even(n)= already /is/ a Boolean, so
+  comparing it to ~True~ is redundant; should just be =if is_even(n):=.
+  #+end_quote
+
+** Code along lecture: functions with ~return~, pure functions, recursion
+
+- Open the Colab starter file: [[https://tinyurl.com/return-ipynb][tinyurl.com/return-ipynb]]
+
+- Make a copy and save it
+
+- Code along with me and save it at the end
+
+- The full solution is on GitHub.
+
+** New assignments
+
+- Home assignment: 
+- Quiz on DataCamp's "Dictionaries & Pandas" and today's lecture
 
 
 * Footnotes

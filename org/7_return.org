@@ -1,0 +1,508 @@
+#+TITLE: CS100 Code-Along: Return Values (Ch. 6) & DataCamp Dictionaries and Pandas
+#+AUTHOR: Marcus Birkenkrahe
+#+PROPERTY: header-args:python :session *Python* :python python3 :results output :exports both
+#+STARTUP: overview hideblocks indent entitiespretty:
+* Objectives
+
+- Detect when a function implicitly returns ~None~.
+- Convert a printing ("void") function into a returning (fruitful) one.
+- Generalize a function's output, input, and interface.
+- Explain what makes a function *pure*, and why it matters.
+- Write a one-line ~assert~ test.
+- Distinguish *dead code* from the ~None~-trap.
+- Refactor a conditional function into a boolean-returning, simplified
+  one.
+- Apply incremental development — build, scaffold, and test a function
+  one step at a time.
+
+* Returning ~None~
+
+- If a function does not have a ~return~ statement, it returns ~None~.
+
+- Example:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def hello():
+        print("hello")
+
+    # call function
+    hello()
+    # call function and store what it returns in variable
+    greeting = hello()
+    # print variable: prints `None`
+    print(greeting)
+  #+end_src
+
+  #+RESULTS:
+  : hello
+  : hello
+  : None
+
+- Test that with another function =add(a,b)= that adds a=2 and b=3. Make
+  only one call to =add=. Sample output:
+  #+begin_example
+  5
+  None
+  #+end_example
+
+  Solution:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def add(a,b):
+        print(a+b)
+
+    print(add(2,3))
+  #+end_src
+
+  #+RESULTS:
+  : 5
+  : None
+
+- An easier way to find out if the function returns ~None~ is to ~type~ it
+  without arguments:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(type(hello()))
+    print(type(add(2,3)))
+  #+end_src
+
+  #+RESULTS:
+  : hello
+  : <class 'NoneType'>
+  : 5
+  : <class 'NoneType'>
+
+* PRACTICE Generalizing a function
+
+- Starting with the non-returning ("void") function =add=, we turn the
+  function into a returning function (since it has a result to
+  return), generalize its output and its input, and encapsulate its
+  interface.
+
+- Modify =add= to =add2= so that it returns the result of the addition of
+  a and b. Sample output:
+  #+begin_example
+  The sum of 2 and 3 is 5.
+  #+end_example
+
+  Solution:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def add2(a,b):
+        return a+b
+
+    print("The sum of 2 and 3 is", add2(2,3))
+  #+end_src
+
+  #+RESULTS:
+  : The sum of 2 and 3 is 5
+
+- Generalize the output. Assign 2 to a and 3 to b and use an f-string
+  to print the variables and call the function.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def add2(a,b):
+        return a+b
+
+    a = 2
+    b = 3
+    print(f"The sum of {a} and {b} is {add2(a,b)}.")
+  #+end_src
+
+  #+RESULTS:
+  : The sum of 2 and 3 is 5.
+
+- Generalize the input. Enter a and b on the keyboard. Sample output:
+  #+begin_example
+  Enter first integer: 2
+  Enter second integer: 3
+  The sum of 2 and 3 is 5.
+  #+end_example
+
+  Solution:
+  #+begin_src python :tangle ../../src/add4.py :results none :exports both :session *Python* :python python3
+    def add2(a,b):
+        return a+b
+
+    a = int(input("Enter first integer: "))
+    print(a)
+    b = int(input("Enter second integer: "))
+    print(b)
+    print(f"The sum of {a} and {b} is {add2(a,b)}.")
+  #+end_src
+  #+begin_src bash :results output :exports both
+    cd ../../src
+    echo -e "2\n3" | python3 add4.py
+  #+end_src
+
+  #+RESULTS:
+  : Enter first integer: 2
+  : Enter second integer: 3
+  : The sum of 2 and 3 is 5.
+
+- Encapsulate the interface: Modify the previous program to call =add2=
+  from within a ~main()~ function.
+  #+begin_src python :tangle ../../src/add5.py :results none :exports both :session *Python* :python python3
+    def add2(a,b):
+        return a+b
+
+    def main():
+        a = int(input("Enter first integer: "))
+        print(a)
+        b = int(input("Enter second integer: "))
+        print(b)
+        print(f"The sum of {a} and {b} is {add2(a,b)}.")
+
+    if __name__ == "__main__":
+        main()
+  #+end_src
+
+  #+begin_src bash :results output :exports both
+    cd ../../src
+    echo -e "2\n3" | python3 add5.py
+  #+end_src
+
+  #+RESULTS:
+  : Enter first integer: 2
+  : Enter second integer: 3
+  : The sum of 2 and 3 is 5.
+
+* Pure functions
+
+- Throughout these manipulations, =add2= remained "pure":
+  + it always returns the same output for the same input
+  + it has no side effects outside its parameters and body
+
+- Pure functions are important:
+  + They compose safely: values flow cleanly from one function into
+    the next. A function that prints instead of returning does not.
+  + They are predictable: same input, same output every time
+    independent of the rest of the program.
+  + They separate computing from communicating: computes and hands
+    back a value - what do to with it is left to the caller.
+  + They are reusable across contexts: can be called from a script, a
+    web handler, or another function.
+  + They are testable with one liners: you can write simple checks,
+    there is no setup required with stdout (like when using print).
+
+- Example for such a one-liner test:
+  #+begin_src python :tangle ../../src/assert.py :results none :exports both :session *Python* :python python3
+    def add2(a,b):
+        return a+b
+
+    assert add2(2,4) == 5, f"expected 5, got {add2(2,4)}"
+  #+end_src
+
+  #+begin_src bash :results output :exports both
+    cd ../../src
+    python3 assert.py 2>&1 # "AssertionError: expected 5, got 6
+  #+end_src
+
+  #+RESULTS:
+  : Traceback (most recent call last):
+  :   File "/home/aletheia/GitHub/admin/summer26/cs100/src/assert.py", line 4, in <module>
+  :     assert add2(2,4) == 5, f"expected 5, got {add2(2,4)}"
+  : AssertionError: expected 5, got 6
+
+* Return values and conditionals
+
+- If your function contains conditionals (~if~), every path needs to
+  have a ~return~ — a path that falls through without one implicitly
+  returns ~None~.
+
+- *Dead code* is a different (but related) pitfall: code written
+  /after/ a ~return~ statement in the same branch. It never executes;
+  it's harmless, but it signals confused thinking to a reader.
+
+- Watch what happens when a path is missing its ~return~:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def eq(a,b):
+        if a==b:
+            print(f"{a} is equal to {b}")
+
+    eq(3,3)
+    print(eq(2,3)) # case not captured - returns nothing (`None`)
+  #+end_src
+
+  #+RESULTS:
+  : 3 is equal to 3
+  : None
+
+  The first call looks fine - the function is called =eq=, too - that's
+  what makes this bug dangerous. Any non-equal values fall through
+  with nothing to catch them and return ~None~ (which you only see when
+  applying ~print~).
+
+* PRACTICE Comparing values, returning booleans
+
+1) Create a *void* function =cmp= that prints the relation of a and
+   b. Then call =cmp= on these scenarios: =cmp(2,3)=, =cmp(3,2)=, and
+   =cmp(2,2)=. Add a minimal docstring.
+
+   Sample output:
+   #+begin_example
+    2 is smaller than 3
+    2 is smaller than 3
+    2 is equal to 2
+   #+end_example
+
+   Solution:
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def cmp(a,b):
+         """Compare two numbers a,b and print their relation.
+         """
+         if a < b:
+             print(f"{a} is smaller than {b}")
+         elif a > b:
+             print(f"{b} is smaller than {a}")
+         else:
+             print(f"{a} is equal to {b}")
+
+     cmp(2,3)
+     cmp(3,2)
+     cmp(2,2)
+   #+end_src
+
+   #+RESULTS:
+   : 2 is smaller than 3
+   : 2 is smaller than 3
+   : 2 is equal to 2
+
+2) Change the *void* function =cmp= to a function =cmp2= that returns ~False~
+   if a < b or b < a, and ~True~ if a = b. Do this by replacing only the
+   ~print~ statements.
+
+   Sample output:
+   #+begin_example
+   False
+   False
+   True
+   #+end_example
+
+   Solution:
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def cmp2(a,b):
+         if a < b:
+             return b < a # or: `return False`
+         elif a > b:
+             return a < b # or: `return False`
+         else:
+             return a == b # or: `return True`
+
+     print(cmp2(2,3))
+     print(cmp2(3,2))
+     print(cmp2(2,2))
+   #+end_src
+
+   #+RESULTS:
+   : False
+   : False
+   : True
+
+3) Refactoring: Reduce the number of conditional checks in =cmp2= and put the result
+   into a function =cmp3= with the same input and output.
+
+   Solution:
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def cmp3(a,b):
+         if (a < b) or (b < a):
+             return False
+         else:
+             return True
+
+     print(cmp3(2,3))
+     print(cmp3(3,2))
+     print(cmp3(2,2))
+   #+end_src
+
+   #+RESULTS:
+   : False
+   : False
+   : True
+
+* Incremental development
+
+- Incremental development means that you *add and test* only a small
+  amount of code at a time.
+
+- The process:
+
+  1) *Start with a stub* and make it work:
+     - Correct name, parameters (interface)
+     - Use a dummy ~return <value>~
+     - Function runs without crashing
+     - Goal: callability and syntax
+
+  2) *Add one small piece of real work*:
+     - One calculation or one conditional branch
+     - Goal: confirm the new piece uses the parameters correctly
+
+  3) *Scaffold with temporary variables and print*:
+     - Store intermediate results in variables
+     - Print the variables
+     - Goal: check what the function is doing
+
+  4) *Test after every change*:
+     - Use fixed inputs whose answers you know
+     - Consider edge cases
+     - Goal: keep the code working correctly
+
+  5) *Repeat*:
+     - Go through steps 2-4 until program is complete (the stub in
+       step 1 only happens once)
+     - Goal: Complete the function's task
+
+  6) *Clean up*:
+     - Remove scaffolding (print), temporary noise
+     - Keep a clear ~return~
+     - Encapsulate/rename for clean interface
+     - Refactor for improved implementation
+
+- *Rules:*
+  1. Only one new idea per step.
+  2. The program should run after every step.
+  3. If something breaks, the bug is in the last change.
+  4. Elegance, performance, brevity are secondary goals.
+
+* PRACTICE Development example: Bill splitter
+
+Write a program =split_bill= that splits a restaurant bill: given a
+bill total, a tip percentage, and how many people are splitting it,
+~return~ each person's share (=tip= included).
+
+You already need the algorithm before you build the function. One way
+of doing that is by establishing the pseudocode and use it as a
+scaffold to hang the code of:
+
+#+begin_example python
+   # Compute the tip as total * (tip_percent / 100)
+   # Compute the grand_total as total + tip
+   # Compute the share per_person as grand_total / num_people
+   # Return per_person rounded to the nearest cent (2 digits)
+#+end_example
+
+This tells us also that we need the parameters =total=, =tip_percent=,
+and =num_people=, and compute =tip=, =grand_total=, and =per_person= share.
+
+2) *Step 1: Stub*. Correct name and parameters, a dummy ~return~ value,
+   nothing else. Just confirm it runs.
+
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def split_bill(total, tip_percent, num_people):
+         return 0.0 # dummy return (don't leave this out, don't use `pass`)
+
+     print(split_bill(50, 20, 4)) # total=$50, tip_percent=20%,
+     # num_people=4
+   #+end_src
+
+   #+RESULTS:
+   : 0.0
+
+3) *Step 2+3 scaffold:* Add and scaffold =tip=. Compute the =tip=, ~print~ it
+   to check — don't touch the ~return~ value yet.
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def split_bill(total, tip_percent, num_people):
+         # Compute the tip as total * (tip_percent / 100)
+         tip = total * (tip_percent / 100) # $50 * (20/100) = $50 * 0.2 = $10
+         print(tip)
+         return 0.0
+
+     split_bill(50, 20, 4)
+   #+end_src
+
+   #+RESULTS:
+   : 10.0
+
+   Known answer check: a 20% tip on $50 is $10 — matches.
+
+4) *Step 2+3: Add and scaffold* =grand_total=. Add the =tip= to the bill.
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def split_bill(total, tip_percent, num_people):
+         # Compute the tip as total * (tip_percent / 100)
+         tip = total * (tip_percent / 100)
+         # Compute the grand_total as total + tip
+         grand_total = total + tip # $50 + $10 = $60
+         print(grand_total)
+         return 0.0
+
+     split_bill(50, 20, 4)
+   #+end_src
+
+   #+RESULTS:
+   : 60.0
+
+5) *Step 2+3: Add and scaffold* =per_person=. Divide the grand total across
+   everyone splitting it.
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def split_bill(total, tip_percent, num_people):
+         # Compute the tip as total * (tip_percent / 100)
+         tip = total * (tip_percent / 100)
+         # Compute the grand_total as total + tip
+         grand_total = total + tip
+         # Compute the share per_person as grand_total / num_people
+         per_person = grand_total / num_people # $60 / 4 = $15
+         print(per_person) # <- final result for return
+         return 0.0
+
+     split_bill(50, 20, 4)
+   #+end_src
+
+   #+RESULTS:
+   : 15.0
+
+6) *Step 6: Clean up*. Remove the scaffolding prints, ~round~ to the
+   nearest cent, and ~return~ the real result.
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def split_bill(total, tip_percent, num_people):
+         # Compute the tip as total * (tip_percent / 100)
+         tip = total * (tip_percent / 100)
+         # Compute the grand_total as total + tip
+         grand_total = total + tip
+         # Compute the share per_person as grand_total / num_people
+         per_person = grand_total / num_people
+         # Return per_person rounded to the nearest cent (2 digits)
+         return round(per_person,2)
+
+     print(split_bill(50, 20, 4)) # $15
+     print(split_bill(100, 15, 3)) # $38.3333...
+   #+end_src
+
+   #+RESULTS:
+   : 15.0
+   : 38.33
+
+7) What happens if you call =split_bill(50, 20, 0)= — zero people to
+   split the bill?
+   #+begin_example python
+   print(split_bill(50, 20, 0)) # ZeroDivisionError
+   #+end_example
+
+   #+begin_quote
+   If we had tested this edge case /during/ step 4 — right when
+   =per_person= was introduced — we would have hit the ~ZeroDivisionError~
+   immediately, and Rule 3 ("the bug is in the last change") would
+   have pointed straight at the division. Finding it only now means
+   searching back through every step instead.
+
+   The fix is a guardrail: check the input before dividing, and fail
+   with a clear, intentional error instead of a confusing one:
+   #+end_quote
+   #+begin_example python
+   if num_people <= 0:
+      raise ValueError("num_people must be at least 1")
+   #+end_example
+
+* Summary
+
+- A function without =return= implicitly returns ~None~ — check for it
+  whenever a value seems to disappear.
+- "Void" functions that only ~print~ can be turned into fruitful
+  functions that ~return~ instead, then generalized (output → input →
+  interface) and wrapped in a =main()=.
+- *Pure* functions — same input, same output, no side effects —
+  compose safely, test easily, and are reusable anywhere.
+- *Dead code* (unreachable code after ~return~) and the ~None~-trap (a
+  missing ~return~ path) are two different pitfalls, not one.
+- A chained conditional can be simplified step by step: printing
+  branches → returning Booleans branch by branch → one refactored
+  condition.
+- *Incremental development* — stub, add one piece, scaffold with
+  ~print~, test (including edge cases), repeat, clean up — keeps bugs
+  isolated to "the last change."
+- Guardrails (=raise ValueError=, etc.) turn a confusing crash into a
+  clear, intentional one.   
