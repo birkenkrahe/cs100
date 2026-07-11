@@ -1400,7 +1400,7 @@ calls out by name.
 
 ** New assignments
 
-- Home assignment: 
+- Home assignment: Incremental development (Pilgrim walking days)
 - Quiz on DataCamp's "Dictionaries & Pandas" and today's lecture
 
 

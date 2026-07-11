@@ -487,6 +487,67 @@ and =num_people=, and compute =tip=, =grand_total=, and =per_person= share.
       raise ValueError("num_people must be at least 1")
    #+end_example
 
+* A note on guardrails
+
+- Exceptions should be raised as soon as they can detected to avoid
+  any unnecessary additional work to be done by the program.
+
+- In this case, as soon as the wrong argument is passed to the
+  function, an error can, and should be detected.
+
+- Python must, and will, abort, but it is still important with what
+  error (message).
+
+- Here is the ~if/raise~ statement in the working program:
+  #+begin_src python :tangle ValueError.py :results output :exports both :session *Python* :python python3 
+    def split_bill(total, tip_percent, num_people):
+        if num_people <= 0:
+          raise ValueError("num_people must be at least 1")
+      # Compute the tip as total * (tip_percent / 100)
+        tip = total * (tip_percent / 100)
+        # Compute the grand_total as total + tip
+        grand_total = total + tip
+        # Compute the share per_person as grand_total / num_people
+        per_person = grand_total / num_people  
+        # Return per_person rounded to the nearest cent (2 digits)
+        return round(per_person,2)
+
+    print(split_bill(50, 20, 4)) # $15
+    print(split_bill(100, 15, 3)) # $38.3333...
+    print(split_bill(50, 20, 0)) # ZeroDivisionError -> ValueError
+  #+end_src
+
+  #+RESULTS:
+  : 15.0
+  : 38.33
+
+- The last call is not completed. To see the error message, I will run
+  this on the REPL (shell/terminal):
+  #+begin_src bash :results output :exports both
+    python3 ValueError.py 2>&1
+  #+end_src
+
+  #+RESULTS:
+  : 15.0
+  : 38.33
+  : Traceback (most recent call last):
+  :   File "/home/aletheia/GitHub/admin/summer26/cs100/org/ValueError.py", line 15, in <module>
+  :     print(split_bill(50, 20, 0)) # ZeroDivisionError -> ValueError
+  :   File "/home/aletheia/GitHub/admin/summer26/cs100/org/ValueError.py", line 3, in split_bill
+  :     raise ValueError("num_people must be at least 1")
+  : ValueError: num_people must be at least 1
+
+- How is ~ValueError~ "better" than ~ZeroDivisionError~? It is actually:
+  #+begin_quote
+  It names the actual problem by saying that the argument is
+  invalid. It catches more than just division by zero, namely a
+  negative value for =num_people=: =print(split_bill(50,20,-4)=
+  #+end_quote
+
+- I also mentioned ~try/except~, but that was a mistake - this guardrail
+  can only catch what Python actually decides to raise, and it will
+  not raise an automatic exception for negative numbers!
+
 * Summary
 
 - A function without =return= implicitly returns ~None~ — check for it
