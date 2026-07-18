@@ -1285,25 +1285,27 @@ Through Christ our Lord.
 
 *Amen.*
 
-* Week 8 - Function ~return~ values, dictionaries and DataFrames
+* DONE Week 8 - Function ~return~ values
 
-| Activity                                                           | Min |   |   |
-|--------------------------------------------------------------------+-----+---+---|
-| Opening prayer                                                     |   1 |   |   |
-| Hindsight is 20/20: choice of book                                 |   5 |   |   |
-| Review: Home assignment "Camino de Santiago"                       |   5 |   |   |
-| Review: Textbook ch. 6 - What's wrong with this code               |   6 |   |   |
-| Code along: return values, pure functions, incremental development |  65 |   |   |
-| New assignments                                                    |   1 |   |   |
-| Checkout (takeaway)                                                |   5 |   |   |
-| Closing prayer                                                     |   1 |   |   |
-|--------------------------------------------------------------------+-----+---+---|
+| Activity                                                           | Min |
+|--------------------------------------------------------------------+-----|
+| Opening prayer                                                     |   1 |
+| Hindsight is 20/20: choice of book                                 |   5 |
+| Review: Home assignment "Camino de Santiago"                       |   5 |
+| Review: Textbook ch. 6 - What's wrong with this code               |   6 |
+| Code along: return values, pure functions, incremental development |  65 |
+| New assignments                                                    |   1 |
+| Checkout (takeaway)                                                |   5 |
+| Closing prayer                                                     |   1 |
+|--------------------------------------------------------------------+-----|
 
+** Opening Prayer
 ** Hindsight is 20/20 - Choice of book
 
 *Question: How has your reading experience in this course been so far?*
 
 My view now:
+
 - I don't think that "ThinkPython" was the best choice for a textbook.
 
 - I don't like the flow of any of the chapters or the examples.
@@ -1314,7 +1316,7 @@ My view now:
 
 - For absolute beginners, "[[https://learncodethehardway.com/client/#/product/learn-python-the-hard-way-5e-2023/][Learn Python the Hard Way]]" is better.
 
-- It's not expenseive and comes with a digital copy & videos for $22.
+- It's not expensive and comes with a digital copy & videos for $22.
 
 - For those who already know a little programming "Python Crash
   Course" (2023) may be better ($20-$30)
@@ -1336,6 +1338,11 @@ My view now:
 - If you don't submit an assignment on time, you lose 50% of the
   points. But you should still try to solve it.
 
+** New assignments
+
+- Home assignment: Incremental development (Pilgrim walking days)
+- Quiz on DataCamp's "Dictionaries & Pandas" and today's lecture
+
 ** Review: Textbook ch. 6 - What's wrong with this code?
 
 Find out if you actually read the chapter — three "what's wrong with
@@ -1343,7 +1350,7 @@ this code" questions, each targeting a specific pitfall the chapter
 calls out by name.
 
 - What does this print, and why?
-  #+begin_example python
+  #+begin_src python :results output :exports both :session *Python* :python python3 
   def sign(n):
       if n > 0:
           return "positive"
@@ -1351,20 +1358,24 @@ calls out by name.
           return "negative"
 
   print(sign(0))
-  #+end_example
+  #+end_src
+
+  #+RESULTS:
+  : None
+
   #+begin_quote
   Prints ~None~ — no branch catches =n == 0=, so the function falls off
   the end and implicitly returns ~None~.
   #+end_quote
 
 - This crashes. What's the actual bug?
-  #+begin_example python
+  #+begin_src python :results output :exports both :session *Python* :python python3 
   def double(n):
       print(n * 2)
 
   result = double(5)
   print(result + 1)
-  #+end_example
+  #+end_src
   #+begin_quote
   ~double()~ never ~return~s, so =result= is ~None~; =None + 1= raises a
   ~TypeError~. ~print()~ displays a value, it doesn't hand it back to the
@@ -1373,7 +1384,7 @@ calls out by name.
 
 - This works, but the chapter would flag one line as bad style. Which
   line, and why?
-  #+begin_example python
+  #+begin_src python :results output :exports both :session *Python* :python python3 
   def is_even(n):
       return n % 2 == 0
 
@@ -1382,7 +1393,7 @@ calls out by name.
           return "even"
       else:
           return "odd"
-  #+end_example
+  #+end_src
   #+begin_quote
   =if is_even(n) == True:= — =is_even(n)= already /is/ a Boolean, so
   comparing it to ~True~ is redundant; should just be =if is_even(n):=.
@@ -1398,11 +1409,35 @@ calls out by name.
 
 - The full solution is on GitHub.
 
+** Take aways
+
+- Use try...except instead of raise
+- Use assert to write a one-line test for a function return
+- Doing more coding with return
+- Changing void to return 
+
+** Closing Prayer
+
+* Week 9 - Dictionaries in Action
+
+** Opening prayer
 ** New assignments
 
-- Home assignment: Incremental development (Pilgrim walking days)
-- Quiz on DataCamp's "Dictionaries & Pandas" and today's lecture
+- Quiz on Control flow and filtering pandas data (DataCamp)
+- Another DataCamp chapter (loops)
 
+** Review: Dictionary, control flow, and pandas (part 1/2)
+
+- We're going to code a text adventure game "Escape to the chapel"
+
+- Open the starter Colab notebook: [[https://tinyurl.com/escape-to-the-chapel][tinyurl.com/escape-to-the-chapel]]
+
+- You can find the complete solution in GitHub (8_dict_pandas.org)
+
+- Next week: finish the game, turn modular code into functions
+  
+** Take aways
+** Closing prayer
 
 * Footnotes
 

@@ -1,0 +1,743 @@
+#+TITLE: Escape to the Chapel — Dictionaries, Iteration, and Logic in Action
+#+SUBTITLE: CSC 100 — Solution
+#+AUTHOR: Marcus Birkenkrahe
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :results output :exports both :noweb yes
+
+* Overview
+
+We build a small text adventure game: a novice monk must find the way
+from his cell to the chapel before Vespers. Along the way we cover
+~if/elif/else~, ~while~ loops, dictionaries, Boolean logic, the
+accumulator pattern, filtering, and a bridge from dictionaries to
+=pandas= DataFrames.
+
+Before we code the game, let's look at how control flow with if/else
+is connected with dictionaries.
+
+* Preamble: control flow vs data structure
+
+- Consider the following control flow: Suppose you want to translate
+  an acroynm into its full name:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    abb = "IHS"
+
+    if abb == "IHS":
+        full = "Iesus Hominem Salvator"
+    elif abb == "INRI":
+        full = "Iesus Nazarenus Rex Iudaeorum"
+    elif abb == "RIP":
+        full = "Requiescat In Pace"
+    else:
+        full = "Unknown"
+
+    print(full)
+  #+end_src
+
+  #+RESULTS:
+  : Iesus Hominem Salvator
+
+- Every branch here does the same job, and the purpose is to look
+  something up using the abbreviation as the key to the full phrase as
+  the value.
+
+- If you can identify key-value pairs, you can write a dictionary:
+  #+begin_src python :results none :session *Python* :python python3
+    expansions = {
+        "IHS":   "Iesus Hominem Salvator",
+        "INRI": "Iesus Nazarenus Rex Iudaeorum",
+        "RIP":  "Requiescat In Pace"
+    }
+  #+end_src
+
+- Let's use it to look something up, for example the phrase for =IHS=:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    abb = "IHS"
+    full = expansions[abb]
+    print(full)
+  #+end_src
+
+  #+RESULTS:
+  : Iesus Hominem Salvator
+
+- We can also print the keys and values:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for key in expansions.keys():
+        print(key)
+    for value in expansions.values():
+        print(value)
+  #+end_src
+
+  #+RESULTS:
+  : IHS
+  : INRI
+  : RIP
+  : Iesus Hominem Salvator
+  : Iesus Nazarenus Rex Iudaeorum
+  : Requiescat In Pace
+
+- Or you can unpack both key and value (this is called "tuple
+  unpacking", since ~.items()~ yields 2-tuples):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for k,v in expansions.items():
+        print(k,v)
+  #+end_src
+
+  #+RESULTS:
+  : IHS Iesus Hominem Salvator
+  : INRI Iesus Nazarenus Rex Iudaeorum
+  : RIP Requiescat In Pace
+
+- The attribute ~.items()~ returns a view object with all key-value
+  pairs as tuples. Viewing objects (like ~.keys()~, ~.values()~) are cheap
+  because they don't create any copies. That's also why they are not
+  subscriptable.
+
+- What if we want to add a fourth abbreviation/phrase pair, like "DOM"
+  ("Deo Optimo Maximo") for the if/elif flow?
+  #+begin_quote
+  We add: ~elif abb=="DOM": full = "Deo Optimo Maximo"~
+  #+end_quote
+
+- What can we do with the dictionary? Add it and try to extract the
+  phrase:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    expansions["DOM"]="Deo Optimo Maximo"
+    print(expansions["DOM"])
+  #+end_src
+
+  #+RESULTS:
+  : Deo Optimo Maximo
+
+- If we want to extract a specific key from the dictionary, we need to
+  convert to a ~list~ since ~[]~ does not work on ~.keys()~:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    exp_keys = list(expansions.keys())
+    print(f"The last key: {exp_keys[-1]}")
+    exp_vals = list(expansions.values())
+    print(f"'{exp_keys[-1]}' stands for the phrase '{exp_vals[-1]}'")
+  #+end_src
+
+  #+RESULTS:
+  : The last key: DOM
+  : 'DOM' stands for the phrase 'Deo Optimo Maximo'
+
+- This use of ~[]~ is unnecessary since we have a dictionary:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(f"'DOM' stands for the phrase '{expansions['DOM']}'")
+  #+end_src
+
+  #+RESULTS:
+  : 'DOM' stands for the phrase 'Deo Optimo Maximo'
+
+- To check if the key is in the dictionary:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print("DOM" in expansions)
+  #+end_src
+
+  #+RESULTS:
+  : True
+
+* Phase 1: The wrong way
+
+- The monastery has rooms connected by passages.
+  #+CAPTION: Monastery layout — cloister is the hub
+  #+begin_example
+                       +--------------+
+                       |  Scriptorium |
+                       +------+-------+
+                              |
+                              | north
+                              |
+   +---------------+   west  +--------------+   east  +--------------+
+   |   Refectory   +---------+   Cloister   +---------+    Chapel    |
+   +---------------+         +------+-------+         +--------------+
+                                     |
+                                     | south
+                                     |
+                              +------+-------+
+                              |     Cell     |
+                              |  (start)     |
+                              +--------------+
+  #+end_example
+
+- Start with just two =rooms= (=cell= and =cloister=) and pure control
+  flow - that means we allow the player to =move= between rooms
+  depending on the input. We also allow for wrong moves (not supported
+  by the map).
+
+- The pseudocode just for one room, starting point =cell= and end point
+  =cloister=:
+  #+begin_example python
+  # SET current room
+  # PRINT current room
+  # MOVE north, east, west or south (input)
+
+  # IF room is cell
+    # IF move is north
+      # SET room to cloister
+    # ELSE
+      # wrong move
+
+  # PRINT current room
+  #+end_example
+
+- In Python code:
+  #+begin_src python :noeval :results none :exports both :session *Python* :python python3
+    room = 'cell'
+    print("You are in the", room)
+    move = input("> ")
+    if room == 'cell':
+        if move == 'north':
+            room = 'cloister'
+        else:
+            print("You can't go that way.")
+            print("You are in the", room)
+  #+end_src
+
+* PRACTICE Add a room
+
+- You can now go from the =cell= to the =cloister= but not back. Add a
+  =move= from the =cloister= to the =cell= starting with the code already
+  written.
+
+- To make it a little more interesting, get both starting =room= and
+  =move= as =input()= from the player.
+
+- Solution:
+  #+begin_src python :noeval :results output :exports both :session *Python* :python python3
+    room = input("Where are you? > ")
+    move = input("Where are you headed? > ")
+
+    if room == 'cell':
+        if move == 'north':
+            room = 'cloister'
+        else:
+            print("You can't go that way.")
+    elif room == 'cloister':
+        if move =='south':
+            room = 'cell'
+        else:
+            print("You can't go that way.")
+
+    print("You are in the", room)
+  #+end_src
+
+- The cloister connects to four rooms. How many ~if/elif~ branches would
+  we need for the cloister alone?
+  #+begin_quote
+  Four inner branches, plus the ~else~. Every new room adds an outer ~elif~
+  with its own inner block. With 5 rooms and ~12 passages the program is
+  already ~40 lines of near-identical code — and no /game/ yet, only
+  geography.
+  #+end_quote
+
+- What varies between these branches — the *algorithm* or the *values*?
+  #+begin_quote
+  Only the values: current room, direction, destination. The algorithm
+  ("look up where this move leads") is identical everywhere. When only
+  values vary, the variation belongs in data, not code.
+  #+end_quote
+
+* Phase 2: The world as data
+
+- What's the best way to manage the data for this map?
+  #+begin_quote
+  The data structure in Python for maps (key->value) is the
+  dictionary. The map provides the (immutable) key to a path on the
+  map. For example: key = =north= opens the value = =cloister= if the player
+  is in the =cell=. That's the structure to implement the `if move = north
+  then go to room = cloister` flow.
+  #+end_quote
+
+- The control flow is nested: a room check followed by a move check.
+  #+begin_example python
+  if room == cell then
+     if move == north then
+          new room -> cloister
+     else
+          can't go that way (can't go south from the cell)
+  elif room == cloister
+     if move == south then
+          new room -> cell
+     else
+        can't go that way (can't go north from the cloister yet)
+#+end_example
+
+- So we're mapping the rooms (=cell=, =cloister=) to the
+  directions (=north=, =south=).
+
+- What are the dictionary entries for the =cell= and for the =cloister=?
+  #+begin_example python
+  "cell": "north" # cell is key to going north to the cloister
+  "cloister": "south" # cloister is key to going south to the cell
+  #+end_example
+
+- The dictionary plan for the =cell= is the same for the other three
+  rooms: =scriptorium=, =chapel= and =refectory=.
+
+- Notice something missing from ~"cell": "north"~: it tells us a move
+  is /possible/, but not /where it leads/. What do we need to add?
+  #+begin_quote
+  *Answer:* The destination room. For a single-exit room like the =cell=,
+  we need both pieces together: the direction and the destination,
+  e.g.  as a pair: =("north", "cloister")=.
+  #+end_quote
+
+- The =cloister= has four exits, not one. Can we still use a single
+  pair as its dictionary value?
+  #+begin_quote
+  No — we'd need four pairs, one per direction. We /could/ store them
+  all in a tuple of tuples: =(("south","cell"), ("east","chapel"),
+  ("west","refectory"), ("north","scriptorium"))=. But then, to check
+  whether "east" is a valid move, we'd have to loop through and
+  compare each first element, one at a time. That's exactly the
+  scanning we escaped when we replaced =if/elif= with a dictionary in
+  the first place.
+  #+end_quote
+
+- So what data structure lets us jump straight from a *direction* to a
+  *destination*, direct lookup, no scanning?
+  #+begin_quote
+  A dictionary: ={"south": "cell", "east": "chapel", "west":
+  "refectory", "north": "scriptorium"}=. Each room's value in =rooms=
+  isn't a string or a pair, then — it's a small dictionary of its own,
+  one entry per exit. That's what makes =rooms= a /dictionary of
+  dictionaries/: the same "stop scanning, start looking up" idea we
+  used for the outer dictionary, applied again one level in. The
+  =cloister= is the key to four other keys (south, east, west, north)
+  that lead to their respective values (cell, chapel, refectory,
+  scriptorium).
+  #+end_quote
+
+- The final dictionary:
+  #+begin_src python :session *Python* :python python3 :results none
+    rooms = {
+        "cell":        {"north": "cloister"},
+        "cloister":    {"south": "cell", "east": "chapel",
+                        "west": "refectory", "north": "scriptorium"},
+        "chapel":      {"west": "cloister"},
+        "refectory":   {"east": "cloister"},
+        "scriptorium": {"south": "cloister"},
+    }
+  #+end_src
+
+- Let's print the keys:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(rooms.keys())
+  #+end_src
+  #+RESULTS:
+  : dict_keys(['cell', 'cloister', 'chapel', 'refectory', 'scriptorium'])
+
+- You can also print this with a ~for~ loop (one per line):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for key in rooms.keys():
+        print(key)
+  #+end_src
+
+  #+RESULTS:
+  : cell
+  : cloister
+  : chapel
+  : refectory
+  : scriptorium
+
+- And if you want to print the keys of the sub-directories:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for key in rooms['cloister'].keys():
+        print(key)
+  #+end_src
+
+  #+RESULTS:
+  : south
+  : east
+  : west
+  : north
+
+- What about the values for =rooms=: print them with a ~for~ loop, too.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for values in rooms.values():
+        print(values)
+  #+end_src
+
+  #+RESULTS:
+  : {'north': 'cloister'}
+  : {'south': 'cell', 'east': 'chapel', 'west': 'refectory', 'north': 'scriptorium'}
+  : {'west': 'cloister'}
+  : {'east': 'cloister'}
+  : {'south': 'cloister'}
+
+- What order do the rooms print in?
+  #+begin_quote
+  The insertion order — the order we typed them into the dictionary
+  literal (Python 3.7+ preserves this). Don't rely on this for game
+  logic, only for display; the point of the loop is that the program
+  discovers the map by reading the data structure, not because we
+  told it to room by room.
+  #+end_quote
+
+- What does ~rooms["cloister"]~ contain? Use square brackets ~[]~ to
+  extract the content:
+  #+begin_src python :session *Python* :python python3 :results output :exports both
+    print(rooms["cloister"])
+  #+end_src
+
+  #+RESULTS:
+  : {'south': 'cell', 'east': 'chapel', 'west': 'refectory', 'north': 'scriptorium'}
+
+  One key per direction, mapping to the destination room. This matches
+  the four spokes off the cloister on the map.
+
+- We can loop over the dictionary itself to print the whole map by
+  unpacking keys and values:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for k,v in rooms.items():
+        print(k,v)
+  #+end_src
+
+  #+RESULTS:
+  : cell {'north': 'cloister'}
+  : cloister {'south': 'cell', 'east': 'chapel', 'west': 'refectory', 'north': 'scriptorium'}
+  : chapel {'west': 'cloister'}
+  : refectory {'east': 'cloister'}
+  : scriptorium {'south': 'cloister'}
+
+- Or loop over any sub-dictionary:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for k,v in rooms['cloister'].items():
+        print(k,v)
+  #+end_src
+
+  #+RESULTS:
+  : south cell
+  : east chapel
+  : west refectory
+  : north scriptorium
+
+- There is another way to do this:
+  #+begin_src python :session *Python* :python python3 :results output :exports both
+    for room in rooms:
+        print(room, "connects to:", list(rooms[room].keys()))
+  #+end_src
+
+  #+RESULTS:
+  : cell connects to: ['north']
+  : cloister connects to: ['south', 'east', 'west', 'north']
+  : chapel connects to: ['west']
+  : refectory connects to: ['east']
+  : scriptorium connects to: ['south']
+
+- Let's unpack this last loop:
+  1) We loop over =rooms=, which is a dictionary of dictionaries
+  2) The loop counter =room= looks up each key in the sub-dictionary
+     =rooms[room]=. For example:
+     #+begin_src python :results output :exports both :session *Python* :python python3
+       print(rooms["cell"])         # cell's value = dictionary to go north
+       print(rooms["cell"].keys())  # key to go to the cloister
+       print(list(rooms["cell"].keys())) # as a list item (to iterate over)
+     #+end_src
+
+     #+RESULTS:
+     : {'north': 'cloister'}
+     : dict_keys(['north'])
+     : ['north']
+
+* PRACTICE Add another room
+
+- Add another room to the dictionary: The kitchen, which lies south of
+  the refectory.
+
+- The new map looks like this:
+  #+CAPTION: Monastery layout — now with the kitchen
+  #+begin_example
+                        +--------------+
+                        |  Scriptorium |
+                        +------+-------+
+                               |
+                               | north
+                               |
+    +---------------+   west  +--------------+   east  +--------------+
+    |   Refectory   +---------+   Cloister   +---------+    Chapel    |
+    +-------+-------+         +------+-------+         +--------------+
+            |                        |
+            | south                  | south
+            |                        |
+    +-------+-------+         +------+-------+
+    |    Kitchen    |         |     Cell     |
+    +---------------+         +--------------+
+  #+end_example
+
+- The current dictionary:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for k,v in rooms.items():
+        print(k,v)
+  #+end_src
+
+  #+RESULTS:
+  : cell {'north': 'cloister'}
+  : cloister {'south': 'cell', 'east': 'chapel', 'west': 'refectory', 'north': 'scriptorium'}
+  : chapel {'west': 'cloister'}
+  : refectory {'east': 'cloister'}
+  : scriptorium {'south': 'cloister'}
+
+- The image shows all that we need to know: you can only go =north= from
+  the =kitchen=. The dictionary itself does not care about order - we
+  insert "kitchen" at the end. But we make a copy first so we don't
+  ruin a working =rooms= dictionary, and we delete it later.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    rooms2 = rooms.copy()  # the dictionary has a copy constructor!
+    print(rooms2.items())
+    rooms2["kitchen"] = {"north":"refectory"}
+    print("kitchen" in rooms2)
+    for k,v in rooms2['kitchen'].items():
+        print(k,v)
+        del(rooms2)
+        print("rooms2" in dir())
+  #+end_src
+
+  #+RESULTS:
+  : dict_items([('cell', {'north': 'cloister'}), ('cloister', {'south': 'cell', 'east': 'chapel', 'west': 'refectory', 'north': 'scriptorium'}), ('chapel', {'west': 'cloister'}), ('refectory', {'east': 'cloister'}), ('scriptorium', {'south': 'cloister'})])
+  : True
+  : north refectory
+  : False
+
+- This worked, so now let's add it to the original =rooms=:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    rooms["kitchen"] = {"north":"refectory"}
+    print("kitchen" in rooms)
+    print(rooms["kitchen"].items())
+  #+end_src
+
+  #+RESULTS:
+  : True
+  : dict_items([('north', 'refectory')])
+
+- There's another problem here: You can now go =north= from the =kitchen=,
+  but you cannot go =south= from the =refectory=, only =east=.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(rooms['refectory'].keys())
+  #+end_src
+
+  #+RESULTS:
+  : dict_keys(['east'])
+
+- So we also need to add a =south= key to =refectory=:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    rooms['refectory']={"east":"cloister","south":"kitchen"}
+    for k,v in rooms['refectory'].items():
+        print(k,v)
+  #+end_src
+
+  #+RESULTS:
+  : east cloister
+  : south kitchen
+
+* Phase 3: The game loop
+
+- Look back at your practice solution: it asks for one move, checks it
+  against =rooms[room]=, and then the program ends. To actually reach
+  the chapel (remember the title: "Escape to the chapel"), what's
+  missing?
+  #+begin_quote
+  Repetition. A real player needs to keep moving, room after room,
+  until they arrive — not make one move and stop. That's iteration: do
+  the same lookup over and over until some condition changes.
+  #+end_quote
+
+- Python's tool for "keep doing this as long as a condition holds" is
+  the =while= loop. The general recipe:
+  #+begin_example python
+  while condition:
+      # repeat this block as long as condition is True
+  #+end_example
+
+- What should the /condition/ be here — when should the game stop
+  asking for moves?
+  #+begin_quote
+  When the player has reached the chapel: ~while room != "chapel":~
+  As long as that stays ~True~, keep asking for another move.
+  #+end_quote
+
+- Inside the loop, each pass repeats exactly the lookup you already
+  know: ask for a =move=, check it against =rooms[room]=, then update =room=
+  if it's valid. The only difference from your practice solution is
+  that this whole exchange now happens inside the =while= loop instead
+  of running once. Because of that, we need a ~break~ condition - this
+  is when the player enters ="quit"=.
+
+- First pass at the code — handles movement and invalid moves. We're
+  starting in the =cell= again.
+  #+name: while
+  #+begin_src python :noeval :session *Python* :python python3 :results output :exports both
+    room = "cell"
+
+    while room != "chapel":
+        move = input(f"You are in the {room}. > ")
+        if move == "quit":
+            break
+        if move in rooms[room]:
+            room = rooms[room][move]
+        else:
+            print("You can't go that way.")
+
+    print("You reached the", room, "— just in time for Vespers.")
+  #+end_src
+
+- You notice =rooms[room][move]= - what does it mean?
+  #+begin_quote
+  Two lookups chained together, evaluated left to right. =rooms[room]=
+  first looks up the current room's key in =rooms=, returning /that
+  room's/ sub-dictionary of exits, e.g. ={"east": "cloister"}=. Then
+  =[move]= looks up the player's direction inside /that/ sub-dictionary,
+  returning the destination room's name. Same idea as
+  =rooms["cloister"].keys()= from Phase 2, just with a variable room
+  and a second =[]= added to go one step further, from exit to
+  destination.
+  #+end_quote
+
+- Why check ~move in rooms[room]~ rather than writing
+  ~rooms[room][move]~ directly?
+  #+begin_quote
+  ~rooms[room][move]~ raises a ~KeyError~ if the move is invalid — the
+  program crashes. Checking ~in~ first (the ~in~ operator on
+  dictionaries) lets us handle bad input gracefully instead.
+  #+end_quote
+
+* The locked chapel — Boolean logic
+
+The chapel door is locked. The player needs the key, found in the
+scriptorium, before entering:
+
+#+begin_src python :noeval :session *Python* :python python3 :results output :exports both
+  room = "cell"
+  has_key = False
+
+  while room != "chapel":
+      move = input(f"You are in the {room}. > ")
+      if move == "quit":
+          break
+
+      if move == "take" and room == "scriptorium":
+          has_key = True
+          print("You take the key.")
+          continue
+
+      if move in rooms[room]:
+          destination = rooms[room][move]
+          if destination == "chapel" and not has_key:
+              print("The door is locked. You need the key.")
+          else:
+              room = destination
+      else:
+          print("You can't go that way.")
+
+  if room == "chapel":
+      print("You reached the chapel — just in time for Vespers.")
+#+end_src
+
+- Player goes to the scriptorium, types ~take~, then heads to the
+  cloister and east. What is ~has_key~ at each step, and why does
+  ~and not has_key~ (rather than just ~not has_key~) matter?
+  #+begin_quote
+  ~has_key~ is ~False~ until ~take~ sets it ~True~ in the scriptorium;
+  from then on it stays ~True~. The compound condition
+  ~destination == "chapel" and not has_key~ only checks the lock when
+  the player is actually trying to enter the chapel. Without the first
+  clause, ~not has_key~ alone would print "locked" for every move made
+  before the key is found, even moves that have nothing to do with the
+  chapel.
+  #+end_quote
+
+* Phase 4: Accumulator and filter
+
+Track every room visited, using the accumulator pattern: initialize
+before the loop, update inside, read out after.
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  room = "cell"
+  has_key = False
+  visits = {"cell": 1}
+
+  while room != "chapel":
+      move = input(f"You are in the {room}. > ")
+      if move == "quit":
+          break
+
+      if move == "take" and room == "scriptorium":
+          has_key = True
+          print("You take the key.")
+          continue
+
+      if move in rooms[room]:
+          destination = rooms[room][move]
+          if destination == "chapel" and not has_key:
+              print("The door is locked. You need the key.")
+          else:
+              room = destination
+              if room in visits:
+                  visits[room] += 1
+              else:
+                  visits[room] = 1
+      else:
+          print("You can't go that way.")
+
+  if room == "chapel":
+      print("You reached the chapel — just in time for Vespers.")
+
+  print(visits)
+#+end_src
+
+The counter updates only on a successful move into a new room —
+including the chapel itself — which keeps every count meaningful: no
+double-counting a locked-door bounce, and the final room is counted
+like any other.
+
+Filter, parallel to the textbook's ~long_palindromes~ pattern — loop
+through the accumulated dictionary, build a new list by selection:
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  revisited = []
+  for room_name in visits:
+      if visits[room_name] > 1:
+          revisited.append(room_name)
+
+  print("Rooms you backtracked through:", revisited)
+#+end_src
+
+- What does it mean, narratively, for a room to appear in ~revisited~?
+  #+begin_quote
+  The player passed through it more than once — a dead end, a
+  backtrack, or getting lost. The data structure tells a story about
+  how the game was played, not just what the map looks like.
+  #+end_quote
+
+* Coda: from dictionary to pandas
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  import pandas as pd
+
+  df = pd.DataFrame(list(visits.items()), columns=["room", "visits"])
+  df
+#+end_src
+
+#+begin_src python :session *Python* :python python3 :results output :exports both
+  df[df["visits"] > 1]
+#+end_src
+
+- Compare this line to the ~revisited~ for-loop above. Same result —
+  what differs about how we got there?
+  #+begin_quote
+  The for-loop filters by explicit iteration and an ~if~ test; the
+  pandas line filters by evaluating a Boolean condition
+  (~df["visits"] > 1~) across the whole column at once and using the
+  result as a mask. Same logic, different idiom: one value at a time
+  versus the whole column at once.
+  #+end_quote
+
+* Wrap-up
+
+Control flow got unwieldy → a dictionary held the values → a loop
+drove the game → Boolean logic gated the chapel → an accumulator
+tracked visits → a filter selected the interesting ones → pandas did
+the same filter in one line.
