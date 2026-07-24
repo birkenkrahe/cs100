@@ -1418,12 +1418,12 @@ calls out by name.
 
 ** Closing Prayer
 
-* Week 9 - Dictionaries in Action
+* DONE Week 9 - Dictionaries in Action
 
 ** Opening prayer
 ** New assignments
 
-- Quiz on Control flow and filtering pandas data (DataCamp)
+- Quiz on Control flow and filtering pandas (DataCamp)
 - Another DataCamp chapter (loops)
 
 ** Review: Dictionary, control flow, and pandas (part 1/2)
@@ -1437,7 +1437,79 @@ calls out by name.
 - Next week: finish the game, turn modular code into functions
   
 ** Take aways
+
+- Difference between lookup O(1) and search O(n) (time complexity)
+- ~.items()~ function to view all key-value pairs
+- Printing sub-dictionaries
+- Lots of coding = lots of errors
+- Little (elegant, terse) coding = little readability
+
 ** Closing prayer
+
+* Week 10 - Escape to the Chapel! (Part 2) / Immutable structures
+
+** Opening prayer
+
+- Let's pray!
+
+** Mutable vs. immutable data types
+
+- Jim's question: *Mutable* vs *immutable* data types: I've made a video
+  on this and uploaded it to MS Teams. You may need this if you want
+  to do the refactoring exercise for the "Escape to the Chapel" game.
+
+** New assignments
+
+- New assignments:
+  1. New DataCamp lesson: Random walk (case study)
+  2. Quiz on Loops (DataCamp) and class content (game)
+  3. Treasure Island text adventure game (control flow)
+  4. Refactoring of "Escape to the Chapel" (bonus)
+
+** Code along lecture: Escape to the Chapel II
+
+- Today we finish the "Escape to the Chapel" game:
+  [[https://tinyurl.com/escape-to-chapel-2][tinyurl.com/escape-to-chapel-2]]
+
+- But first we're going to do a *warm-up* exercise to get back into
+  dictionaries and dictionaries of dictionaries. We're using the
+  scenario that you'll find in the home assignment, "Treasure Island".
+
+- Open this notebook now for the startup exercise:
+  [[https://tinyurl.com/treasure-island-ipynb][tinyurl.com/treasure-island-ipynb]]
+
+** Your take aways
+
+- What are your *take aways* for today?
+
+** Outlook
+
+- *Outlook*: for the remaining sessions, I will stay close to the
+  textbook though you'll continue to get a weekly DataCamp
+  session. The next (and last) course is "Introduction to Functions in
+  Python", with "Intermediate Python" as its prerequisite. 
+
+** Closing prayer
+
+- Let's pray again!
+
+* Week 11: Iteration and search (ch 7)
+
+- Short aside: tuples (~15-20 min). Not covered by DataCamp
+  (lists and dictionaries were). Immutable, so usable as dict keys;
+  packing/unpacking; the natural type for multiple return values.
+  Fold in wherever multiple-return-values comes up naturally, rather
+  than as its own block.
+
+- Iteration and linear search (ch 7)
+
+* Week 12: Strings and regular expressions (ch 8)
+
+* Week 13: Text analysis and generation (ch 12)
+
+* Week 14: Files and databases (ch 13)
+
+* Week 15: Final presentations of your projects
 
 * Footnotes
 
