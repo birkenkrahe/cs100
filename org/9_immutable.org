@@ -1,0 +1,336 @@
+#+TITLE: Mutable and Immutable Data — Refactoring the Chapel Game into Functions
+#+SUBTITLE: CS100 — Week 10
+#+AUTHOR: Marcus Birkenkrahe
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :results output :exports both :python python3
+* Overview
+
+Before we turn "Escape to the Chapel" into functions, we need one more
+idea: some Python objects can change /in place/, others can't.  That
+distinction decides whether a function needs to =return= a new value, or
+can just change what you handed it. Then we refactor the game's =while=
+loop into functions, using =try_move= as the model.
+
+Objects that can be changed in place are called "mutable". Objects
+that cannot be changed in place are called "immutable". 
+
+* Integers (and other primitive data types)
+
+- Primitive data types (integers, floats, strings, booleans, tuples)
+  are immutable. You cannot reach into the object and edit its
+  content. To change them, you need to rebuild them elsewhere and then
+  repoint at them.
+
+- The ~id~ function returns a unique integer for every object (as long
+  as it is defined):
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    foo = 0
+    print(id(foo))
+  #+end_src
+
+  #+RESULTS:
+  : 128004991746256
+  
+- What about the right hand side of that assignment, the literal ~0~?
+  It's an object. Does it also have an ID?
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    print(id(0))
+  #+end_src
+
+  #+RESULTS:
+  : 128004991746256
+
+- Yes! And it's the same ~id~. We say that =foo= now references its
+  content, the number =0=.
+
+- What if the right hand side is an expression?
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    print(id(1-1))
+  #+end_src
+
+  #+RESULTS:
+  : 128004991746256
+
+- Same thing! The expression is evaluated, and the object remains ~0~.
+
+- We cannot change ~0~ - it's a literal. This will lead to a ~SyntaxError~:
+  #+begin_src bash :results output :exports both
+    python3 -c "0 = 1" 2>&1
+  #+end_src
+
+  #+RESULTS:
+  :   File "<string>", line 1
+  :     0 = 1
+  :     ^
+  : SyntaxError: cannot assign to literal here. Maybe you meant '==' instead of '='?
+
+- What happens if we assign another number (another literal) to =foo=?
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    foo = 1
+    print(id(foo))
+    print(id(1))
+  #+end_src
+
+  #+RESULTS:
+  : 128004991746288
+  : 128004991746288
+
+- That's a different number but =foo= now shares this ~id~. What's going on?
+  #+begin_quote
+  The variable =foo= is simply repointed at a new object: first it
+  referenced ~0~, and now it references ~1~. ~id~ returns the memory address
+  of whatever object it points to. Assignment always means: "point
+  this name at a different object," and never "edit this object's
+  content. This is rebinding - not mutation.
+  #+end_quote
+
+- Using comparison operators, we could also have run this:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    print(id(foo) == id(0))
+    print(id(foo) == id(1))
+  #+end_src
+
+  #+RESULTS:
+  : False
+  : True
+
+- Though there is an illusion at work here: the object has to be
+  within the range currently cached (stored) for use in this cell:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    bar = 1000
+    print(bar)
+  #+end_src
+
+  #+RESULTS:
+  : 1000
+
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(id(bar) == id(1000))
+  #+end_src
+
+  #+RESULTS:
+  : False
+
+- What is going on?
+  #+begin_quote
+  Python only pre-creates and reuses a fixed pool of small integers,
+  =-5= through =256= — a real, permanent cache. =1000= is outside that
+  range, so the =1000= typed here is a *different* object from the
+  =bar = 1000= typed above, even though they're equal in value. This
+  is why splitting the assignment and the check into two separate
+  cells (as we just did) matters: it's the only way to see the real
+  boundary. Cram both into a *single* cell instead —
+  ~bar = 1000; print(id(bar) == id(1000))~ — and it comes back =True=,
+  not because of caching, but because Python's compiler deduplicates
+  identical literals *within one block of code* before it ever runs.
+  That's a compile-time shortcut, not the same thing as the -5..256
+  cache, and it disappears the moment the two literals are compiled
+  separately.
+  #+end_quote
+  
+* Lists and dictionaries
+  
+- Now compare a list:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    lst = [1, 2, 3]
+    print(id(lst))   # memory that foo points at (start of the list)
+  #+end_src
+
+  #+RESULTS:
+  : 128003694754176
+
+- Now append an object - a number - to the list, and check the ~id~
+  again:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    lst.append(4)
+    print(lst)
+    print(id(lst))
+  #+end_src
+
+  #+RESULTS:
+  : [1, 2, 3, 4]
+  : 128003694754176
+
+- Same =id= both times — =.append()= changed the list /in place/. A
+  dictionary behaves the same way:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    d = {"a": 1}
+    print(d, id(d))
+    d["b"] = 2
+    print(d, id(d))
+  #+end_src
+
+  #+RESULTS:
+  : {'a': 1} 128003694649408
+  : {'a': 1, 'b': 2} 128003694649408
+
+- Why does this matter for functions?
+  #+begin_quote
+  If you pass a string, int, or bool into a function and reassign it
+  inside, the caller never sees the change — the function only rebound
+  its own local copy of the name. You have to =return= the new value.
+  But if you pass a list or dictionary into a function and mutate it
+  in place (~.append()~, ~d[key] = ...~), the caller *does* see the change,
+  because both names point at the same object. Which kind of object
+  you're working with tells you whether your function needs a =return=.
+  #+end_quote
+
+- Let's see it in action — a function that mutates a list it's handed,
+  with no =return= at all:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def add_greeting(lst):
+        lst.append("pax")
+        print("inside function:", id(lst))
+
+    names = ["ora", "labora"]
+    print("before call:  ", id(names))
+    add_greeting(names)
+    print("after call:   ", id(names), names)
+  #+end_src
+
+  #+RESULTS:
+  : before call:   128314404757248
+  : inside function: 128314404757248
+  : after call:    128314404757248 ['ora', 'labora', 'pax']
+
+- Same =id= all three times — =names= and the function's =lst= were
+  always the same object. =add_greeting= never returned anything, and
+  it didn't need to: it changed the object in place, and =names= in the
+  caller's scope sees that change because there's only ever one list,
+  referenced by two names.
+
+- Now try the same trick with an immutable type — a string:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def try_greeting(word):
+        word = word + " pax"
+        print("inside function:", word, id(word))
+
+    phrase = "ora"
+    print("before call:  ", phrase, id(phrase))
+    try_greeting(phrase)
+    print("after call:   ", phrase, id(phrase))
+  #+end_src
+
+  #+RESULTS:
+  : before call:   ora 136713698860848
+  : inside function: ora pax 136713699155056
+  : after call:    ora 136713698860848
+
+- Different story: the =id= inside the function is different from the
+  =id= outside, and =phrase= in the caller is completely unchanged —
+  still just =ora=, no =pax=. =word = word + " pax"= built a *new* string
+  and rebound the function's own local name =word= to it; =phrase= back
+  in the caller never knew that happened, because =word= and =phrase=
+  stopped being the same object the instant that line ran. If you want
+  the caller to see a new value, the only way is to =return= it and
+  reassign at the call site — exactly what =try_move= does with =room=.
+
+- Fixed, with =return=:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def try_greeting(word):
+        word = word + " pax"
+        return word
+
+    phrase = "ora"
+    print("before call:  ", phrase, id(phrase))
+    phrase = try_greeting(phrase)
+    print("after call:   ", phrase, id(phrase))
+  #+end_src
+
+  #+RESULTS:
+  : before call:   ora 128003694648624
+  : after call:    ora pax 128003694650288
+
+  Now =phrase= actually changes — but notice the =id= changed too.
+  =try_greeting= didn't edit the string; it built a new one and handed
+  it back, and =phrase = try_greeting(phrase)= rebound the caller's own
+  name to that new object. That reassignment at the call site is not
+  optional: drop it (just call ~try_greeting(phrase)~ without
+  =phrase = ...=) and the caller's =phrase= stays =ora=, exactly like
+  before.
+
+* Refactoring into functions
+
+- The following will be helpful if you tackled the bonus assignment
+  "Escape to the Chapel - Refactoring into functions".
+
+- Look at the Phase 4 code from "Escape to the Chapel" as a whole.
+  Its =while= loop body does at least four different jobs, one after
+  another: check a move, take a key, check whether the chapel is
+  locked, update the visit counter.
+    #+begin_src python :noeval 
+    room = "cell"
+    has_key = False   
+    visits = {"cell": 1} 
+
+    while room != "chapel":
+        move = input(f"You are in the {room}. > ") 
+        if move == "quit":                        #  <--- quit?
+            break          
+        if move == "take" and room == "scriptorium": # <--- got key?
+            has_key = True       
+            print("You take the key.") 
+            continue               
+        if move in rooms[room]:              # <--- move allowed?
+            destination = rooms[room][move]
+            if destination == "chapel" and not has_key: # <--- got key?
+                print("The door is locked. You need the key.")
+            else:
+                room = destination
+                if room in visits:     # <-- room already visited?
+                    visits[room] += 1
+                else:
+                    visits[room] = 1 
+        else:
+            print("You can't go that way.")
+    if room == "chapel": 
+        print("You reached the chapel — just in time for Vespers.")
+    print(visits) 
+  #+end_src
+
+- What's the cost of leaving all of that in one place?
+  #+begin_quote
+  It's hard to read, hard to test one piece without the others, and
+  hard to reuse — the same problem the original =if/elif= chain had in
+  Phase 1, just reappearing inside a loop instead of a branch. The
+  fix is the same idea, one level up: give each job its own name.
+  #+end_quote
+
+- One example, the "is movement allowed?" check, pulled out into its
+  own function:
+  #+begin_src python :session *Python* :python python3 :results output :exports both
+    def try_move(room, move):
+        """Return the destination if move is a valid exit from room,
+        otherwise None."""
+        if move in rooms[room]:
+            return rooms[room][move]
+        else:
+            return None
+  #+end_src
+
+  Used inside the loop:
+  #+begin_src python :noeval :session *Python* :python python3 :results output :exports both
+    destination = try_move(room, move)
+    if destination is None:
+        print("You can't go that way.")
+    else:
+        room = destination
+  #+end_src
+
+- Why does =try_move= *return* the destination instead of just setting
+  =room= itself, inside the function?
+  #+begin_quote
+  =room= is a string — immutable, just like =phrase= above — so
+  =try_move= has to =return= the destination and reassign it at the
+  call site, exactly like =try_greeting= did. Contrast with =visits=: a
+  dictionary, so a function can mutate it in place with no =return=
+  needed, exactly like =add_greeting= did.
+  #+end_quote
+
+- *Home assignment:* using =try_move= as the model, pull the rest of
+  the loop body into its own functions — taking the key, checking the
+  locked door, and updating =visits= — then rewrite the =while= loop so
+  it calls these functions instead of doing the work inline. Decide
+  for each one: does it need to =return= a new value (like =try_move=),
+  or can it mutate a dictionary argument in place (like =visits=)?
