@@ -1447,6 +1447,9 @@ calls out by name.
 ** Closing prayer
 
 * Week 10 - Escape to the Chapel! (Part 2) / Immutable structures
+#+attr_html: :width 700px :float nil:
+[[../img/panel.png]]
+Remember the CPU panel: next Monday, 5 pm PST
 
 ** Opening prayer
 
