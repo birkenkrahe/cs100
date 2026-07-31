@@ -1446,10 +1446,10 @@ calls out by name.
 
 ** Closing prayer
 
-* Week 10 - Escape to the Chapel! (Part 2) / Immutable structures
+* DONE Week 10 - Escape to the Chapel! (Part 2) / Immutable structures
 #+attr_html: :width 700px :float nil:
 [[../img/panel.png]]
-Remember the CPU panel: next Monday, 5 pm PST
+Remember the CPU panel: next Monday, 5 pm PST - must RSVP
 
 ** Opening prayer
 
@@ -1469,45 +1469,70 @@ Remember the CPU panel: next Monday, 5 pm PST
   3. Treasure Island text adventure game (control flow)
   4. Refactoring of "Escape to the Chapel" (bonus)
 
-** Code along lecture: Escape to the Chapel II
-
-- Today we finish the "Escape to the Chapel" game:
-  [[https://tinyurl.com/escape-to-chapel-2][tinyurl.com/escape-to-chapel-2]]
-
-- But first we're going to do a *warm-up* exercise to get back into
-  dictionaries and dictionaries of dictionaries. We're using the
-  scenario that you'll find in the home assignment, "Treasure Island".
-
-- Open this notebook now for the startup exercise:
-  [[https://tinyurl.com/treasure-island-ipynb][tinyurl.com/treasure-island-ipynb]]
-
-** Your take aways
-
-- What are your *take aways* for today?
-
 ** Outlook
 
 - *Outlook*: for the remaining sessions, I will stay close to the
   textbook though you'll continue to get a weekly DataCamp
   session. The next (and last) course is "Introduction to Functions in
-  Python", with "Intermediate Python" as its prerequisite. 
+  Python", with "Intermediate Python" as its prerequisite.
 
-** Closing prayer
+- *Reading* the respective chapters is *not required* but it might be
+  useful to skim them. You don't need to work through the Colab work
+  books since we'll do that here in class based on my lectures.
+
+** Code along lecture: Escape to the Chapel II
+
+- First we're going to do a *warm-up* exercise to get back into
+  dictionaries and dictionaries of dictionaries. We're using the
+  scenario that you'll find in this week's home assignment.
+
+- Open this notebook now for the warm-up exercise:
+  [[https://tinyurl.com/treasure-island-ipynb][tinyuNrl.com/treasure-island-ipynb]]
+
+- Today we finish the "Escape to the Chapel" game:
+  [[https://tinyurl.com/escape-to-chapel-2][tinyurl.com/escape-to-chapel-2]]
+
+** Your take aways
+
+- What are your *take aways* for today?
+  + ~break~ to leave a loop and ~continue~ to take a shortcut back to the
+    top
+  + Dictionaries (lookup tables) can be nested and linked (=visits=)
+  + Loops in a text based game allow you to run it forever (if you
+    forgot the =quit= condition).
+
+** TODO Closing prayer
 
 - Let's pray again!
 
-* Week 11: Iteration and search (ch 7)
+* Week 11: strings and search (ch 7 + 8)
 
-- Short aside: tuples (~15-20 min). Not covered by DataCamp
-  (lists and dictionaries were). Immutable, so usable as dict keys;
-  packing/unpacking; the natural type for multiple return values.
-  Fold in wherever multiple-return-values comes up naturally, rather
-  than as its own block.
+** Opening prayer
+** DataCamp review (Intermediate Python)
 
-- Iteration and linear search (ch 7)
+- You finished another DataCamp course (Intermediate Python)
+- Any questions or comments on that course?
+- Next up: Introductions to functions in Python
+
+** Strings and search (textbook ch 7 + 8)
+
+- I will code this for you in Jupyterlab
+- You can code along or just join me for two practice bits
+- What we don't finish today I will record on video
+
+** New assignments
+
+- Quiz based on what we did in class + last DataCamp lesson.
+- Pick at least one of the exercises 7.9.2-7.9.6 and submit your
+  solution in a Colab notebook with explanations. I will share my
+  sample solutions with you via GitHub next week. All of them together
+  will probably take you 90 minutes, with the last one taking up to
+  30-45 minutes.
+- DataCamp lesson 1 of "Introduction to functions in Python".
+
+** Closing prayer
 
 * Week 12: Strings and regular expressions (ch 8)
-
 * Week 13: Text analysis and generation (ch 12)
 
 * Week 14: Files and databases (ch 13)

@@ -1,0 +1,1025 @@
+#+TITLE: Iteration and search
+#+SUBTITLE: CS100 — Week 10
+#+AUTHOR: Marcus Birkenkrahe
+#+STARTUP: overview hideblocks indent entitiespretty
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :results output :exports both :python python3
+* Overview
+
+This lesson is based on Downey, Think Python, chapter 7.
+
+Topics:
+- Strings are special
+- Looping over strings
+- Checking strings
+- Reading from files
+-
+
+* Strings are special
+
+- Strings count as "primitive types" but they are special because they
+  have sub-structure: they're made of sequences of characters, another
+  primitive type.
+
+- How can we be sure of that? Can we subset strings?
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    s = "hello"
+    print(s)
+    print(s[0])
+  #+end_src
+
+  #+RESULTS:
+  : hello
+  : h
+
+- What can we do with strings? They have methods, don't they? What are
+  these? Let's print them, one per line:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for m in dir(str):  # str: string class name, dir: available methods
+            print(m)
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  __add__
+  __class__
+  __contains__
+  __delattr__
+  __dir__
+  __doc__
+  __eq__
+  __format__
+  __ge__
+  __getattribute__
+  __getitem__
+  __getnewargs__
+  __gt__
+  __hash__
+  __init__
+  __init_subclass__
+  __iter__
+  __le__
+  __len__
+  __lt__
+  __mod__
+  __mul__
+  __ne__
+  __new__
+  __reduce__
+  __reduce_ex__
+  __repr__
+  __rmod__
+  __rmul__
+  __setattr__
+  __sizeof__
+  __str__
+  __subclasshook__
+  capitalize
+  casefold
+  center
+  count
+  encode
+  endswith
+  expandtabs
+  find
+  format
+  format_map
+  index
+  isalnum
+  isalpha
+  isascii
+  isdecimal
+  isdigit
+  isidentifier
+  islower
+  isnumeric
+  isprintable
+  isspace
+  istitle
+  isupper
+  join
+  ljust
+  lower
+  lstrip
+  maketrans
+  partition
+  removeprefix
+  removesuffix
+  replace
+  rfind
+  rindex
+  rjust
+  rpartition
+  rsplit
+  rstrip
+  split
+  splitlines
+  startswith
+  strip
+  swapcase
+  title
+  translate
+  upper
+  zfill
+  #+end_example
+
+- We already know that anything starting with the string ~__~ is for
+  Python's internal use. There's a method: ~str.startswith~[fn:1]
+
+- How could you find out more about it?
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    help(str.startswith) # prints the docstring
+  #+end_src
+
+  #+RESULTS:
+  : Help on method_descriptor:
+  :
+  : startswith(...)
+  :     S.startswith(prefix[, start[, end]]) -> bool
+  :
+  :     Return True if S starts with the specified prefix, False otherwise.
+  :     With optional start, test S beginning at that position.
+  :     With optional end, stop comparing S at that position.
+  :     prefix can also be a tuple of strings to try.
+
+- Let's use it to narrow the printout of the ~str~ methods to the ones
+  we can directly use:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for m in dir(str):
+        if not m.startswith("_"):
+            print(m)
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  capitalize
+  casefold
+  center
+  count
+  encode
+  endswith
+  expandtabs
+  find
+  format
+  format_map
+  index
+  isalnum
+  isalpha
+  isascii
+  isdecimal
+  isdigit
+  isidentifier
+  islower
+  isnumeric
+  isprintable
+  isspace
+  istitle
+  isupper
+  join
+  ljust
+  lower
+  lstrip
+  maketrans
+  partition
+  removeprefix
+  removesuffix
+  replace
+  rfind
+  rindex
+  rjust
+  rpartition
+  rsplit
+  rstrip
+  split
+  splitlines
+  startswith
+  strip
+  swapcase
+  title
+  translate
+  upper
+  zfill
+  #+end_example
+
+- Nothing in that last command should be a surprise:
+  1) =for m in dir(str):= loops over every item in the list =dir(str)=
+  2) =if not= checks if whatever follows is NOT ~True~
+  3) =m.startswith('_')= checks if =m= starts with an underscore
+
+- Do you know which data types =dir(str)= and =m.startswith('_')= are?
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(type(dir(str)))
+    print(type(m.startswith('_')))
+  #+end_src
+
+  #+RESULTS:
+  : <class 'list'>
+  : <class 'bool'>
+
+- Do you know what ~for~, ~if~ and ~not~ are called?
+  #+begin_quote
+  ~for~ and ~if~ are keywords for sequential loops and conditional checks,
+  respectively. ~not~ is a logical operator: =not x= is ~True~ only if ~x~ is
+  ~False~. So =not m.startswith('_')= is ~True~ only if =m= does not start
+  with an underscore.
+  #+end_quote
+
+* PRACTICE Using ~str.startswith~
+
+- Read the full docstring of ~startswith(...)~: there are three
+  parameters, one is mandatory (~prefix~), and two are optional (~start~,
+  ~end~):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    help(str.startswith)
+  #+end_src
+
+  #+RESULTS:
+  : Help on method_descriptor:
+  :
+  : startswith(...)
+  :     S.startswith(prefix[, start[, end]]) -> bool
+  :
+  :     Return True if S starts with the specified prefix, False otherwise.
+  :     With optional start, test S beginning at that position.
+  :     With optional end, stop comparing S at that position.
+  :     prefix can also be a tuple of strings to try.
+
+- The ~start~ parameter lets you begin the check partway through the
+  string, without slicing it first. Use ~start~ to check whether the
+  string begins with "10" starting from index 5.
+
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    filename = "unit_10_notes.txt"
+    print(filename[5:]) # looking it up
+    print(filename.startswith("10", 5))  # start at index 5 (6th
+    # character)
+  #+end_src
+
+  #+RESULTS:
+  : 10_notes.txt
+  : True
+
+- The ~end~ parameter lets you stop the check before the end of the
+  string. Check whether =filename= starts with "unit_10" but only look
+  within the first 5 characters, i.e.  =filename[:5]=.
+
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    filename = "unit_10_notes.txt"
+    print(filename[:5])
+    print(filename.startswith("unit_10", 0, 5)) # (start,end) = (0,5]
+  #+end_src
+
+  #+RESULTS:
+  : unit_
+  : False
+
+- Combine ~start~ and ~end~ to check one specific slice of the string
+  without ever slicing it yourself. Check whether characters 5 through
+  6 (i.e. =filename[5:7]=) equal "10".
+
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    filename = "unit_10_notes.txt"
+    print(filename[5:7])
+    print(filename.startswith("10", 5, 7))
+  #+end_src
+
+  #+RESULTS:
+  : 10
+  : True
+
+* Looping over a string
+
+- You can use a ~for~ loop to show all letters in a string:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for letter in "String":
+        print(letter)
+  #+end_src
+
+  #+RESULTS:
+  : S
+  : t
+  : r
+  : i
+  : n
+  : g
+
+- How can you make this print on one line? Check the ~help~ for ~print~:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    help(print)
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  Help on built-in function print in module builtins:
+
+  print(...)
+      print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+
+      Prints the values to a stream, or to sys.stdout by default.
+      Optional keyword arguments:
+      file:  a file-like object (stream); defaults to the current sys.stdout.
+      sep:   string inserted between values, default a space.
+      end:   string appended after the last value, default a newline.
+      flush: whether to forcibly flush the stream.
+  #+end_example
+
+- Now you know how to put an empty space between each letter (i.e. at
+  the end of each line of output):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for letter in "String":
+        print(letter, end=' ')
+  #+end_src
+
+  #+RESULTS:
+  : S t r i n g
+
+- You can also use ~range~ to loop over a string:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for index in range(len("String")):
+        print("String"[index], end=' ')
+  #+end_src
+
+  #+RESULTS:
+  : S t r i n g
+
+- Can you use ~enumerate~?
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    help(enumerate)
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  Help on class enumerate in module builtins:
+
+  class enumerate(object)
+   |  enumerate(iterable, start=0)
+   |
+   |  Return an enumerate object.
+   |
+   |    iterable
+   |      an object supporting iteration
+   |
+   |  The enumerate object yields pairs containing a count (from start, which
+   |  defaults to zero) and a value yielded by the iterable argument.
+   |
+   |  enumerate is useful for obtaining an indexed list:
+   |      (0, seq[0]), (1, seq[1]), (2, seq[2]), ...
+   |
+   |  Methods defined here:
+   |
+   |  __getattribute__(self, name, /)
+   |      Return getattr(self, name).
+   |
+   |  __iter__(self, /)
+   |      Implement iter(self).
+   |
+   |  __next__(self, /)
+   |      Implement next(self).
+   |
+   |  __reduce__(...)
+   |      Return state information for pickling.
+   |
+   |  ----------------------------------------------------------------------
+   |  Class methods defined here:
+   |
+   |  __class_getitem__(...) from builtins.type
+   |      See PEP 585
+   |
+   |  ----------------------------------------------------------------------
+   |  Static methods defined here:
+   |
+   |  __new__(*args, **kwargs) from builtins.type
+   |      Create and return a new object.  See help(type) for accurate signature.
+  #+end_example
+
+- Looks like it, since ="String"= clearly is an *iterable*:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for index,letter in enumerate("String"):
+        print(f"index: {index}, letter: {letter}")
+  #+end_src
+
+  #+RESULTS:
+  : index: 0, letter: S
+  : index: 1, letter: t
+  : index: 2, letter: r
+  : index: 3, letter: i
+  : index: 4, letter: n
+  : index: 5, letter: g
+
+* Checking strings in loops
+
+- Loops and conditionals are useful to check text passages. For
+  example this quote by G.K.Chesterton:
+  #+begin_quote
+  "God is like the sun; you cannot look at it, but without it you
+  cannot look at anything else."
+  #+end_quote
+
+- Let's store the string in a ~str~ variable:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    quote = "God is like the sun;\
+     you cannot look at it, but without it\
+     you cannot look at anything else."
+
+    print(quote)
+  #+end_src
+
+  #+RESULTS:
+  : God is like the sun; you cannot look at it, but without it you cannot look at anything else.
+
+- The character '\' at the end of the line ensures that Python
+  understands that the string is still running on.
+
+- How many letters 'e' are in =quote=?
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    e = 0
+    for letter in quote:
+        if letter == 'e':
+            e += 1
+            print(e)
+  #+end_src
+
+  #+RESULTS:
+  : 4
+
+- How can we make sure that there aren't any upper case 'e' letters in
+  there? Perhaps like this?
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    e = 0
+    for letter in quote:
+        if letter == 'e' or 'E':
+            e += 1
+            print(e)
+  #+end_src
+
+  #+RESULTS:
+  : 92
+
+- That sounds wrong, because 92 is the length of the whole
+  sentence. So the check failed - it was always ~True~.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(len(quote))
+  #+end_src
+
+  #+RESULTS:
+  : 92
+
+- Do you know why?
+  #+begin_quote
+  With ~if letter == 'e' or 'E'~, Python checks if letter is 'e' or if
+  'E', but not if letter is 'e' or letter is 'E'. Since the ASCII
+  value of 'E' is non-zero, the expression is always ~True~.
+  #+end_quote
+
+- Let's fix it:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    count = 0
+    for letter in quote:
+        if letter == 'e' or letter == 'E':
+            count += 1
+            print(count)
+  #+end_src
+
+  #+RESULTS:
+  : 4
+
+- Okay, so there are no letter e or E in the quote.
+
+- We can *modularize* such a check by putting it into a
+  function =how_many_e= that returns a boolean:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def how_many_e():
+        count = 0
+        for letter in quote:
+            if letter == 'e' or letter == 'E':
+                count += 1
+        return count
+
+    print(how_many_e())
+  #+end_src
+
+  #+RESULTS:
+  : 4
+
+- We can *generalize* this function beyond =quote= by making it a function
+  parameter:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def how_many_e(string):
+        count = 0
+        for letter in string:
+            if letter == 'e' or letter == 'E':
+                count += 1
+        return count
+
+    print(how_many_e(quote))
+  #+end_src
+
+  #+RESULTS:
+  : 4
+
+* The ~in~ operator
+
+- The =how_many_e= function can be simplified using the ~in~ keyword:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    word = "banana"
+    print('a' in word)
+  #+end_src
+
+  #+RESULTS:
+  : True
+
+- So we can rewrite:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    def how_many_e2(string):
+        count = 0
+        for letter in string:
+            if letter in "eE":
+                count += 1
+        return count
+
+    print(how_many_e2(quote))
+  #+end_src  
+
+  #+RESULTS:
+  : 4
+
+- And it gets better: Instead of having to check on lower and
+  uppercase characters, convert them to one case, ~.upper()~ or
+  ~.lower()~:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    def how_many_e3(string):
+        count = 0
+        for letter in string:
+            if letter.lower() in 'e':
+                count += 1
+        return count
+
+    print(how_many_e3(quote))
+  #+end_src
+
+  #+RESULTS:
+  : 4
+  
+* Reading from files
+
+- Let's put our quote into a file, and then read from the file. This
+  is useful for natural language programming when we want to analyse
+  large amounts of text usually stored in files.
+
+- Files can be opened to be written to and to be read from using ~open~:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    help(open)
+  #+end_src
+
+- The docstring is long. The essence is this:
+  1) ~open~ has one mandatory argument, the =file=
+  2) it opens and returns a data stream
+  3) its default mode is 'read' or 'r'
+  4) to open an existing file for writing, use 'w'
+  5) to create and open a file for writing, use 'x'
+  6) reading and writing text is the default
+
+- Let's write the quote to a file =quote.txt=:
+  #+begin_src python :results none :session *Python* :python python3
+    open('quote.txt',
+         mode = 'x')
+  #+end_src
+
+- You can check from within Python if the file was created:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    import os  # library for operating system commands
+    os.system('pwd') # where are you (present working directory)
+    os.system('ls -l quote.txt')
+  #+end_src
+
+  #+RESULTS:
+  : /home/aletheia/GitHub/admin/summer26/cs100/org
+  : -rw-rw-r-- 1 aletheia aletheia 0 Jul 31 09:15 quote.txt
+
+- File exists and is empty. Now let's write to it:
+  #+begin_src python :results none :session *Python* :python python3
+    with open("quote.txt","w") as f:
+        f.write(quote)
+  #+end_src
+
+- Now check it using the ~cat~ command that views the file (on the OS):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    os.system('cat quote.txt')
+  #+end_src
+
+  #+RESULTS:
+  : God is like the sun; you cannot look at it, but without it you cannot look at anything else.
+
+- There we are! Now the other way around. Let's look at the methods
+  available to us in ~open~ (removing the system methods):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for m in dir(open('quote.txt')):
+        if not m.startswith('_'):
+            print(m)
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  buffer
+  close
+  closed
+  detach
+  encoding
+  errors
+  fileno
+  flush
+  isatty
+  line_buffering
+  mode
+  name
+  newlines
+  read
+  readable
+  readline
+  readlines
+  reconfigure
+  seek
+  seekable
+  tell
+  truncate
+  writable
+  write
+  write_through
+  writelines
+  #+end_example
+
+- We'll take a look at ~open.readline~, which returns one line per
+  call, and at . ~open.read~ on the other hand, slurps the whole text file into
+  one string. ~open~ is not a class but it's a function, so to see the
+  ~help~, you need an actual file object first.
+
+- Why?
+  #+begin_quote
+  ~open~ is a built-in function that acts as a factory: it looks at
+  the mode that you passed ('r', 'w' etc.) and constructs one of several
+  real classes from the ~io~ module, then hands you that instance. That is
+  the file object.
+  #+end_quote
+
+- Create the file object, then check out its type to see ~io~ at work:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    file_object = open('quote.txt')
+    print(type(file_object))
+  #+end_src
+
+  #+RESULTS:
+  : <class '_io.TextIOWrapper'>
+
+- Now we can move on with the ~readline~ methods:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    help(file_object.read)
+  #+end_src
+
+  #+RESULTS:
+  : Help on built-in function read:
+  :
+  : read(size=-1, /) method of _io.TextIOWrapper instance
+  :     Read at most n characters from stream.
+  :
+  :     Read from underlying buffer until we have n characters or we hit EOF.
+  :     If n is negative or omitted, read until EOF.
+
+- Note: In the docstring, ~/~ marks everything before it as
+  positional-only, you cannot pass the parameter (~size~) as a keyword.
+
+- We run ~readline~ on our =file_object= to read the line.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(file_object.readline())
+  #+end_src
+
+  #+RESULTS:
+  : God is like the sun; you cannot look at it, but without it you cannot look at anything else.
+
+- What if we had a second line?
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    os.system('echo "\nsecond line" >> quote.txt')
+    os.system('cat quote.txt')
+  #+end_src
+
+  #+RESULTS:
+  : God is like the sun; you cannot look at it, but without it you cannot look at anything else.
+  : second line
+
+- Now read again:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(file_object.readline())
+  #+end_src
+
+- Subsequent attempts to ~readline()~ are unsuccessful: we have reached
+  the end of the file (EOF). The file, however, is still open:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(file_object.closed)
+  #+end_src
+
+  #+RESULTS:
+  : False
+
+- You now have to close it explicitly:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    file_object.close()
+    print(file_object.closed)
+  #+end_src
+
+  #+RESULTS:
+  : True
+
+- This is the reason why we wrote the file earlier using the ~with...as~
+  idiom: this opens and closes the file stream automatically
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    with open("quote.txt") as f: # 'rt', reading text, is the default
+        line = f.readline()
+        print(line)
+  #+end_src
+
+  #+RESULTS:
+  : God is like the sun; you cannot look at it, but without it you cannot look at anything else.
+
+- Unfortunately, here in Emacs, I don't see trailing newlines, but they are there:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(repr(line)[-18:-1])
+  #+end_src
+
+  #+RESULTS:
+  :  anything else.\n
+
+- This is a problem because a "silent" newline breaks anything that
+  compares or measures the line's content:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    s = "banana\n"
+    print(f'{len(s)} is not {len("banana")}')
+  #+end_src
+
+  #+RESULTS:
+  : 7 is not 6
+
+- To remove both leading and trailing whitespaces, use ~str.strip()~:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    help(str.strip)
+  #+end_src
+
+  #+RESULTS:
+  : Help on method_descriptor:
+  :
+  : strip(self, chars=None, /)
+  :     Return a copy of the string with leading and trailing whitespace removed.
+  :
+  :     If chars is given and not None, remove characters in chars instead.
+
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    line = line.strip()
+    print(repr(line)[-10,-1]) # fixed!
+  #+end_src
+
+  #+RESULTS:
+  : ing else.
+
+* PRACTICE Reading a text from the web
+
+- ~open~ can also be used as part of a ~for~ loop. Let's test this
+  together. The file is available online:
+  [[https://tinyurl.com/waugh-txt][https://tinyurl.com/waugh-txt]]
+
+- Download the text - in Pyodide/Jupyterlab:
+  #+begin_example python
+  from pyodide.http import open_url
+  text = open_url("https://tinyurl.com/waugh-txt").read()
+  with open("waugh.txt","w") as f:
+      f.write(text)
+  os.listdir()
+  #+end_example
+
+  In Emacs:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    import urllib.request
+    urllib.request.urlretrieve("https://tinyurl.com/waugh-txt","waugh.txt")
+    os.system('ls -l waugh.txt')
+  #+end_src
+
+  #+RESULTS:
+  : -rw-rw-r-- 1 aletheia aletheia 386 Jul 31 16:54 waugh.txt
+
+- Read text into a file object, line by line, in a ~for~ loop:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for line in open('waugh.txt'):
+        waugh = line.strip()
+        print(waugh)
+    print(len(waugh))
+  #+end_src
+
+  #+RESULTS:
+  : The trouble with modern education is you never know how ignorant
+  : people are. With anyone over fifty you can be fairly confident what's
+  : been taught and what's been left out. But these young people have such
+  : an intelligent, knowledgeable surface, and then the crust suddenly
+  : breaks and you look down into depths of confusion you didn't know
+  : existed.
+  : (Evelyn Waugh - Brideshead Revisited)
+  : 37
+
+- Hmmm. I meant to check the length of the text at the end, and
+  expected something like 400 characters, not 37...what's going on?
+  #+begin_quote
+  =waugh= is overwritten in each iteration. 37 is the character length
+  of the last line =(Evelyn Waugh - Brideshead Revisited)=.
+  #+end_quote
+
+- Fix:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    waugh = ""
+    for line in open('waugh.txt'):
+        waugh += line.strip() + " "
+
+    print(len(waugh))        
+  #+end_src
+
+  #+RESULTS:
+  : 386
+
+- Or without ~for~ loop but with ~open.read()~, loading everything into
+  one big string:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    with open('waugh.txt') as f:
+        waugh = f.read().strip() # chain of commands
+
+    print(len(waugh))
+    print(repr(waugh))
+  #+end_src
+
+  #+RESULTS:
+  : 385
+  : "The trouble with modern education is you never know how ignorant\npeople are. With anyone over fifty you can be fairly confident what's\nbeen taught and what's been left out. But these young people have such\nan intelligent, knowledgeable surface, and then the crust suddenly\nbreaks and you look down into depths of confusion you didn't know\nexisted.\n(Evelyn Waugh - Brideshead Revisited)"
+
+* Linear search
+
+- A linear search is a search that goes along its target letter by
+  letter. There are many more efficient search methods, but this is
+  the simplest.
+
+- The following function is a generalization of =how_many_e= and checks
+  how many of a given =letters= argument are contained in its =word=
+  argument.
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    def how_many(letters,word):
+        """Checks how many letters are in a word"""
+        count = 0
+        for letter in word.lower():
+            if letter in letters.lower():
+                count += 1
+        return count
+
+    print(how_many('a',"Banana"))
+    print(how_many('o',"banana"))        
+  #+end_src
+
+  #+RESULTS:
+  : 3
+  : 0
+
+- You can also test this with more than one letter:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    print(how_many('aeiou',"Traffic control")) # a:1, i:1, o:2 = 4
+  #+end_src
+
+  #+RESULTS:
+  : 4
+
+- Alternatively, if you only want to find out if any of a given set of
+  letters can be found in the string:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    def uses_any(letters,word):
+        """Checks if a word uses any of a list of letters."""
+        for letter in word.lower():
+            if letter in letters.lower():
+                return True
+        return False
+
+    print(uses_any('a',"banana"))
+    print(uses_any('o',"banana"))    
+  #+end_src
+
+  #+RESULTS:
+  : True
+  : False
+
+* Doctest
+
+- You can also use a docstring to *test* a function, for example ~uses_any~:
+
+  #+begin_src python :results none :session *Python* :python python3 
+    def uses_any(letters,word):
+        """Checks if a word uses any of a list of letters.
+        >>> print(uses_any('a',"banana"))
+        True
+        >>> print(uses_any('o',"banana"))    
+        False
+        """
+        for letter in word.lower():
+            if letter in letters.lower():
+                return True
+        return False
+  #+end_src
+
+- To run these tests, you need to import a new module and run a
+  special function:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    from doctest import run_docstring_examples
+
+    print(run_docstring_examples(uses_any,
+                                 globals(),
+                                 name=uses_any.__name__)) # None
+  #+end_src
+
+  #+RESULTS:
+  : None
+
+- Let's mess the function up and test it again:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    def uses_any2(letters,word):
+        """Checks if a word uses any of a list of letters.
+        >>> print(uses_any2('a',"banana"))
+        True
+        >>> print(uses_any2('o',"banana"))    
+        False
+        """
+        for letter in word.lower():
+            if letter in letters.lower():
+                return True
+            else:
+                return False # wrong
+
+    print(run_docstring_examples(uses_any2,
+                                 globals(),
+                                 name=uses_any2.__name__)) # None
+  #+end_src
+
+  #+RESULTS:
+  : **********************************************************************
+  : File "__main__", line 3, in uses_any2
+  : Failed example:
+  :     print(uses_any2('a',"banana"))
+  : Expected:
+  :     True
+  : Got:
+  :     False
+  : None
+    
+- The docstring for ~run_docstring_examples~ explains how it works - but
+  it's hard to understand without background...
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    help(run_docstring_examples)
+  #+end_src  
+
+  #+RESULTS:
+  #+begin_example
+  Help on function run_docstring_examples in module doctest:
+
+  run_docstring_examples(f, globs, verbose=False, name='NoName', compileflags=None, optionflags=0)
+      Test examples in the given object's docstring (`f`), using `globs`
+      as globals.  Optional argument `name` is used in failure messages.
+      If the optional argument `verbose` is true, then generate output
+      even if there are no failures.
+
+      `compileflags` gives the set of flags that should be used by the
+      Python compiler when running the examples.  If not specified, then
+      it will default to the set of future-import flags that apply to
+      `globs`.
+
+      Optional keyword arg `optionflags` specifies options for the
+      testing and output.  See the documentation for `testmod` for more
+      information.
+  #+end_example
+
+- Two of these parameters, =globs= and =name=, sound intimidating, but
+  they connect to something you already know:
+  #+begin_quote
+  You've already met ~__name__~: Python sets it for every file, and
+  =if __name__ == "__main__":= checks its value to decide whether the
+  file is being run directly. ~__name__~ doesn't float around on its
+  own - it's one entry in a big dictionary that Python keeps of every
+  name your file knows about (functions, variables, imports, and yes,
+  ~__name__~ itself). That dictionary is exactly what ~globals()~
+  returns.
+
+  ~run_docstring_examples~ has to *execute* the =>>> ...= lines written
+  inside a docstring, as if you had typed them yourself at the prompt.
+  To do that, it needs to know what names like ~uses_any2~ actually
+  refer to - so you hand it your whole "name book" with ~globals()~,
+  the same dictionary ~__name__~ lives in.
+
+  ~name=...~ is much simpler, and does nothing to the test itself: it
+  is only a label attached to failure messages, so that when you are
+  doctesting several functions, you can tell which one just failed.
+  Purely cosmetic.
+  #+end_quote
+
+* Footnotes
+
+[fn:1] We call a function a "method" if it can be used to alter the
+behavior of a class, an abstract data type, like =str=, the class to
+manipulate strings. This terminology is part of an object-oriented
+(OO) view of Python, which is an OO programming language.
