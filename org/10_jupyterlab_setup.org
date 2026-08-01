@@ -1,0 +1,145 @@
+#+TITLE: Installing Python 3 and JupyterLab
+#+SUBTITLE: CS 100 — Local Setup Guide (Windows & macOS)
+#+AUTHOR: Marcus Birkenkrahe
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+
+* Why install this at all?
+
+So far you have been coding entirely in the browser: Colab, DataCamp,
+and the JupyterLite version of JupyterLab we used in class. None of
+those require anything installed on your computer.
+
+Installing Python 3 and JupyterLab locally gives you a copy that:
+
+- keeps your files even after you close the browser tab (JupyterLite
+  can lose your work)
+- does not need an internet connection once installed
+- is closer to what you would use outside of a classroom
+
+This is optional unless an assignment specifically asks you to submit
+a notebook you ran locally, but it's worth doing once so you have it
+ready.
+
+* Windows
+
+** Step 1 - Install Python 3
+
+1. Go to [[https://www.python.org/downloads/][python.org/downloads]] and click the big "Download Python
+   3.x.x" button. This detects Windows automatically.
+2. Run the installer once it downloads.
+3. *Important*: On the very first installer screen, check the box at
+   the bottom that says *"Add python.exe to PATH"*. If you skip this,
+   Windows will not know what to do when you type =python= later, and
+   you will have to reinstall.
+4. Click "Install Now" and let it finish.
+
+** Step 2 - Verify Python installed
+
+1. Open the *Command Prompt* (search for "cmd" in the Start menu, or
+   PowerShell works too).
+2. Type:
+   #+begin_example
+   python --version
+   #+end_example
+3. You should see something like =Python 3.13.x=. If instead you see
+   an error like "python is not recognized," Python was not added to
+   PATH - reinstall and make sure you check that box in Step 1.
+
+** Step 3 - Install JupyterLab
+
+1. In the same Command Prompt window, type:
+   #+begin_example
+   pip install jupyterlab
+   #+end_example
+2. This downloads and installs JupyterLab and everything it depends
+   on. It can take a few minutes.
+
+** Step 4 - Launch JupyterLab
+
+1. In the Command Prompt, type:
+   #+begin_example
+   jupyter lab
+   #+end_example
+2. This should open JupyterLab automatically in your default web
+   browser (it runs a small local server on your machine - the
+   browser is just the display, everything runs locally).
+3. To stop it later, go back to the Command Prompt window and press
+   =Ctrl+C=, then close the window.
+
+* macOS
+
+** Step 1 - Install Python 3
+
+macOS does *not* reliably ship with a usable Python 3 anymore (recent
+versions removed it entirely, and older ones only include a very old
+copy Apple uses internally - do not rely on that one).
+
+1. Go to [[https://www.python.org/downloads/][python.org/downloads]] and click the "Download Python 3.x.x"
+   button. This detects macOS automatically and gives you a =.pkg=
+   installer.
+2. Open the downloaded =.pkg= file and click through the installer
+   (defaults are fine).
+
+** Step 2 - Verify Python installed
+
+1. Open *Terminal* (search for it with Spotlight: =Cmd+Space=, then
+   type "Terminal").
+2. Type:
+   #+begin_example
+   python3 --version
+   #+end_example
+3. You should see something like =Python 3.13.x=. On macOS the command
+   is =python3=, not =python= - typing =python= alone may not work or may
+   point to Apple's old internal copy.
+
+** Step 3 - Install JupyterLab
+
+1. In Terminal, type:
+   #+begin_example
+   pip3 install jupyterlab
+   #+end_example
+2. This downloads and installs JupyterLab and everything it depends
+   on. It can take a few minutes.
+
+** Step 4 - Launch JupyterLab
+
+1. In Terminal, type:
+   #+begin_example
+   jupyter lab
+   #+end_example
+2. This should open JupyterLab automatically in your default web
+   browser.
+3. To stop it later, go back to the Terminal window and press
+   =Ctrl+C=, then close the window.
+
+* Troubleshooting
+
+- *"python is not recognized" (Windows) or "command not found:
+  python3" (macOS)*: Python did not install correctly, or was not
+  added to PATH. Reinstall from Step 1 and check the PATH box on
+  Windows; on macOS just reinstall using the official =.pkg=.
+
+- *"jupyter: command not found" after installing JupyterLab*: Try
+  running it as a module instead, which sidesteps PATH problems:
+  #+begin_example
+  python -m jupyterlab
+  #+end_example
+  (macOS: =python3 -m jupyterlab=)
+
+- *=pip= not recognized, but Python works*: Use =python -m pip install
+  jupyterlab= (Windows) or =python3 -m pip install jupyterlab= (macOS)
+  instead of calling =pip= directly.
+
+- *Multiple Python versions installed and things behave strangely*:
+  This usually means an older Python (or the Microsoft Store version
+  on Windows) is being found first. Reinstalling from python.org and
+  making sure only one version is on your PATH is the simplest fix.
+
+* Checking your work before submitting
+
+Once JupyterLab is running locally, you can open any =.ipynb= file you
+downloaded (from JupyterLite, Colab, or a classmate) with File -> Open,
+and run it top to bottom with Run -> Run All Cells. This is a good way
+to confirm a notebook actually runs cleanly before you submit it -
+exactly what the submission checklist on each assignment asks for.
