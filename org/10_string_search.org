@@ -13,7 +13,9 @@ Topics:
 - Looping over strings
 - Checking strings
 - Reading from files
--
+- Reading from the web
+- Linear search
+- Testing with docstrings
 
 * Strings are special
 
