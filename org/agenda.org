@@ -1505,34 +1505,83 @@ Remember the CPU panel: next Monday, 5 pm PST - must RSVP
 
 - Let's pray again!
 
-* Week 11: strings and search (ch 7 + 8)
-
+* DONE Week 11: strings and search (ch 7 + 8)
 ** Opening prayer
+[[../img/hail_holy_queen.png]]
+
 ** DataCamp review (Intermediate Python)
 
 - You finished another DataCamp course (Intermediate Python)
 - Any questions or comments on that course?
 - Next up: Introductions to functions in Python
 
+** New assignments
+
+- Quiz based on what we did in class + last DataCamp lesson.
+- DataCamp lesson 1 of "Introduction to functions in Python".
+- This week's exercise will test your understanding of what we did in
+  class directly.
+  
 ** Strings and search (textbook ch 7 + 8)
 
 - I will code this for you in Jupyterlab
 - You can code along or just join me for two practice bits
 - What we don't finish today I will record on video
 
+** Take aways
+
+- =import os= gives you access to many Operating System commands
+- Learning more about strings
+- Positional vs. keyword arguments separation with ~/~ in the function
+  docstring
+- Characters are encoded as ASCII values (0 to 255)
+- Opening and writing to files using data file 'streams'
+
+** Closing prayer
+#+attr_html: :width 700px :float nil: 
+[[../img/memorare.png]]
+
+* Week 12: Strings and regular expressions (ch 8)
+
+** Opening prayer
+
+Most Sacred Heart of Jesus,
+have mercy on us.
+
+Immaculate Heart of Mary,
+pray for us.
+
+Immaculate Heart of Mary, be our salvation.
+
 ** New assignments
 
-- Quiz based on what we did in class + last DataCamp lesson.
-- Pick at least one of the exercises 7.9.2-7.9.6 and submit your
+- *DataCamp lesson*: Intro to functions in Python - arguments and scope
+- *Programming assignments:* Pick at least one of the exercises 7.9.2-7.9.6 and submit your
   solution in a Colab notebook with explanations. I will share my
   sample solutions with you via GitHub next week. All of them together
   will probably take you 90 minutes, with the last one taking up to
   30-45 minutes.
-- DataCamp lesson 1 of "Introduction to functions in Python".
+- *Quiz* covering DataCamp and today's classroom session.
 
+** Installing Jupyter lab and Python
+
+- See instructions in GitHub.
+
+** Strings and regular expressions
+
+- To seamlessly continue last week's session, download my notebook and
+  upload it either to your local Jupyter lab, or to the cloud
+  instance: [[https://tinyurl.com/string-search-ipynb][tinyurl.com/strings-search-ipynb]] (raw ipynb file)
+
+** Take aways
 ** Closing prayer
 
-* Week 12: Strings and regular expressions (ch 8)
+Hail Mary, full of grace, the Lord is with thee; blessed art thou
+among women, and blessed is the fruit of thy womb, Jesus.
+
+Holy Mary, Mother of God, pray for us sinners, now and at the hour of
+our death. Amen.
+  
 * Week 13: Text analysis and generation (ch 12)
 
 * Week 14: Files and databases (ch 13)
