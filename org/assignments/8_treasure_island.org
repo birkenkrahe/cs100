@@ -1,0 +1,184 @@
+#+TITLE: Treasure Island (Bonus Assignment)
+#+SUBTITLE: CS 100 — Chapter 5, Conditionals
+#+AUTHOR: Marcus Birkenkrahe
+#+STARTUP: overview hideblocks indent
+#+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: header-args:python :session *Python* :results output :exports both :python python3
+
+* Overview
+
+Turn the flowchart below into a working text adventure game. This is
+practice reading a flowchart as a *spec* and translating each
+diamond (decision) into an ~if~ / ~elif~ / ~else~ block, and each
+=input()= into a question the player answers.
+
+No due date, no submission — this one is for practice. *0 points,*
+just like the other bonus assignments.
+[[file:../../img/treasure_island_flowchart.png]]
+
+** Reading the flowchart
+
+- A rounded box is something the game *prints*.
+- A diamond is a question the game *asks with input()*, with one arrow
+  out per possible answer.
+- Notice that two of the three diamonds only have *one* good answer
+  ("Left", "Wait") — every other answer, including the other labeled
+  option ("Right", "Swim"), leads to the same "Game Over." Only the
+  *last* diamond ("Which door?") has four genuinely different
+  outcomes, one per color plus a catch-all.
+
+That difference matters for how you write the conditions: the first
+two diamonds are really just "right answer vs. everything else" (an
+~if~ / ~else~ is enough), while the last one needs ~if~ / ~elif~ /
+~elif~ / ~else~ to tell all four branches apart.
+
+** Reminder: how ~input()~ works
+
+#+begin_example python
+  answer = input("Left or right? ")
+  print("You typed:", answer)
+#+end_example
+
+~input()~ always returns a *string* — compare it to another string
+with ~==~, exactly like ~"left"~.
+
+* Task
+
+Write the game so that it matches the flowchart exactly: same
+questions, same messages, same branches. Test it by "playing"
+through every ending at least once (all four Game Overs and the
+win) before you consider it done.
+
+* Challenge (Bonus)
+
+Program it first *without* functions, straight ~if~ / ~elif~ / ~else~, and
+check that all five endings work. Once it works, you can go back and
+*refactor*: pull out any piece of logic that is reusable or follows the
+same pattern more than once into its own function, and rewrite the
+game to call those functions instead. The game should behave
+identically before and after — refactoring changes how the code is
+organized, not what it does.
+
+In my refactoring, I am using the dictionary data structure as shown
+in the "Escape to the Chapel" text adventure game from class.
+
+* Source
+
+The flowchart is taken from "100 Days of Code: The COmplete Python Pro
+Bootcamp" by Angela Yu, Udemy.com.
+
+* Solution (without functions)
+
+See ~/python/org/udemy.org for comments and strategy.
+
+#+begin_src python
+  print("Welcome to Treasure Island.")
+  print("Your mission is to find the treasure.")
+
+  path_choice = input("You're at a crossroad. Left or right? ")
+
+  if path_choice == "left":
+      water_choice = input("You've come to a lake. Swim or wait for a boat? ")
+
+      if water_choice == "wait":
+          door_choice = input("Which door — red, blue, or yellow? ")
+
+          if door_choice == "red":
+              print("Burned by fire. Game Over.")
+          elif door_choice == "blue":
+              print("Eaten by beasts. Game Over.")
+          elif door_choice == "yellow":
+              print("You Win!")
+          else:
+              print("Game Over.")
+      else:
+          print("Attacked by trout. Game Over.")
+  else:
+      print("Fall into a hole. Game Over.")
+#+end_src
+
+*Stretch goal:* right now, typing ~"Left"~ (capital L) loses the
+game, since ~"Left" != "left"~. Look up the string method ~.lower()~
+and use it on each answer so the game accepts any capitalization.
+
+* Solution (with functions)
+
+The three questions all follow the same shape — ask, normalize, look
+up what happens next — so that shape is what gets pulled into
+functions, not each branch individually. The data (which answers lead
+where, and what each wrong answer says) moves into module-level
+dictionaries, separate from the logic that walks through them.
+
+#+begin_src python
+  LOCATIONS = {
+      "crossroads": {
+          "moves": {"left": "river"},
+          "wrong": "Fall into a hole. Game Over.",
+      },
+      "river": {
+          "moves": {"wait": "doors"},
+          "wrong": "Attacked by trout. Game Over.",
+      },
+      "doors": {
+          "moves": {"red": "fire", "blue": "beasts", "yellow": "win"},
+          "wrong": "Game Over.",
+      },
+  }
+
+  PROMPTS = {
+      "crossroads": "You're at a crossroad. Left or right? ",
+      "river": "You've come to a lake. Swim or wait for a boat? ",
+      "doors": "Which door — red, blue, or yellow? ",
+  }
+
+  ENDINGS = {
+      "fire": "Burned by fire. Game Over.",
+      "beasts": "Eaten by beasts. Game Over.",
+      "win": "You Win!",
+  }
+
+  def welcome_screen():
+      print("Welcome to Treasure Island.")
+      print("Your mission is to find the treasure.")
+
+  def get_choice(prompt):
+      """Ask a question, return the answer normalized to lower case."""
+      return input(prompt).lower()
+
+  def try_move(location, choice):
+      """Return the next location/ending for choice, or None if choice is invalid here."""
+      return LOCATIONS[location]["moves"].get(choice)
+
+  def play():
+      location = "crossroads"
+
+      while location in LOCATIONS:
+          choice = get_choice(PROMPTS[location])
+          destination = try_move(location, choice)
+
+          if destination is None:
+              print(LOCATIONS[location]["wrong"])
+              return
+
+          location = destination
+
+      print(ENDINGS[location])
+
+  def main():
+      welcome_screen()
+      play()
+
+  if __name__ == "__main__":
+      main()
+#+end_src
+
+*Why this generalizes:* adding a fourth location — say a cave past
+the doors — means adding one entry to =LOCATIONS=, one to =PROMPTS=,
+and (if it's an ending) one to =ENDINGS=. Nothing about =try_move= or
+=play= has to change: neither one knows how many locations there
+are or what they're called, they just follow whatever =LOCATIONS=
+currently says. That's the payoff of separating data from logic —
+the *shape* of the game (ask, normalize, look up, move or end) stays
+fixed in code, while the *content* (how many locations, what they
+say, where they lead) lives entirely in data you can edit without
+touching a function.

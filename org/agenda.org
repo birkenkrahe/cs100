@@ -894,7 +894,7 @@ remove(self, value, /)
 
 - All remaining DataCamp lessons assigned (July 3-Aug 28):
   1) Intermediate Python: Pandas, dictionaries, loops, control flow
-  2) Lambda functions and error-handling 
+  2) Lambda functions and error-handling
   3) Python Toolbox: iterators, comprehensions, generators
 
 - All assignments and quizzes until June 19 graded.
@@ -913,10 +913,10 @@ Restated more precisely, the question is:
 
 1. ~x.remove()~ is a *method* that belongs to the ~list~ type and you call
    it with the dot-notation.
-   
+
 2. ~len()~ is a *function*, an interface to the hidden function ~__len__~
    and works for all objects that chose to implement length counting.
-   
+
 3. ~del~ is a built-in *keyword* that works on any object using the hidden
    ~__delitem__~ function.
 
@@ -987,8 +987,8 @@ Full version [[https://teams.cloud.microsoft/l/message/19:xwJm5Zf90mdM34VuFWBGyX
       our_father()
       for i in range(n):
         hail_mary()
-      glory_be()
-      fatima()
+        glory_be()
+        fatima()
 
     def rosary(mysteries):
       """Pray one set of five decades of the Rosary.
@@ -1118,54 +1118,54 @@ Full version [[https://teams.cloud.microsoft/l/message/19:xwJm5Zf90mdM34VuFWBGyX
 
 [[../img/o_most_holy_heart_of_jesus.png]]
 
-* DONE Week 7 - Matplotlib - Midterm project 
+* DONE Week 7 - Matplotlib - Midterm project
 
 ** Opening prayer
 
 LITANY OF THE MOST PRECIOUS BLOOD ([[https://www.usccb.org/prayers/litany-most-precious-blood][usccb.org]])
 
- Lord, have mercy  *Lord, have mercy*
- Christ, have mercy  *Christ, have mercy*
- Lord, have mercy  *Lord, hav mercy*
-       
- God our Father in heaven  *Have mercy on us*
- God the Son, Redeemer of the world  *Have mercy on us*
- God the Holy Spirit  *Have mercy on us*
- Holy Trinity, one God  *Have mercy on us*
- 
- Blood of Christ, only Son of the Father  *Be our salvation*
- Blood of Christ, incarnate Word  *Be our salvation*
- Blood of Christ, of the new and eternal covenant  *Be our salvation*
- Blood of Christ, that spilled to the ground  *Be our salvation*
- Blood of Christ, that flowed at the scourging  *Be our salvation*
- Blood of Christ, dripping from the thorns  *Be our salvation*
- Blood of Christ, shed on the cross  *Be our salvation*
- Blood of Christ, the price of our redemption  *Be our salvation*
- Blood of Christ, our only claim to pardon  *Be our salvation*
- Blood of Christ, our blessing cup  *Be our salvation*
- Blood of Christ, in which we are washed  *Be our salvation*
- Blood of Christ, torrent of mercy  *Be our salvation*
- Blood of Christ, that overcomes evil  *Be our salvation*
- Blood of Christ, strength of the martyrs  *Be our salvation*
- Blood of Christ, endurance of the saints  *Be our salvation*  
- Blood of Christ, that makes the barren fruitful  *Be our salvation*
- Blood of Christ, protection of the threatened  *Be our salvation*  
- Blood of Christ, comfort of the weary  *Be our salvation*  
- Blood of Christ, solace of the mourner  *Be our salvation*  
- Blood of Christ, hope of the repentant  *Be our salvation*  
- Blood of Christ, consolation of the dying  *Be our salvation*  
- Blood of Christ, our peace and refreshment  *Be our salvation*
- Blood of Christ, our pledge of life  *Be our salvation*  
- Blood of Christ, by which we pass to glory  *Be our salvation*
- Blood of Christ, most worthy of honor  *Be our salvation*
- 
- Lamb of God, you take away the sins of the world  *Have mercy on us*
- Lamb of God, you take away the sins of the world  *Have mercy on us*  
- Lamb of God, you take away the sins of the world  *Have mercy on us*
- 
- Lord, you redeemed us by your blood.  *You have made us a kingdom to serve our God.*
+Lord, have mercy  *Lord, have mercy*
+Christ, have mercy  *Christ, have mercy*
+Lord, have mercy  *Lord, hav mercy*
 
- *Amen*.
+God our Father in heaven  *Have mercy on us*
+God the Son, Redeemer of the world  *Have mercy on us*
+God the Holy Spirit  *Have mercy on us*
+Holy Trinity, one God  *Have mercy on us*
+
+Blood of Christ, only Son of the Father  *Be our salvation*
+Blood of Christ, incarnate Word  *Be our salvation*
+Blood of Christ, of the new and eternal covenant  *Be our salvation*
+Blood of Christ, that spilled to the ground  *Be our salvation*
+Blood of Christ, that flowed at the scourging  *Be our salvation*
+Blood of Christ, dripping from the thorns  *Be our salvation*
+Blood of Christ, shed on the cross  *Be our salvation*
+Blood of Christ, the price of our redemption  *Be our salvation*
+Blood of Christ, our only claim to pardon  *Be our salvation*
+Blood of Christ, our blessing cup  *Be our salvation*
+Blood of Christ, in which we are washed  *Be our salvation*
+Blood of Christ, torrent of mercy  *Be our salvation*
+Blood of Christ, that overcomes evil  *Be our salvation*
+Blood of Christ, strength of the martyrs  *Be our salvation*
+Blood of Christ, endurance of the saints  *Be our salvation*
+Blood of Christ, that makes the barren fruitful  *Be our salvation*
+Blood of Christ, protection of the threatened  *Be our salvation*
+Blood of Christ, comfort of the weary  *Be our salvation*
+Blood of Christ, solace of the mourner  *Be our salvation*
+Blood of Christ, hope of the repentant  *Be our salvation*
+Blood of Christ, consolation of the dying  *Be our salvation*
+Blood of Christ, our peace and refreshment  *Be our salvation*
+Blood of Christ, our pledge of life  *Be our salvation*
+Blood of Christ, by which we pass to glory  *Be our salvation*
+Blood of Christ, most worthy of honor  *Be our salvation*
+
+Lamb of God, you take away the sins of the world  *Have mercy on us*
+Lamb of God, you take away the sins of the world  *Have mercy on us*
+Lamb of God, you take away the sins of the world  *Have mercy on us*
+
+Lord, you redeemed us by your blood.  *You have made us a kingdom to serve our God.*
+
+*Amen*.
 
 ** Updates - housekeeping
 
@@ -1187,24 +1187,24 @@ LITANY OF THE MOST PRECIOUS BLOOD ([[https://www.usccb.org/prayers/litany-most-p
 
 ** Review Quiz 4
 
-#+attr_html: :width 600px :float nil: 
+#+attr_html: :width 600px :float nil:
 [[../img/quiz_4_import_numpy.png]]
 
 The reasons for preferring ~import numpy~:
 1. Namespace pollution (=array= name collision likely)
 2. Readability (=array= from different packages)
 
-#+attr_html: :width 600px :float nil: 
+#+attr_html: :width 600px :float nil:
 [[../img/quiz_4_import.png]]
 
 Once you ~import~ the ~array~ module on its own, the dot notation will no
 longer work - =array= now is on its own. But you want it, even though
 it's more to write.
 
-#+attr_html: :width 600px :float nil: 
+#+attr_html: :width 600px :float nil:
 [[../img/quiz_4_index().png]]
 
-#+begin_src python :results output :exports both :session *Python* :python python3 
+#+begin_src python :results output :exports both :session *Python* :python python3
   spam = [23, 45, 67]
   print(spam.index(45))
   print(spam[1])
@@ -1216,32 +1216,32 @@ it's more to write.
 
 ** Review Quiz 5
 
-#+attr_html: :width 600px :float nil: 
+#+attr_html: :width 600px :float nil:
 [[../img/quiz_5_composition.png]]
 
 Encapsulation means that whatever was available everywhere before
 (global scope) is now hidden in the function implementation (local
 scope), and you can only get to it through the function interface.
 
-#+attr_html: :width 600px :float nil: 
+#+attr_html: :width 600px :float nil:
 [[../img/quiz_5_generalization.png]]
 
 Making a function call another function is called composition. It
 means building more complex behavior out of simpler pieces (like a
 composition in music).
 
-#+attr_html: :width 600px :float nil: 
+#+attr_html: :width 600px :float nil:
 [[../img/quiz_5_magic_number.png]]
 
 A named constant is typically a global object.
 
-#+attr_html: :width 400px :float nil: 
+#+attr_html: :width 400px :float nil:
 [[../img/quiz_5_default_parameter.png]]
 
 In =decade(n=10)=, n=10 is the default for =n= irrespective what goes on
 inside the function =decade= (difference interface vs. implementation).
 
-#+attr_html: :width 400px :float nil: 
+#+attr_html: :width 400px :float nil:
 [[../img/quiz_5_docstring.png]]
 
 Think about why people call the ~help()~ function.
@@ -1331,7 +1331,7 @@ My view now:
 ** Review: Home assignment "Camino de Santiago"
 
 - This was a parallel to last week's lecture & code along.
-  
+
 - You can find a well commented solution in Colab:
   [[https://tinyurl.com/pilgrim-path-solution][tinyurl.com/pilgrim-path-solution]]
 
@@ -1350,14 +1350,14 @@ this code" questions, each targeting a specific pitfall the chapter
 calls out by name.
 
 - What does this print, and why?
-  #+begin_src python :results output :exports both :session *Python* :python python3 
-  def sign(n):
-      if n > 0:
-          return "positive"
-      elif n < 0:
-          return "negative"
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def sign(n):
+        if n > 0:
+            return "positive"
+        elif n < 0:
+            return "negative"
 
-  print(sign(0))
+    print(sign(0))
   #+end_src
 
   #+RESULTS:
@@ -1369,12 +1369,12 @@ calls out by name.
   #+end_quote
 
 - This crashes. What's the actual bug?
-  #+begin_src python :results output :exports both :session *Python* :python python3 
-  def double(n):
-      print(n * 2)
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def double(n):
+        print(n * 2)
 
-  result = double(5)
-  print(result + 1)
+    result = double(5)
+    print(result + 1)
   #+end_src
   #+begin_quote
   ~double()~ never ~return~s, so =result= is ~None~; =None + 1= raises a
@@ -1384,15 +1384,15 @@ calls out by name.
 
 - This works, but the chapter would flag one line as bad style. Which
   line, and why?
-  #+begin_src python :results output :exports both :session *Python* :python python3 
-  def is_even(n):
-      return n % 2 == 0
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def is_even(n):
+        return n % 2 == 0
 
-  def describe(n):
-      if is_even(n) == True:
-          return "even"
-      else:
-          return "odd"
+    def describe(n):
+        if is_even(n) == True:
+            return "even"
+        else:
+            return "odd"
   #+end_src
   #+begin_quote
   =if is_even(n) == True:= — =is_even(n)= already /is/ a Boolean, so
@@ -1414,7 +1414,7 @@ calls out by name.
 - Use try...except instead of raise
 - Use assert to write a one-line test for a function return
 - Doing more coding with return
-- Changing void to return 
+- Changing void to return
 
 ** Closing Prayer
 
@@ -1435,7 +1435,7 @@ calls out by name.
 - You can find the complete solution in GitHub (8_dict_pandas.org)
 
 - Next week: finish the game, turn modular code into functions
-  
+
 ** Take aways
 
 - Difference between lookup O(1) and search O(n) (time complexity)
@@ -1521,7 +1521,7 @@ Remember the CPU panel: next Monday, 5 pm PST - must RSVP
 - DataCamp lesson 1 of "Introduction to functions in Python".
 - This week's exercise will test your understanding of what we did in
   class directly.
-  
+
 ** Strings and search (textbook ch 7 + 8)
 
 - I will code this for you in Jupyterlab
@@ -1538,10 +1538,12 @@ Remember the CPU panel: next Monday, 5 pm PST - must RSVP
 - Opening and writing to files using data file 'streams'
 
 ** Closing prayer
-#+attr_html: :width 700px :float nil: 
+#+attr_html: :width 700px :float nil:
 [[../img/memorare.png]]
 
 * Week 12: Strings and regular expressions (ch 8)
+#+attr_html: :width 400px :float nil:
+[[../img/regex.jpeg]]
 
 ** Opening prayer
 
@@ -1553,27 +1555,318 @@ pray for us.
 
 Immaculate Heart of Mary, be our salvation.
 
-** New assignments
-
-- *DataCamp lesson*: Intro to functions in Python - arguments and scope
-- *Programming assignments:* Pick at least one of the exercises 7.9.2-7.9.6 and submit your
-  solution in a Colab notebook with explanations. I will share my
-  sample solutions with you via GitHub next week. All of them together
-  will probably take you 90 minutes, with the last one taking up to
-  30-45 minutes.
-- *Quiz* covering DataCamp and today's classroom session.
-
 ** Installing Jupyter lab and Python
 
-- See instructions in GitHub.
+- See [[https://github.com/birkenkrahe/cs100/blob/main/org/10_jupyterlab_setup.org][instructions in GitHub]]: [[https://tinyurl.com/install-jupyter-lab][tinyurl.com/install-jupyter-lab]]
+
+** Review Last Session / DataCamp "Writing your own functions"
+*** Open a Python console in the cloud using Jupyter
+
+*How do you open a Python console in Jupyter*
+#+begin_quote
+- Open URL: jupyter.org/try-jupyter (or on your PC)
+- Open app: ~Console~ > ~Python (Pyodide)~
+- Output: ~A WebAssembly-powered Python kernel backed by Pyodide~
+#+end_quote
+
+*** Now we review last week's material:
+
+1) We live-coded in *JupyterLab* for the first time (no slides) - strings
+   are intuitive, a good fit for a hands-on format.
+
+   *What's different in JupyterLab? Think of at least one thing.*
+   #+begin_quote
+   + There's no AI assistant available.
+   + It's free and open source (not attached to Google).
+   + You can install it on your own computer.
+   + It runs directly in your browser not on some server on the web.
+   #+end_quote
+
+2) *Strings are special*: they have substructure (sequences of
+   characters) - explored with indexing and =dir(str)=.
+
+   *How can you display all available methods in ~str~?*
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     for m in dir(str):
+         print(m)
+   #+end_src
+
+3) Filtered out *dunder* (double underscore) methods with
+   ~str.startswith('_'):~ used ~help()~ to read docstrings instead of
+   guessing/googling.
+
+   *Filter out the dunder methods from the previous output*:
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     for m in dir(str):
+         if not m.startswith('_'):
+             print(m)
+   #+end_src
+
+   #+RESULTS:
+   #+begin_example
+   capitalize
+   casefold
+   center
+   count
+   encode
+   endswith
+   expandtabs
+   find
+   format
+   format_map
+   index
+   isalnum
+   isalpha
+   isascii
+   isdecimal
+   isdigit
+   isidentifier
+   islower
+   isnumeric
+   isprintable
+   isspace
+   istitle
+   isupper
+   join
+   ljust
+   lower
+   lstrip
+   maketrans
+   partition
+   removeprefix
+   removesuffix
+   replace
+   rfind
+   rindex
+   rjust
+   rpartition
+   rsplit
+   rstrip
+   split
+   splitlines
+   startswith
+   strip
+   swapcase
+   title
+   translate
+   upper
+   zfill
+   #+end_example
+
+4) Practiced ~str.startswith(prefix, start, end)~ on a filename
+   example - noted the ~/~ in the docstring marking positional-only
+   arguments.
+
+   *Does ~startswith~ have any positional-only arguments?*
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     help(str.startswith) # if this shows `self.../` depends on your
+     # installed Python version
+   #+end_src
+
+   - Looped over strings three ways: =for letter in s=,
+   =range(len(s))=, and =enumerate(s)=.
+
+   *Display "Amen" in these three ways and with a "regular" ~for~ loop.
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     s = "Amen"
+     for letter in s: print(letter)
+     for letter in range(len(s)): print(s[letter])
+     for letter in enumerate(s): print(letter)
+   #+end_src
+
+   #+RESULTS:
+   #+begin_example
+   A
+   m
+   e
+   n
+   A
+   m
+   e
+   n
+   (0, 'A')
+   (1, 'm')
+   (2, 'e')
+   (3, 'n')
+   #+end_example
+
+5) Classic bug: =if letter == 'e' or 'E'= is always ~True~ (the ASCII
+   value of ~'E'~ is non-zero).
+
+   *What is the ASCII value of 'e'?
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     print(ord('e'))
+     print(chr(101))
+   #+end_src
+
+6) Modularized the letter-counter into a function, generalized it to
+   take any string, then simplified it with the ~in~ operator and
+   ~.lower()~.
+
+   *Check if "Amen" has an `e` in it using ~in~ and ~str.lower()~
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     has_e=False
+     for l in "Amen":
+         if l.lower() in 'e':
+             has_e=True
+             print(has_e)
+   #+end_src
+
+7) Started *reading/writing files* with ~open()~ (modes: read/write/
+   create), and checking the operating system with ~os.listdir()~.
+
+   *Write "hello" to file =hello.txt=, then check if it was created.
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     with open('hello.txt', 'w') as f:
+         f.write("hello")
+         import os
+     for f in os.listdir():
+         if 'hello.txt' in f:
+             print("file created")
+   #+end_src
+
+   #+RESULTS:
+   : file created
+
+*** Now we review the DataCamp lesson "Write your own functions"
+
+1) What does this program print? Why?
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def add(a,b):
+         """Add a and b"""
+         return a + b
+
+     result = print(add(2,3))
+     print(result)
+   #+end_src
+
+   #+RESULTS:
+   : 5
+   : None
+
+   #+begin_quote
+   ~print()~ displays, it does not ~return~ a value. It always returns
+   ~None~. The first call prints the result of =add(2,3)=, which is =5=, then
+   stores the ~return~ value of =print(5)= in =result=, which is ~None~.
+   #+end_quote
+
+2) What are =foo= and =bar=? What's the difference between them?
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     foo = [1,2,3]
+     bar = (1,2,3)
+   #+end_src
+   #+begin_quote
+   =foo= is a list - mutable, =bar= is a tuple - immutable. This is why
+   tuples can be used as dictionary keys, but lists cannot!
+   #+end_quote
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     foo[1]=100
+     print(foo)
+     # bar[1]=100 TypeError: 'tuple' object does not support item assignment
+   #+end_src
+
+3) Write a function =swap= that swaps two strings and returns *both* of
+   them.
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def swap(s1,s2):
+         """Swap s1 and s2"""
+         t = s1
+         s1 = s2
+         s2 = t
+         return (s1,s2)
+
+     foo='hello'
+     bar='goodbye'
+     print(f'{foo} and {bar}')
+     foo,bar = swap('hello','goodbye')
+     print(f'{foo} and {bar}')
+   #+end_src
+
+   #+RESULTS:
+   : hello and goodbye
+   : goodbye and hello
+
+4) *Can you ~return~ a ~list~, a NumPy array, or a dictionary from a
+   function?*
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     def list_return(l):
+         l.append("to that")
+         return l
+
+     lst = ["Amen"]
+     result = list_return(lst)
+     print(result)
+   #+end_src
+   
+   #+begin_src python :results output :exports both :session *Python* :python python3
+     import numpy as np
+
+     def array_return(a):
+         a=a*2
+         return a
+
+     arr = np.array([100,200]) # input: [100 200]
+     result = array_return(arr)
+     print(result) # output: [200 400]
+   #+end_src
+
+   #+RESULTS:
+   : [200 400]
+
+   #+begin_src python :results output :exports both :session *Python* :python python3 
+     def dict_return(d):
+         None_dict = {"None":"Represents no value, of NoneType"}
+         d = None_dict
+         return d
+
+     defs = { "dictionary":"A key-value data structure",
+              "array":"An ordered set of values of one data type",
+              "list":"An ordered set of values of any data type"
+             }
+     result = dict_return(defs)
+     print(result)
+   #+end_src
+
+   #+RESULTS:
+   : {'None': 'Represents no value, of NoneType'}
 
 ** Strings and regular expressions
 
-- To seamlessly continue last week's session, download my notebook and
-  upload it either to your local Jupyter lab, or to the cloud
-  instance: [[https://tinyurl.com/string-search-ipynb][tinyurl.com/strings-search-ipynb]] (raw ipynb file)
+To continue last week's session:
+
+- In Jupyter, click on ~+~ to open the ~Launcher~ and choose ~Notebook~ >
+  ~Python (Pyodide)~
+
+- These commands should show you a list of your files:
+  #+begin_example python
+    import os
+    print(os.listdir())
+  #+end_example
+
+- The file =quote.txt= should be among them because we created it last
+  time.
+
+- Code along with me in Jupyter.
 
 ** Take aways
+** New assignments
+
+- *Programming assignments:* Pick at least *one* of the exercises
+  7.9.2-7.9.6, and *one* of the exercises 8.12.2-8.12.5 and submit your
+  solution in a Colab notebook with explanations.
+
+  You can of course solve as many exercises as you like, but one
+  (non-AI) exercise from chapter 7 and one from chapter 8 is the
+  minimum.
+
+  I will share my sample solutions with you via GitHub.
+
+- *Quiz* covering DataCamp (1st lesson - writing functions in Python)
+  and today's classroom session.
+
+- *DataCamp lesson*: default arguments, variable-length arguments, and
+  scope in functions.
+
 ** Closing prayer
 
 Hail Mary, full of grace, the Lord is with thee; blessed art thou
@@ -1581,7 +1874,7 @@ among women, and blessed is the fruit of thy womb, Jesus.
 
 Holy Mary, Mother of God, pray for us sinners, now and at the hour of
 our death. Amen.
-  
+
 * Week 13: Text analysis and generation (ch 12)
 
 * Week 14: Files and databases (ch 13)
@@ -1599,4 +1892,3 @@ author suggests. Instead, consider it a tool that you're trying to
 master. Getting lost in emotions when you fail to hammer a nail into a
 wall gets you nowhere IMHO (and I'm saying this as a trained coach
 and psychotherapist).
-
