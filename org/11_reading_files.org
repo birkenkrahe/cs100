@@ -1,0 +1,52 @@
+#+STARTUP: overview hideblocks indent entitiespretty:
+* Reading files (speed run)
+
+- [[https://github.com/birkenkrahe/cs100/blob/main/org/11_string_search.org#reading-from-files][See GitHub for more detail.]]
+
+- Put a new string into a text file using ~open~.
+  #+begin_src python :results none :exports both :session *Python* :python python3 
+    quote = "Do not be so open-minded that your brains fall out."
+  #+end_src
+
+- You don't need to create a file object to ~.write()~ to the file:
+  #+begin_src python :results none :exports both :session *Python* :python python3 
+    open("quote.txt",'w').write(quote)
+  #+end_src
+
+- This overwrites =quote.txt= if that file existed already.
+
+- Now look at the result with ~.read()~
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    print(open("quote.txt").read())
+  #+end_src
+
+  #+RESULTS:
+  : Do not be so open-minded that your brains fall out.
+
+- What's the difference to the ~with open("quote.txt",'w') as f:~ idiom?
+  #+begin_quote
+  The idiom creates a file object and aliases it with =f=. It then
+  writes to that file and closes the file again.
+  #+end_quote
+
+- To first write and then read, you have to combine writing and
+  reading modest (~mode = w+~) and set the read/write position to the
+  start:
+  #+begin_src python :results output :session *Python* :python python3 
+    with open("hello.txt",'w+') as f:
+        f.write("hello there")        # write string to file
+        f.seek(0)                     # go back to start position
+        line = f.read()               # read until EOF
+
+    print(line)
+  #+end_src  
+
+  #+RESULTS:
+  : hello there
+
+- So far, we've been reading the entire file with ~.read()~. With
+  ~.readline()~ you read one line at a time until EOF.
+
+- To test this, let's add a line to our 
+
+- TRAILING NEWLINES - strip
