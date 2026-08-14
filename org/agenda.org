@@ -1541,7 +1541,7 @@ Remember the CPU panel: next Monday, 5 pm PST - must RSVP
 #+attr_html: :width 700px :float nil:
 [[../img/memorare.png]]
 
-* Week 12: Strings and regular expressions (ch 8)
+* DONE Week 12: Strings and regular expressions (ch 8)
 #+attr_html: :width 400px :float nil:
 [[../img/regex.jpeg]]
 
@@ -1553,7 +1553,8 @@ have mercy on us.
 Immaculate Heart of Mary,
 pray for us.
 
-Immaculate Heart of Mary, be our salvation.
+Immaculate Heart of Mary,
+be our salvation.
 
 ** Installing Jupyter lab and Python
 
@@ -1590,6 +1591,90 @@ Immaculate Heart of Mary, be our salvation.
      for m in dir(str):
          print(m)
    #+end_src
+
+   #+RESULTS:
+   #+begin_example
+   __add__
+   __class__
+   __contains__
+   __delattr__
+   __dir__
+   __doc__
+   __eq__
+   __format__
+   __ge__
+   __getattribute__
+   __getitem__
+   __getnewargs__
+   __gt__
+   __hash__
+   __init__
+   __init_subclass__
+   __iter__
+   __le__
+   __len__
+   __lt__
+   __mod__
+   __mul__
+   __ne__
+   __new__
+   __reduce__
+   __reduce_ex__
+   __repr__
+   __rmod__
+   __rmul__
+   __setattr__
+   __sizeof__
+   __str__
+   __subclasshook__
+   capitalize
+   casefold
+   center
+   count
+   encode
+   endswith
+   expandtabs
+   find
+   format
+   format_map
+   index
+   isalnum
+   isalpha
+   isascii
+   isdecimal
+   isdigit
+   isidentifier
+   islower
+   isnumeric
+   isprintable
+   isspace
+   istitle
+   isupper
+   join
+   ljust
+   lower
+   lstrip
+   maketrans
+   partition
+   removeprefix
+   removesuffix
+   replace
+   rfind
+   rindex
+   rjust
+   rpartition
+   rsplit
+   rstrip
+   split
+   splitlines
+   startswith
+   strip
+   swapcase
+   title
+   translate
+   upper
+   zfill
+   #+end_example
 
 3) Filtered out *dunder* (double underscore) methods with
    ~str.startswith('_'):~ used ~help()~ to read docstrings instead of
@@ -1663,10 +1748,21 @@ Immaculate Heart of Mary, be our salvation.
      # installed Python version
    #+end_src
 
-   - Looped over strings three ways: =for letter in s=,
+   #+RESULTS:
+   : Help on method_descriptor:
+   : 
+   : startswith(...)
+   :     S.startswith(prefix[, start[, end]]) -> bool
+   :     
+   :     Return True if S starts with the specified prefix, False otherwise.
+   :     With optional start, test S beginning at that position.
+   :     With optional end, stop comparing S at that position.
+   :     prefix can also be a tuple of strings to try.
+
+5) Looped over strings three ways: =for letter in s=,
    =range(len(s))=, and =enumerate(s)=.
 
-   *Display "Amen" in these three ways and with a "regular" ~for~ loop.
+   *Display "Amen" in these three ways:
    #+begin_src python :results output :exports both :session *Python* :python python3
      s = "Amen"
      for letter in s: print(letter)
@@ -1690,36 +1786,43 @@ Immaculate Heart of Mary, be our salvation.
    (3, 'n')
    #+end_example
 
-5) Classic bug: =if letter == 'e' or 'E'= is always ~True~ (the ASCII
+6) Classic bug: =if letter == 'e' or 'E'= is always ~True~ (the ASCII
    value of ~'E'~ is non-zero).
 
    *What is the ASCII value of 'e'?
    #+begin_src python :results output :exports both :session *Python* :python python3
-     print(ord('e'))
-     print(chr(101))
+     print(ord('\n')) # returns the ASCII value
+     print(repr(chr(10))) # returns the ASCII encoding (character)
    #+end_src
 
-6) Modularized the letter-counter into a function, generalized it to
+   #+RESULTS:
+   : 10
+   : '\n'
+
+7) Modularized the letter-counter into a function, generalized it to
    take any string, then simplified it with the ~in~ operator and
    ~.lower()~.
 
    *Check if "Amen" has an `e` in it using ~in~ and ~str.lower()~
    #+begin_src python :results output :exports both :session *Python* :python python3
-     has_e=False
-     for l in "Amen":
-         if l.lower() in 'e':
-             has_e=True
-             print(has_e)
+     has_e=False     # logical flag
+     for l in "Amen": # loop over the string
+         if l.lower() in 'e': # checks for each letter of string if it's an 'e'
+             has_e=True # change flag to true
+     print(has_e)
    #+end_src
 
-7) Started *reading/writing files* with ~open()~ (modes: read/write/
+   #+RESULTS:
+   : True
+
+8) Started *reading/writing files* with ~open()~ (modes: read/write/
    create), and checking the operating system with ~os.listdir()~.
 
    *Write "hello" to file =hello.txt=, then check if it was created.
    #+begin_src python :results output :exports both :session *Python* :python python3
      with open('hello.txt', 'w') as f:
          f.write("hello")
-         import os
+     import os
      for f in os.listdir():
          if 'hello.txt' in f:
              print("file created")
@@ -1736,8 +1839,8 @@ Immaculate Heart of Mary, be our salvation.
          """Add a and b"""
          return a + b
 
-     result = print(add(2,3))
-     print(result)
+     result = print(add(2,3))  # prints 5
+     print(result)  # prints nothing (None) 
    #+end_src
 
    #+RESULTS:
@@ -1752,9 +1855,16 @@ Immaculate Heart of Mary, be our salvation.
 
 2) What are =foo= and =bar=? What's the difference between them?
    #+begin_src python :results output :exports both :session *Python* :python python3
-     foo = [1,2,3]
-     bar = (1,2,3)
+     foo = [1,2,3]  # list
+     bar = (1,2,3)  # tuple
+     print(foo)
+     print(bar)
    #+end_src
+
+   #+RESULTS:
+   : [1, 2, 3]
+   : (1, 2, 3)
+
    #+begin_quote
    =foo= is a list - mutable, =bar= is a tuple - immutable. This is why
    tuples can be used as dictionary keys, but lists cannot!
@@ -1762,8 +1872,11 @@ Immaculate Heart of Mary, be our salvation.
    #+begin_src python :results output :exports both :session *Python* :python python3
      foo[1]=100
      print(foo)
-     # bar[1]=100 TypeError: 'tuple' object does not support item assignment
+     bar[1]=100 # TypeError: 'tuple' object does not support item assignment
    #+end_src
+
+   #+RESULTS:
+   : [1, 100, 3]
 
 3) Write a function =swap= that swaps two strings and returns *both* of
    them.
@@ -1773,13 +1886,13 @@ Immaculate Heart of Mary, be our salvation.
          t = s1
          s1 = s2
          s2 = t
-         return (s1,s2)
+         return (s1,s2)   # return two strings (packed in a tuple)
 
      foo='hello'
      bar='goodbye'
-     print(f'{foo} and {bar}')
+     print(f'{foo} and {bar}')  # hello goodbye
      foo,bar = swap('hello','goodbye')
-     print(f'{foo} and {bar}')
+     print(f'{foo} and {bar}')  # goodbye hello
    #+end_src
 
    #+RESULTS:
@@ -1797,12 +1910,15 @@ Immaculate Heart of Mary, be our salvation.
      result = list_return(lst)
      print(result)
    #+end_src
+
+   #+RESULTS:
+   : ['Amen', 'to that']
    
    #+begin_src python :results output :exports both :session *Python* :python python3
      import numpy as np
 
      def array_return(a):
-         a=a*2
+         a=a*2   # cannot do this with lists
          return a
 
      arr = np.array([100,200]) # input: [100 200]
@@ -1823,49 +1939,48 @@ Immaculate Heart of Mary, be our salvation.
               "array":"An ordered set of values of one data type",
               "list":"An ordered set of values of any data type"
              }
+     print(defs)
      result = dict_return(defs)
      print(result)
    #+end_src
 
    #+RESULTS:
+   : {'dictionary': 'A key-value data structure', 'array': 'An ordered set of values of one data type', 'list': 'An ordered set of values of any data type'}
    : {'None': 'Represents no value, of NoneType'}
 
 ** Strings and regular expressions
 
+To cover:
+- Reading files
+- Writing files
+- Find and replace strings in files
+- Use regular expressions to find and replace strings in files
+
 To continue last week's session:
 
+- https://jupyter.org/try-jupyter/lab/
 - In Jupyter, click on ~+~ to open the ~Launcher~ and choose ~Notebook~ >
   ~Python (Pyodide)~
 
-- These commands should show you a list of your files:
-  #+begin_example python
-    import os
-    print(os.listdir())
-  #+end_example
-
-- The file =quote.txt= should be among them because we created it last
-  time.
-
 - Code along with me in Jupyter.
 
-** Take aways
 ** New assignments
 
-- *Programming assignments:* Pick at least *one* of the exercises
-  7.9.2-7.9.6, and *one* of the exercises 8.12.2-8.12.5 and submit your
-  solution in a Colab notebook with explanations.
-
-  You can of course solve as many exercises as you like, but one
-  (non-AI) exercise from chapter 7 and one from chapter 8 is the
-  minimum.
-
-  I will share my sample solutions with you via GitHub.
+- *Programming assignments:* ???
 
 - *Quiz* covering DataCamp (1st lesson - writing functions in Python)
   and today's classroom session.
 
 - *DataCamp lesson*: default arguments, variable-length arguments, and
   scope in functions.
+
+** Take aways
+
+- Finding and downloading books into files Python can work with
+- Stripping strings with ~str.strip()~
+- Files must be ~.closed~ when you're done with them
+- Writing into a text file through code
+- In Python you can return a list (and an array, a tuple, a dict)
 
 ** Closing prayer
 
@@ -1875,10 +1990,40 @@ among women, and blessed is the fruit of thy womb, Jesus.
 Holy Mary, Mother of God, pray for us sinners, now and at the hour of
 our death. Amen.
 
-* Week 13: Text analysis and generation (ch 12)
+* Week 13: Text analysis and generation part 1 (ch 12)
 
-* Week 14: Files and databases (ch 13)
+** Opening prayer
 
+Most Sacred Heart of Jesus,
+have mercy on us.
+
+Immaculate Heart of Mary,
+pray for us.
+
+Immaculate Heart of Mary,
+be our salvation.
+
+** Text analysis and generation (ch 12)
+
+- Code along in JupyterLab.
+
+- Only 2 sessions for this chapter (this week + next), so Part 1 (Bag
+  of words: unique words, punctuation, word frequencies, dictionary
+  subtraction) is what we code along live; Part 2 (random numbers,
+  bigrams, Markov analysis, generating text) will go out as the full
+  script if we run out of time.
+
+** Take aways
+** Closing prayer
+
+Hail Mary, full of grace, the Lord is with thee; blessed art thou
+among women, and blessed is the fruit of thy womb, Jesus.
+
+Holy Mary, Mother of God, pray for us sinners, now and at the hour of
+our death. Amen.
+
+
+* Week 14: Text analysis and generation part 2 (ch 12)
 * Week 15: Final presentations of your projects
 
 * Footnotes

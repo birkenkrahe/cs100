@@ -1,0 +1,832 @@
+#+TITLE: Text analysis and generation
+#+AUTHOR: Marcus Birkenkrahe (based on Downey)
+#+SUBTITLE: CS 100 Catholic Polytechnic U, Summer 2026
+#+STARTUP: overview hideblocks indent entitiespretty
+#+OPTIONS: toc:nil num:nil ^:nil
+* Sources
+
+This lecture is based on chapter 12, Text Analysis and Generation,
+from Think Python by Allen B. Downey (O'Reilly, 2023). The material is
+licensed under [[https://creativecommons.org/licenses/by-nc-sa/4.0/][CC BY-NC-SA 4.0]], freely available [[https://allendowney.github.io/ThinkPython/index.html][online here]].
+
+The text source is [[https://www.gutenberg.org/ebooks/204][Project Gutenberg]] a repository of public domain
+texts. The text is the collection of detective stories "[[https://www.gutenberg.org/cache/epub/204/pg204.txt][The innocence
+of Father Brown]]" by G.K. Chesterton (1910).
+
+* Objectives
+
+You learn how to clean a text to generate a corpus that you can
+analyze using self-generated (rather than imported) functions.
+
+You then learn how to generate Markov chains from the text - a method
+similar to parts of a Large Language Model (LLM) in chatbots.
+
+Purpose:
+- Use Python's core datastructures, lists, dictionaries, and tuples
+- Use idiomatic algorithms using these data structures
+- Explore text analysis and Markov chain generation
+
+Topics:
+
+Part 1: Bag of words
+- Filter *unique words* from a text using a dictionary
+- Remove *punctuation* from within and between words
+- Compute the *word frequencies* of each unique word
+- Spell-check a text using *dictionary subtraction*
+
+Part 2: Markov chains
+- Choose a *random* sequence of words from a collection
+- Finding all *bigrams* (sequences of two words)
+- Compute the list of words that come next (*Markov chain analysis*)
+- Generate a new text that maintains statistical relationships
+
+* Extensions
+
+The textbook chapter hand-rolls functions that you can also ~import~
+using standard Python packages:
+
+- The ~collections.Counter~ package does word-frequency counting (a
+  method also known as "Bag-of-words"). There are also other packages,
+  most notably ~sklearn~ (scikit-learn) for ML applications.
+
+- The ~markovify~ package does Markov chain text generation. And the
+  ~nltk~ package has more methods, like ~ngrams()~ and
+  ~ConditionalFreqDist~.
+
+* Keywords and Packages
+
+Keywords:
+- ~open~ to open the filestream to or from a file
+- ~str.split(sep)~ to split a string by a ~sep~ (e.g. =' '=)
+- ~for~ to iterate over an iterable (e.g. a file)
+- ~dict~ to store unique words as ~.keys~
+- ~len~ to compute length of a data structure
+- ~sorted(key)~ to sort an iterable by ~key~ (e.g. by length: =key=len=)
+- ~str.replace(old,new)~ to replace ~old~ string with ~new~ string
+- ~str.strip()~ to remove leading and trailing whitespace
+- ~dict.keys~ and ~dict.items~ to access dictionary keys, items
+
+Remember to look functions up when you use them to check for
+additional parameters that you might use.
+
+Packages:
+- ~urllib.request~ (TCP/IP HTTP transfer)
+- ~pyodide.http~ (Pyodide HTTP transfer)
+- ~os~ (operating system)
+- ~re~ (regular expressions)
+- ~unicodedata~ to manipulate letters in the Unicode standard
+- ~collections.Counter~ to do common counting tasks
+
+* Unique words
+
+We download a text and count the number of unique words using the
+property of dictionary keys to be uniquely defined.
+
+** Get the data
+
+- To get the files from the web we use two methods.
+
+*** If you have an OS
+
+One method uses ~urllib.request~ to retrieve the text from a URL -
+this works whenever you have an operating system (like a LinuxVM in
+Colab) with TCP/IP:
+
+#+begin_src python :results output :exports both :session *Python* :python python3
+  import urllib
+  import os
+
+  url = "https://www.gutenberg.org/cache/epub/204/pg204.txt"
+  urllib.request.urlretrieve(url,filename="../data/brown.txt")
+  os.system("ls -l ../data/brown.txt")
+  os.system("head -1 ../data/brown.txt")
+#+end_src
+
+#+RESULTS:
+: -rw-rw-r-- 1 aletheia aletheia 477688 Aug 14 14:43 ../data/brown.txt
+: The Project Gutenberg eBook of The innocence of Father Brown
+
+*** If you don't have an OS (e.g. JuypterLite/Pyodide)
+
+- To get the files in the Jupyter/Pyodide environment, this will not
+  work because Python runs inside the browser's JavaScript sandbox and
+  not in the OS directly. Instead we read the text and write it to a
+  text file separately.
+
+  An additional complication is that you cannot use the regular URL
+  because the browser protects itself against malicious attacks: It
+  needs specific metadata (CORS header) that I provide by self-hosting
+  the text (in this case on GitHub, with a short URL):
+
+  #+begin_example python
+    from pyodide.http import open_url
+    import os
+
+    text = open_url("https://tinyurl.com/brown-txt").read()
+
+    with open("brown.txt",'w') as f:
+        f.write(text)
+
+    for name in os.listdir('.'): # loop over files in cwd
+        if name == "brown.txt":
+            size = os.path.getsize(name)
+            print(f"{name}: {size} bytes")
+  #+end_example
+
+  This should print:
+  #+begin_example
+  brown.txt: 477688 bytes
+  #+end_example
+
+  Screenshot:
+  #+attr_html: :width 400px :float nil:
+  [[../img/brown_download.png]]
+
+** Create a dictionary of unique words
+
+- We want to build a dictionary of unique words. Python's dictionary
+  does this automatically if we store every word as a key, because
+  keys are unique by design.
+
+- We store the filename (we cannot use ~file~ as a name - it's a
+  protected keyword):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    filename = "../data/brown.txt"
+    print(filename)
+  #+end_src
+
+  #+RESULTS:
+  : ../data/brown.txt
+
+- We create an empty dictionary =unique=:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    unique_words = {}
+    print(unique_words)
+    print(type(unique_words))
+  #+end_src
+
+  #+RESULTS:
+  : {}
+  : <class 'dict'>
+
+- We ~open~ the file, then we loop over every line. This works because
+  once the file is opened, it is by default read to the end of every
+  ~'\n'~:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    f = open(filename)
+    print(repr(next(f)))
+    print(repr(next(f)))
+    print(repr(next(f)))
+    f.close()
+    print(f.closed)
+  #+end_src
+
+  #+RESULTS:
+  : 'The Project Gutenberg eBook of The innocence of Father Brown\n'
+  : '    \n'
+  : 'This eBook is for the use of anyone anywhere in the United States and\n'
+  : True
+
+- Inside the loop we ~split~ the line into individual words: without
+  argument, ~str.split~ has ~sep=None~ and splits on runs of any whitespace.
+
+- We loop over each collection of words on a line and set each word to
+  a key with value 1. This works because keys are unique by definition.
+
+- Then we print the length of our dictionary.
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for line in open(filename):     # every line of the file
+        seq = line.split()          # split line into words
+        for word in seq:            # every word in the line
+            unique_words[word] = 1  # every unique word becomes a key to value 1
+
+    print(len(unique_words))        # show length of dictionary
+  #+end_src
+
+  #+RESULTS:
+  : 14307
+
+** Check the words for validity
+
+- Not all "words" are actually valid words: for example, there are
+  words that include punctuation:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    trailing_bang = []                  # make an empty list
+    for word in unique_words:           # every key (word) in dictionary
+        if word.endswith('!'):          # check if word ends with !
+            trailing_bang.append(word)  # if it does, append it to list
+
+    print(trailing_bang[:5])            # print first 5 elements of list
+  #+end_src
+
+  #+RESULTS:
+  : ['God!', 'proof!', 'course!', 'like!', 'classes!']
+
+- Or you could do it using regex search:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    import re
+
+    trailing_bang = []
+    for word in unique_words:
+        if re.search(r'!$', word):      # check if ! occurs at end of word
+            trailing_bang.append(word)
+    print(trailing_bang[:5])
+  #+end_src
+
+  #+RESULTS:
+  : ['God!', 'proof!', 'course!', 'like!', 'classes!']
+
+- Loops like that can be shortened using so-called *list
+  comprehensions*. These commands achieve the same as the previous two
+  code blocks:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    trailing_bang = [w for w in unique_words if w.endswith('!')]
+    print(trailing_bang[:5])
+    trailing_bang = [w for w in unique_words if re.search('!$',w)]
+    print(trailing_bang[:5])
+  #+end_src
+
+  #+RESULTS:
+  : ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  : ['God!', 'proof!', 'course!', 'like!', 'classes!']
+
+- Let's look at the longest words in =unique_words=: we can sort the
+  words and use the ~len~ function as a ~key~ parameter so that the words
+  are sorted by length, then print the last 5 elements:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    [print(w) for w in sorted(unique_words, key=len)[-10:-4]]
+  #+end_src
+
+  #+RESULTS:
+  : Galloways--especially
+  : (trademark/copyright)
+  : inspiration--important
+  : darkness--hieroglyphics
+  : magnificence--something
+  : excrescences--yourselves,
+
+- These samples show that we need to clean the word list from dashes
+  and other punctuation.
+
+* Punctuation
+
+Three string functions are our helpers:
+1) We remove hyphens in a line and ~replace~ them with spaces.
+2) We ~split~ the line to separate the words in the corpus.
+3) After splitting the words we use ~strip~ to remove punctuation.
+
+** Replace hyphens with whitespace
+
+- The =split_line= function takes a string, replaces all dashes with one
+  space, and splits the string (since there's now a whitespace):[fn:1]
+  #+begin_src python :results none  :session *Python* :python python3
+    def split_line(string):
+        return string.replace('--',' ').split()
+  #+end_src
+
+- The two commands ~replace~ and ~split~ are chained: the string is piped
+  into ~replace~, and the output is piped into ~split~.
+
+- Check:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    string = "darkness--hieroglyphics"
+    result = split_line(string)
+    print(result)
+  #+end_src
+
+  #+RESULTS:
+  : ['darkness', 'hieroglyphics']
+
+- See the two functions in sequence:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    replaced = string.replace('-',' ')
+    print(replaced)
+    print(type(replaced))              # returns one string w/two whitespaces
+    replaced_split = replaced.split()
+    print(replaced_split)
+    print(type(replaced_split))        # returns a lit w/two words
+  #+end_src
+
+  #+RESULTS:
+  : darkness  hieroglyphics
+  : <class 'str'>
+  : ['darkness', 'hieroglyphics']
+  : <class 'list'>
+
+** Remove punctuation - ~unicodedata~
+
+- To remove punctuation from the beginning and end of each word, we
+  need a list of characters that we can ~strip~ and convert to lower
+  case (thus standardizing the corpus).
+
+** Store unique punctuation marks
+
+- The ~unicodedata~ module provides access to the Unicode Character
+  Database (UCD). Its ~category~ function tells us which characters are
+  punctuation.
+
+- Given a letter, ~unicodedata.category~ returns a string with category
+  information ([[https://www.unicode.org/reports/tr44/#GC_Values_Table][see here]] for a list of all category values):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    import unicodedata
+
+    uni = unicodedata.category('A')
+    print(uni) # 'Lu' = 'Letter' + 'uppercase'
+
+    uni = unicodedata.category(':')
+    print(uni) # 'Po' = 'Punctuation' + 'other'
+
+    uni = unicodedata.category('^')
+    print(uni) # 'Sk' = 'Modifier symbol' (non-letterlike)
+
+    uni = unicodedata.category(' ')
+    print(uni) # 'Zs' = 'Space separator'
+  #+end_src
+
+  #+RESULTS:
+  : Lu
+  : Po
+  : Sk
+  : Zs
+
+- Just like we stored the unique words in a dictionary =unique_words=,
+  we can store the unique punctuation marks in a dictionary
+  =punc_marks=:
+  #+begin_src python :results none :session *Python* :python python3
+    punc_marks = {}
+    for line in open(filename):
+        for char in line:
+            category = unicodedata.category(char)
+            if category.startswith('P'):
+                punc_marks[char] = 1
+  #+end_src
+
+- The dictionary =punc_marks= contains all unique punctuation marks:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    [print(char) for char in punc_marks]
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  .
+  ,
+  -
+  :
+  [
+  #
+  ]
+  /
+  ,*
+  ;
+  (
+  )
+  ’
+  “
+  ”
+  ?
+  !
+  ‘
+  _
+  —
+  •
+  %
+  #+end_example
+
+- We can make a ~list~ of the punctuation marks by joining the keys into
+  a string:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    punctuation = ''.join(punc_marks)
+    print(punctuation)
+  #+end_src
+
+  #+RESULTS:
+  : .,-:[#]/*;()’“”?!‘_—•%
+
+- How does this work?
+  1) ~punc_marks~ is a dictionary and its keys can be viewed as a
+     ~dict_keys~ object:
+     #+begin_src python :results output :exports both :session *Python* :python python3
+       print(type(punc_marks.keys()))
+     #+end_src
+
+     #+RESULTS:
+     : <class 'dict_keys'>
+
+- ~str.join~ works on any iterable of strings and concatenates them with
+  an optional separator (here none = ''), and ~dict_keys~ is iterable:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    help(str.join)
+  #+end_src
+
+  #+RESULTS:
+  : Help on method_descriptor:
+  : 
+  : join(self, iterable, /)
+  :     Concatenate any number of strings.
+  :     
+  :     The string whose method is called is inserted in between each given string.
+  :     The result is returned as a new string.
+  :     
+  :     Example: '.'.join(['ab', 'pq', 'rs']) -> 'ab.pq.rs'
+
+** Strip punctuation from words
+
+- We want to strip punctuation from the beginning and end of every
+  word and convert it to lower case, too.
+
+- As before, we use chaining:
+  1) ~strip~ the =punctuation=
+  2) ~lower~ the stripped punctuation
+
+  #+begin_src python :results none :session *Python* :python python3
+    def clean_word(word):
+        return word.strip(punctuation).lower()
+  #+end_src
+
+- Example:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    foo = clean_word("Proof!")
+    print(foo)
+  #+end_src
+
+  #+RESULTS:
+  : proof
+
+- Hyphenated words are not affected, since ~strip~ only affects leading
+  and trailing whitespace:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    bar = clean_word("darkness--hieroglyphics")
+    print(bar)
+  #+end_src
+
+  #+RESULTS:
+  : darkness--hieroglyphics
+
+** Generate the clean text corpus
+
+- We now use =split_line= and =clean_word= to create a text corpus of
+  unique, lower case words without any punctuation:
+
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    corpus = {}                        # create empty dictionary
+    for line in open(filename):        # every line of the text
+        for word in split_line(line):  # remove -- in the line
+            word = clean_word(word)    # remove punctuation and lower case
+            corpus[word] = 1
+
+    print(len(corpus)) # down from 14307 - reduction by 40%
+  #+end_src
+
+  #+RESULTS:
+  : 8564
+
+- Dictionaries preserve insertion order, so to see the top/bottom of
+  the =corpus=, you can turn the keys into a list and then slice them:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    keys = list(corpus)
+    [print(k) for k in keys[:10]]    # top 10 keys
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  the
+  project
+  gutenberg
+  ebook
+  of
+  innocence
+  father
+  brown
+  this
+  is
+  #+end_example
+
+- Re-do the check of the list of longest words (notice that the
+  hyphens, which belong to the word, are not removed):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    [print(w) for w in sorted(corpus, key=len)[-10:-5]]
+  #+end_src
+
+  #+RESULTS:
+  : multi-millionaire
+  : unsubstantialness
+  : sub-consciousness
+  : dissipated-looking
+  : lieutenant-colonel
+
+- In a semantic text analysis, we would go further and also remove
+  so-called *stop words*, a list of words that are often repeated and
+  don't carry meaning by themselves, like =and=, =not=, =by= etc.
+
+- The next step is to analyse the corpus for its statistical
+  properties beginning with word frequencies.
+
+** Extension: Unicode encoding
+
+- Characters aren't all born equal - in Python, they are encoded using
+  the [[https://www.unicode.org/standard/standard.html][Unicode standard]]. Without such a standard, it would be
+  impossible to compare digital texts. "Encoded in unicode" means that
+  each character (e.g. on your keyboard) is mapped to a numeric code
+  point represented as bytes according to some encoding scheme
+  (e.g. UTF-8: ~U+0000~ to ~U+007F~ - 128 values, the whole ASCII range).
+
+- When you enter ~open_url(...).read()~ or ~open(filename)~, Python
+  decoded the raw bytes from the file into a ~str~ of Unicode code
+  points based on an encoding assumption (e.g. UTF-8). If that
+  assumption is wrong, you get garbled text.
+
+- Example:
+  1) ='café'= is four code points - the ='é'= is one code point (~U+00E9~)
+     regardless of how it'll be stored
+
+  2) You see that the byte translation is different for UTF-8 and
+     Latin-1.
+
+  3) When decoding a UTF-8 mapping as Latin-1, you get garbled text
+     called "mojibake" (a Japanese term meaning 'character change').
+
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    word = 'café'
+
+    print('str (code points):', [hex(ord(c)) for c in word],end='\n\n')
+    print('UTF-8 bytes:       ', word.encode('utf-8'))
+    print('UTF-8 byte count:  ', len(word.encode('utf-8')),end='\n\n')
+    print('Latin-1 bytes:     ', word.encode('latin-1'))
+    print('Latin-1 byte count:', len(word.encode('latin-1')),end='\n\n')
+
+    # show the mismatch: decoding UTF-8 bytes AS Latin-1
+    utf8_bytes = word.encode('utf-8')
+    print('UTF-8 bytes decoded as Latin-1:', utf8_bytes.decode('latin-1'))
+  #+end_src
+
+  #+RESULTS:
+  : str (code points): ['0x63', '0x61', '0x66', '0xe9']
+  : 
+  : UTF-8 bytes:        b'caf\xc3\xa9'
+  : UTF-8 byte count:   5
+  : 
+  : Latin-1 bytes:      b'caf\xe9'
+  : Latin-1 byte count: 4
+  : 
+  : UTF-8 bytes decoded as Latin-1: cafÃ©
+
+* Word frequencies
+
+- We create a third dictionary, =word_counter=, of unique words (same
+  procedure as before) but this time we increase the value when ever
+  see the same word again later:
+
+  #+begin_src python :results none :session *Python* :python python3
+    word_counter = {}                     # initialize empty dict
+    for line in open(filename):           # for every line
+        for word in split_line(line):     # remove -- in the line
+            word = clean_word(word)       # remove punctuation, lower case
+            if word not in word_counter:
+                word_counter[word] = 1    # word found for the first time
+            else:
+                word_counter[word] += 1   # word found again increase count
+  #+end_src
+
+- Now =word_counter.values= contains the frequencies. To create an
+  ordered list of the most frequent words, we sort the ~items~ by each
+  entry's second element as the sorting ~key~, and ~reverse~ the order.
+
+- The =second_element= helper function extracts the value:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    def second_element(term):
+        return term[1]         # return value of a key-value pair
+  #+end_src
+
+  #+RESULTS:
+
+- The string function ~sorted~ returns a list. We sort the
+  ~word_counter.items()~ by their ~second_element~ and ~reverse~ the order
+  (from ascending to descending):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    items = sorted(word_counter.items(),
+                   key=second_element,
+                   reverse=True)
+    print(len(items))  # still the same number of entries
+    print(type(items)) # items is a list
+  #+end_src
+
+  #+RESULTS:
+  : 8564
+  : <class 'list'>
+
+- Here are the five most frequent words (here, ={word:<5}= prints the
+  variable =word= with a padding of 5 spaces):
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    [print(f"{word:<5}{freq}") for word,freq in items[:5]]
+  #+end_src
+
+  #+RESULTS:
+  : the  5539
+  : and  2476
+  : of   2373
+  : a    2316
+  : he   1552
+
+- Unsurprising, the words that dominate are function words
+  ('the','and','of','a').
+
+- Here are the five least frequent words:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    [print(f"{word:<12}{freq}") for word,freq in items[-5:]]
+  #+end_src
+
+  #+RESULTS:
+  : pg          1
+  : facility    1
+  : includes    1
+  : subscribe   1
+  : newsletter  1
+
+- Since Fr. Brown is the protagonist, his name must occur
+  frequently. But how frequently?
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(word_counter["brown"])
+  #+end_src
+
+  #+RESULTS:
+  : 291
+
+- We can wrap the process of sorting by second element and printing
+  the first 5 elements in a parametrized function:
+  #+begin_src python :results none :session *Python* :python python3 
+    def print_most_common(word_counter, num=5):
+        '''print top 5 most common words in word_counter dictionary'''
+        items = sorted(word_counter.items(),
+                       key=second_element,
+                       reverse=True)
+        for word, freq in items[:num]:
+            print(f"{word:<10}{freq}")
+  #+end_src
+
+* Spell-checking with dictionary subtraction
+
+- To spell-check a book, you need a dictionary of valid words. I've
+  downloaded the dictionary of American-British words that comes with
+  Linux to [[https://tinyurl.com/common-words-txt][tinyurl.com/common-words-txt]].
+
+- Download the file to a local text file =word.txt= on JupyterLite:
+  #+begin_example python
+    from pyodide.http import open_url
+
+    text = open_url("https://tinyurl.com/common-words-txt").read()
+
+    with open("words.txt",'w') as f:
+        f.write(text)
+
+    [print(f"{name}: {os.path.getsize(name)} bytes")\
+    for name in os.listdir('.') if name=="words.txt"]
+  #+end_example
+
+- Read the contents of the file and split it into a list of strings:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    word_list = open('../data/words.txt').read().split()
+    
+    [print(w) for w in word_list[:5]]   # first five words
+    [print(w) for w in word_list[-5:]]  # last five words
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  A
+  AA
+  AAA
+  AA's
+  AB
+  zwieback
+  zwieback's
+  zygote
+  zygote's
+  zygotes
+  #+end_example
+
+- Store the words as keys of another dictionary so that we can check
+  if a word is valid using the ~in~ operator:
+  #+begin_src python :results none :session *Python* :python python3 
+    valid_words = {}
+    for word in word_list:
+        valid_words[word] = 1
+  #+end_src
+
+- The two dictionaries =word_list= and =valid_words= are identical:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    equal = set(word_list) == set(valid_words.keys())
+    print(equal)
+  #+end_src
+
+  #+RESULTS:
+  : True
+
+- The function ~set~ builds an unordered collection of unique elements
+  from its argument.
+
+- Python functions can return dictionaries! The function =subtract=
+  takes two dictionaries =d1= and =d2= as parameters and returns a
+  residual dictionary =res= that contains all the keys from =d1= that are
+  not in =d2=:
+  #+begin_src python :results none :session *Python* :python python3 
+    def subtract(d1, d2):
+        res = {}
+        for key in d1:
+            if key not in d2:
+                res[key] = d1[key]
+        return res
+  #+end_src
+
+- Now with =d1 = word_counter= and =d2 = valid_words=, the dictionary =diff=
+  contains all the keys from the frequency list that are not valid:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    diff = subtract(word_counter, valid_words)
+  #+end_src
+
+  #+RESULTS:
+
+- Sample some words that are misspelled by printing the most common
+  words in =diff=:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    print_most_common(diff)
+  #+end_src
+
+  #+RESULTS:
+  : flambeau  220
+  : don’t     89
+  : valentin  83
+  : mr        80
+  : gutenberg 70
+
+- Alternatively, you can use ~collections.Counter~:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    from collections import Counter
+    c = Counter(diff)
+
+    [print(w) for w in c.most_common()[:5]]
+  #+end_src
+
+  #+RESULTS:
+  : ('flambeau', 220)
+  : ('don’t', 89)
+  : ('valentin', 83)
+  : ('mr', 80)
+  : ('gutenberg', 70)
+
+- The most common "misspellings" are proper names (Flambeau and
+  Valentin are characters in the story), an abbreviation (=mr=), a
+  contraction that ~clean_word~ doesn't fully normalize (the curly
+  apostrophe in =don’t= sits *inside* the word, so ~strip~ never
+  touches it), and =gutenberg=, an artifact of the Project Gutenberg
+  boilerplate at the top and bottom of the file. None of that is a
+  real spelling error - a nice concrete example of why cleaning real
+  text is never really finished.
+
+- Words that appear only *once* in =diff= are more likely to be
+  genuine misspellings:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    singletons = [word for word, freq in diff.items() if freq == 1]
+    print(len(singletons)) # number of singletons in diff
+    print(singletons[-5:]) # bottom of the list
+  #+end_src
+
+  #+RESULTS:
+  : 763
+  : ['$5,000', 'irs', '50', '5', 'michael']
+
+- The same block without a list comprehension:
+  #+begin_src python :results output :exports both :session *Python* :python python3 
+    singletons2=[]
+    for word, freq in diff.items():
+        if freq == 1:
+            singletons2.append(word)
+
+    print(len(singletons2)) # number of singletons in diff
+    print(singletons2[-5:]) # bottom of the list
+            
+  #+end_src  
+
+  #+RESULTS:
+  : 763
+  : ['$5,000', 'irs', '50', '5', 'michael']
+
+- Here the singleton tail is dominated by more Gutenberg boilerplate
+  (=$5,000=, =irs=, plain numbers) rather than real typos - flip side of
+  the earlier example: the *most frequent* "misspellings" were character
+  names, the *rarest* ones are legal boilerplate. A production
+  spell-checker would strip the Gutenberg header/footer before
+  analysis; we haven't done that here - we did it for the Count of
+  Monte Cristo (find/replace) example.
+
+
+* TODO Random numbers
+* TODO Bigrams
+* TODO Markov analysis
+* TODO Generating text
+* TODO Debugging
+
+* Footnotes
+
+[fn:1]In the textbook, a different text is used that has em-dash
+characters (U+2014) while I use the two-character ASCII sequence (--)
+because that is the way em-dashes are coded in my text.
