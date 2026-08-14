@@ -1990,7 +1990,7 @@ among women, and blessed is the fruit of thy womb, Jesus.
 Holy Mary, Mother of God, pray for us sinners, now and at the hour of
 our death. Amen.
 
-* Week 13: Text analysis and generation part 1 (ch 12)
+* Week 13: Text cleaning and bag-of-words analysis (ch 12)
 
 ** Opening prayer
 
@@ -2022,8 +2022,7 @@ among women, and blessed is the fruit of thy womb, Jesus.
 Holy Mary, Mother of God, pray for us sinners, now and at the hour of
 our death. Amen.
 
-
-* Week 14: Text analysis and generation part 2 (ch 12)
+* Week 14: Text generation  and Markov analysis (ch 12)
 * Week 15: Final presentations of your projects
 
 * Footnotes
