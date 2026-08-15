@@ -1991,7 +1991,6 @@ Holy Mary, Mother of God, pray for us sinners, now and at the hour of
 our death. Amen.
 
 * Week 13: Text cleaning and bag-of-words analysis (ch 12)
-
 ** Opening prayer
 
 Most Sacred Heart of Jesus,
@@ -2003,15 +2002,21 @@ pray for us.
 Immaculate Heart of Mary,
 be our salvation.
 
-** Text analysis and generation (ch 12)
+** Next assignments
+
+- One last DataCamp assignment: Lambda functions and error handling
+- Quiz on today's material and the last DataCamp session
+- One [optional] programming challenge: clean a corpus from stop-words
+
+** Corpus creation and text analysis
 
 - Code along in JupyterLab.
 
-- Only 2 sessions for this chapter (this week + next), so Part 1 (Bag
-  of words: unique words, punctuation, word frequencies, dictionary
-  subtraction) is what we code along live; Part 2 (random numbers,
-  bigrams, Markov analysis, generating text) will go out as the full
-  script if we run out of time.
+- Part 1: Bag of words - cleaning the data to create a text corpus and
+  doing some preliminary text analysis, both in text and in graphs.
+
+- Part 2: Markov chain text generation: injecting randomness,
+  generating bigrams, creating a lookp table and generate text.
 
 ** Take aways
 ** Closing prayer
@@ -2022,7 +2027,7 @@ among women, and blessed is the fruit of thy womb, Jesus.
 Holy Mary, Mother of God, pray for us sinners, now and at the hour of
 our death. Amen.
 
-* Week 14: Text generation  and Markov analysis (ch 12)
+* Week 14: Markov analysis and text generation
 * Week 15: Final presentations of your projects
 
 * Footnotes

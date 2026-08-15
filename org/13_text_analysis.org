@@ -25,6 +25,7 @@ Purpose:
 - Use Python's core datastructures, lists, dictionaries, and tuples
 - Use idiomatic algorithms using these data structures
 - Explore text analysis and Markov chain generation
+- Learn more about how an LLM operates
 
 Topics:
 
@@ -38,7 +39,7 @@ Part 2: Markov chains
 - Choose a *random* sequence of words from a collection
 - Finding all *bigrams* (sequences of two words)
 - Compute the list of words that come next (*Markov chain analysis*)
-- Generate a new text that maintains statistical relationships
+- Generate a new text that maintains *statistical* relationships
 
 * Extensions
 
@@ -65,6 +66,7 @@ Keywords:
 - ~str.replace(old,new)~ to replace ~old~ string with ~new~ string
 - ~str.strip()~ to remove leading and trailing whitespace
 - ~dict.keys~ and ~dict.items~ to access dictionary keys, items
+- ~plt.barh~ for a horizontal bar chart
 
 Remember to look functions up when you use them to check for
 additional parameters that you might use.
@@ -76,6 +78,7 @@ Packages:
 - ~re~ (regular expressions)
 - ~unicodedata~ to manipulate letters in the Unicode standard
 - ~collections.Counter~ to do common counting tasks
+- ~matplotlib.pyplot~ to plot
 
 * Unique words
 
@@ -103,7 +106,7 @@ Colab) with TCP/IP:
 #+end_src
 
 #+RESULTS:
-: -rw-rw-r-- 1 aletheia aletheia 477688 Aug 14 14:43 ../data/brown.txt
+: -rw-rw-r-- 1 aletheia aletheia 477688 Aug 14 16:46 ../data/brown.txt
 : The Project Gutenberg eBook of The innocence of Father Brown
 
 *** If you don't have an OS (e.g. JuypterLite/Pyodide)
@@ -230,11 +233,43 @@ Colab) with TCP/IP:
     for word in unique_words:
         if re.search(r'!$', word):      # check if ! occurs at end of word
             trailing_bang.append(word)
-    print(trailing_bang[:5])
+            print(trailing_bang[:5])
   #+end_src
 
   #+RESULTS:
-  : ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  #+begin_example
+  ['God!']
+  ['God!', 'proof!']
+  ['God!', 'proof!', 'course!']
+  ['God!', 'proof!', 'course!', 'like!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  ['God!', 'proof!', 'course!', 'like!', 'classes!']
+  #+end_example
 
 - Loops like that can be shortened using so-called *list
   comprehensions*. These commands achieve the same as the previous two
@@ -420,13 +455,13 @@ Three string functions are our helpers:
 
   #+RESULTS:
   : Help on method_descriptor:
-  : 
+  :
   : join(self, iterable, /)
   :     Concatenate any number of strings.
-  :     
+  :
   :     The string whose method is called is inserted in between each given string.
   :     The result is returned as a new string.
-  :     
+  :
   :     Example: '.'.join(['ab', 'pq', 'rs']) -> 'ab.pq.rs'
 
 ** Strip punctuation from words
@@ -561,13 +596,13 @@ Three string functions are our helpers:
 
   #+RESULTS:
   : str (code points): ['0x63', '0x61', '0x66', '0xe9']
-  : 
+  :
   : UTF-8 bytes:        b'caf\xc3\xa9'
   : UTF-8 byte count:   5
-  : 
+  :
   : Latin-1 bytes:      b'caf\xe9'
   : Latin-1 byte count: 4
-  : 
+  :
   : UTF-8 bytes decoded as Latin-1: cafÃ©
 
 * Word frequencies
@@ -591,13 +626,21 @@ Three string functions are our helpers:
   ordered list of the most frequent words, we sort the ~items~ by each
   entry's second element as the sorting ~key~, and ~reverse~ the order.
 
-- The =second_element= helper function extracts the value:
+- The ~.items()~ view can be turned into a ~list~ to be subscripted:
   #+begin_src python :results output :exports both :session *Python* :python python3
-    def second_element(term):
-        return term[1]         # return value of a key-value pair
+    print(type(word_counter))
+    print(list(word_counter.items())[100])
   #+end_src
 
   #+RESULTS:
+  : <class 'dict'>
+  : ('shape', 29)
+
+- The =second_element= helper function extracts the value:
+  #+begin_src python :results none :session *Python* :python python3
+    def second_element(term):
+        return term[1]         # return value of a key-value pair
+  #+end_src
 
 - The string function ~sorted~ returns a list. We sort the
   ~word_counter.items()~ by their ~second_element~ and ~reverse~ the order
@@ -613,6 +656,35 @@ Three string functions are our helpers:
   #+RESULTS:
   : 8564
   : <class 'list'>
+
+- We need a helper function here, because the ~key~ parameter of ~sorted~
+  needs to be a callable. An alternative is to use a *lambda function*:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    items2 = sorted(word_counter.items(),
+                    key=lambda t: t[1],
+                    reverse=True)
+    print(items==items2)
+  #+end_src
+
+  #+RESULTS:
+  : True
+
+- Another way to check if =items= and =items2= diverge:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(len(items), len(items2))
+    for i, (a,b) in enumerate(zip(items,items2)):
+        if a != b:
+            print(i,a,b)
+            break
+  #+end_src
+
+  #+RESULTS:
+  : 8564 8564
+
+  - Here, =zip(items,items2)= pairs the two lists up positionally,
+    =(items[0],items2[0])=, =(items[1],items2[1])= etc. ~enumerate~ provides
+    the pair and the index so that each loop iteration gives =i,
+    (a,b)=. So now the conditional is a pair-wise comparison.
 
 - Here are the five most frequent words (here, ={word:<5}= prints the
   variable =word= with a padding of 5 spaces):
@@ -653,7 +725,7 @@ Three string functions are our helpers:
 
 - We can wrap the process of sorting by second element and printing
   the first 5 elements in a parametrized function:
-  #+begin_src python :results none :session *Python* :python python3 
+  #+begin_src python :results none :session *Python* :python python3
     def print_most_common(word_counter, num=5):
         '''print top 5 most common words in word_counter dictionary'''
         items = sorted(word_counter.items(),
@@ -669,6 +741,8 @@ Three string functions are our helpers:
   downloaded the dictionary of American-British words that comes with
   Linux to [[https://tinyurl.com/common-words-txt][tinyurl.com/common-words-txt]].
 
+** Getting a dictionary of valid words
+
 - Download the file to a local text file =word.txt= on JupyterLite:
   #+begin_example python
     from pyodide.http import open_url
@@ -683,9 +757,9 @@ Three string functions are our helpers:
   #+end_example
 
 - Read the contents of the file and split it into a list of strings:
-  #+begin_src python :results output :exports both :session *Python* :python python3 
+  #+begin_src python :results output :exports both :session *Python* :python python3
     word_list = open('../data/words.txt').read().split()
-    
+
     [print(w) for w in word_list[:5]]   # first five words
     [print(w) for w in word_list[-5:]]  # last five words
   #+end_src
@@ -706,14 +780,14 @@ Three string functions are our helpers:
 
 - Store the words as keys of another dictionary so that we can check
   if a word is valid using the ~in~ operator:
-  #+begin_src python :results none :session *Python* :python python3 
+  #+begin_src python :results none :session *Python* :python python3
     valid_words = {}
     for word in word_list:
         valid_words[word] = 1
   #+end_src
 
 - The two dictionaries =word_list= and =valid_words= are identical:
-  #+begin_src python :results output :exports both :session *Python* :python python3 
+  #+begin_src python :results output :exports both :session *Python* :python python3
     equal = set(word_list) == set(valid_words.keys())
     print(equal)
   #+end_src
@@ -721,14 +795,16 @@ Three string functions are our helpers:
   #+RESULTS:
   : True
 
-- The function ~set~ builds an unordered collection of unique elements
-  from its argument.
+- Here, the function ~set~ builds an unordered collection of unique
+  elements from its argument.
+
+** Subtracting the valid word dictionary from our word dictionary
 
 - Python functions can return dictionaries! The function =subtract=
   takes two dictionaries =d1= and =d2= as parameters and returns a
   residual dictionary =res= that contains all the keys from =d1= that are
   not in =d2=:
-  #+begin_src python :results none :session *Python* :python python3 
+  #+begin_src python :results none :session *Python* :python python3
     def subtract(d1, d2):
         res = {}
         for key in d1:
@@ -739,15 +815,13 @@ Three string functions are our helpers:
 
 - Now with =d1 = word_counter= and =d2 = valid_words=, the dictionary =diff=
   contains all the keys from the frequency list that are not valid:
-  #+begin_src python :results output :exports both :session *Python* :python python3 
+  #+begin_src python :results none :session *Python* :python python3
     diff = subtract(word_counter, valid_words)
   #+end_src
 
-  #+RESULTS:
-
 - Sample some words that are misspelled by printing the most common
   words in =diff=:
-  #+begin_src python :results output :exports both :session *Python* :python python3 
+  #+begin_src python :results output :exports both :session *Python* :python python3
     print_most_common(diff)
   #+end_src
 
@@ -758,8 +832,8 @@ Three string functions are our helpers:
   : mr        80
   : gutenberg 70
 
-- Alternatively, you can use ~collections.Counter~:
-  #+begin_src python :results output :exports both :session *Python* :python python3 
+- Alternatively, you can use the ~collections.Counter~ class:
+  #+begin_src python :results output :exports both :session *Python* :python python3
     from collections import Counter
     c = Counter(diff)
 
@@ -794,8 +868,8 @@ Three string functions are our helpers:
   : 763
   : ['$5,000', 'irs', '50', '5', 'michael']
 
-- The same block without a list comprehension:
-  #+begin_src python :results output :exports both :session *Python* :python python3 
+- The same block as the last one without a list comprehension:
+  #+begin_src python :results output :exports both :session *Python* :python python3
     singletons2=[]
     for word, freq in diff.items():
         if freq == 1:
@@ -803,8 +877,8 @@ Three string functions are our helpers:
 
     print(len(singletons2)) # number of singletons in diff
     print(singletons2[-5:]) # bottom of the list
-            
-  #+end_src  
+
+  #+end_src
 
   #+RESULTS:
   : 763
@@ -818,14 +892,149 @@ Three string functions are our helpers:
   analysis; we haven't done that here - we did it for the Count of
   Monte Cristo (find/replace) example.
 
+* PRACTICE (bonus): Filtering stop words
 
-* TODO Random numbers
+This part is optional - for anyone who wants to go further than
+today's session.
+
+- Here is a starter notebook if you want to try it. Run the setup
+  first then fill in the rest:
+  [[https://tinyurl.com/text-analysis-challenge-ipynb][tinyurl.com/text-analysis-challenge-ipynb]]
+
+- Back in "Generate the clean text corpus" we noted that a real
+  semantic analysis would also remove *stop words* - common words like
+  =and=, =not=, =by= that don't carry much meaning on their own. Right now,
+  =print_most_common(word_counter)= is dominated by exactly these
+  words. Your job: filter them out and see what surfaces instead.
+
+- Step 1: Start with a small list of English stop words (feel free to
+  extend it once you see what's still cluttering your results):
+  #+begin_src python :results none :session *Python* :python python3
+    stop_words = ['the', 'a', 'an', 'and', 'or', 'but', 'of', 'to',
+                  'in', 'on', 'at', 'for', 'is', 'was', 'were', 'be',
+                  'been', 'it', 'he', 'she', 'they', 'his', 'her',
+                  'i', 'you', 'that', 'this', 'with', 'as', 'not']
+  #+end_src
+
+  Alternatively, you can also use a public stop-word list. I have
+  uploaded one here: https://tinyurl.com/stop-words-english-txt
+
+  You need to load it into a file as seen in class. It is a lot more
+  effective than the short stop_words list given here.
+
+- Step 2: Write a function =filter_stopwords(counter, stopwords)= that
+  takes a word-frequency dictionary and a list of stop words, and
+  returns a new dictionary containing only the entries whose key is
+  *not* in =stopwords=. (This is structurally the same problem as
+  =subtract= - a dictionary and a "remove if present" test - so reuse
+  that pattern rather than starting from scratch.)
+
+- Step 3: Call =print_most_common= on the filtered result instead of
+  on =word_counter= directly.
+
+- Step 4: Compare the new top 5 to the original top 5
+  (the/and/of/a/he). Which words show up now that didn't before? What
+  do they tell you about "The Innocence of Father Brown" that the
+  function words didn't?
+
+- Stretch goal, if you want more: your =stop_words= list is short and
+  hand-picked. Look at the next 10-15 words in your filtered result -
+  are there more function words you'd add to the list? Where would you
+  draw the line between "stop word" and "just a common word in this
+  story"?
+
+* Visualizing the top words
+
+- =diff= gave us the words in the corpus that are *not* valid. The
+  complement - words that *are* valid - is just another =subtract=, this
+  time removing =diff= from =word_counter=:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    valid_counter = subtract(word_counter, diff)
+    print(len(valid_counter)) 
+    print(len(valid_counter) + len(diff) == len(word_counter)) # check
+  #+end_src
+
+  #+RESULTS:
+  : 7427
+  : True
+
+- Sort =valid_counter= the same way we sorted everything else, and
+  take the top 15:
+  #+begin_src python :results none :session *Python* :python python3
+    items = sorted(valid_counter.items(), key=second_element, reverse=True)[:15]
+    words = [word for word, freq in items]
+    freqs = [freq for word, freq in items]
+  #+end_src
+
+- Plot it as a horizontal bar chart (reversing the lists so the most
+  frequent word ends up on top):
+  #+begin_src python :file ../img/top_words.png :results file graphics output :exports both :session *Python* :python python3
+    import matplotlib.pyplot as plt
+
+    plt.figure(figsize=(8,5))
+    plt.barh(words[::-1], freqs[::-1], color="steelblue", edgecolor="white")
+    plt.xlabel("Frequency")
+    plt.title('Top 15 valid words in "The Innocence of Father Brown"')
+    plt.tight_layout()
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/top_words.png]]
+
+- Notice that "valid" just means "in the dictionary" - it says
+  nothing about whether a word is *meaningful*. The chart is still
+  wall-to-wall function words (=the=, =and=, =of=, =a=, =he=...). That's
+  exactly the problem the stop-word bonus exercise above tackles.
+
+* Word length distribution
+
+Keywords:
+- ~plt.hist~ for a true histogram (bins a continuous numeric variable)
+
+- Unlike the bar chart above, this one is a histogram: word *length* is
+  a continuous numeric quantity, and we want to see how it's
+  distributed - not rank individual words. We use =valid_words= itself
+  (the whole dictionary, not the corpus) since the question here is
+  "how long are English words in general," not "how long are the words
+  Chesterton used."
+
+- Get the length of every word in the dictionary:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    lengths = [len(word) for word in valid_words]
+    print(min(lengths), max(lengths), len(lengths))
+  #+end_src
+
+  #+RESULTS:
+  : 1 23 104334
+
+- Plot the histogram, one bin per word length:
+  #+begin_src python :file ../img/word_lengths.png :results file graphics output :exports both :session *Python* :python python3
+    plt.figure(figsize=(8,5))
+    plt.hist(lengths, bins=range(1, max(lengths)+2), edgecolor="white", color="steelblue")
+    plt.xlabel("Word length (characters)")
+    plt.ylabel("Count")
+    plt.title("Distribution of word lengths in the valid-word list")
+    plt.tight_layout()
+  #+end_src
+
+  #+RESULTS:
+  [[file:../img/word_lengths.png]]
+
+- The distribution is roughly bell-shaped and right-skewed: most
+  English words cluster around 7-9 letters, with a long thin tail of
+  much longer ones. Worth asking students: where would you guess the
+  peak falls before you run it?
+
+
+* IN PROGRESS Random numbers
+
 * TODO Bigrams
 * TODO Markov analysis
 * TODO Generating text
 * TODO Debugging
 
 * Footnotes
+[fn:2]The command would like
 
 [fn:1]In the textbook, a different text is used that has em-dash
 characters (U+2014) while I use the two-character ASCII sequence (--)
