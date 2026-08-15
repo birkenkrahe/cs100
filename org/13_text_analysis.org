@@ -233,43 +233,12 @@ Colab) with TCP/IP:
     for word in unique_words:
         if re.search(r'!$', word):      # check if ! occurs at end of word
             trailing_bang.append(word)
-            print(trailing_bang[:5])
+
+    print(trailing_bang[:5])
   #+end_src
 
   #+RESULTS:
-  #+begin_example
-  ['God!']
-  ['God!', 'proof!']
-  ['God!', 'proof!', 'course!']
-  ['God!', 'proof!', 'course!', 'like!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  ['God!', 'proof!', 'course!', 'like!', 'classes!']
-  #+end_example
+  : ['God!', 'proof!', 'course!', 'like!', 'classes!']
 
 - Loops like that can be shortened using so-called *list
   comprehensions*. These commands achieve the same as the previous two
