@@ -2038,18 +2038,114 @@ Holy Mary, Mother of God, pray for us sinners, now and at the hour of
 our death. Amen.
 
 * Week 14: Markov analysis and text generation
-
 ** Opening prayer
+
+Most Sacred Heart of Jesus,
+have mercy on us.
+
+Immaculate Heart of Mary,
+pray for us.
+
+Immaculate Heart of Mary,
+be our salvation.
 
 ** Projects
 
-** Continue text analysis and text generation
+What are you up to?
 
-- [[https://raw.githubusercontent.com/birkenkrahe/cs100/refs/heads/main/ipynb/text_analysis_august_14.ipynb][Upload this notebook to Jupyter.org/try-jupyter/lab]]
+** Review: Text analysis
+
+1) How can you create a dictionary of unique words from a text?
+   #+begin_example
+   1) Create an empty dictionary
+     2) Go through every line of the file
+       3) Split every line into words separated by spaces
+         4) Go through every word of the line
+           5) Add the word as a key to the dictionary
+   #+end_example
+2) What's a list comprehension?
+   #+begin_quote
+   A way to build a list by looping and filtering in a single
+   expression instead of writing a ~for~ loop with ~.append()~:
+
+   [ =expression= ~for~ =item= ~in~ =iterable= ]
+   #+end_quote
+3) Example: filter out all even/odd numbers in [0,10)
+   #+begin_src python :results output :exports both :session *Python* :python python3 
+     [print(x) for x in range(10) if x % 2 == 0] # even numbers in [0,10)
+   #+end_src
+4) How can you filter out unique words sorted by word length?
+   #+begin_example
+   [print(w) for w in sorted(unique_words, key=len)[-10:-4]];
+   #+end_example
+5) In the last answer, what does =[-10:-4]= mean?
+   #+begin_quote
+   Print 10-4=6 elements from the end of the list and leave out the
+   last three.
+   #+end_quote
+6) Which string functions were used to get rid of punctuation marks?
+   #+begin_quote
+   - ~.replace(old,new)~
+   - ~.split()~
+   - ~.strip()~
+   - ~.lower()~
+   #+end_quote
+7) What is ~unicodedata~?
+   #+begin_quote
+   A module that provides access to the Unicode Character
+   Database. ~unicodedata.category~ returns a category string, e.g. ~Po~
+   for punctuation, or ~Lu~ for uppercase letters.
+   #+end_quote
+8) How can you compute word frequencies from a clean corpus of words?
+   #+begin_example
+   1) Create an empty dictionary
+     2) Go through every line of the file
+       3) Go through every word in the line (no --)
+         4) Clean the word (no punctuation, lower case)
+           5) If word was not seen yet -> assign 1
+           6) If word was seen before  -> add 1
+   #+end_example
+9) We want to sort by the second element (the frequency) of the
+   dictionary. Why don't we just use ~word_counter.values()~?
+   #+begin_example
+   items = sorted(word_counter.items(),    # contains key + value
+                  key=second_element,      # second_element returns value
+                  reverse=True)
+   #+end_example
+10) Can you explain this command?
+    #+begin_example
+    [print(f"{word:<5}{freq}") for word,freq in items[:5]];
+    #+end_example
+    #+begin_quote
+    1. list comprehension (returns a list)
+    2. prints with format string
+    3. prints two variables, `word` and `freq`
+    4. prints `word` on 5 spaces
+    5. loops over the list `items` which consists of pairs (2-tuple)
+    6. unpacks `word` and `freq` from each pair
+    7. extracts five elements with indices 0-4 from `items`
+    #+end_quote
+    Same as:
+    #+begin_example
+    for word, freq in items[:5]:
+        print(f"{word:<5}{freq}")
+    #+end_example
+** Continue text analysis and text generation
+- [[https://raw.githubusercontent.com/birkenkrahe/cs100/refs/heads/main/ipynb/text_analysis_august_14.ipynb][Upload this notebook from URL to Jupyter.org/try-jupyter/lab]]
 
 - This is the current status of our notebook
 
+- Go to *Edit > Clear output of all cells*
+
+- Let's go through what we did and continue the exercise
+
 ** Closing prayer
+
+Hail Mary, full of grace, the Lord is with thee; blessed art thou
+among women, and blessed is the fruit of thy womb, Jesus.
+
+Holy Mary, Mother of God, pray for us sinners, now and at the hour of
+our death. Amen.
 
 * Week 15: Final presentations of your projects
 

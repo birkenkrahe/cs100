@@ -67,6 +67,9 @@ Keywords:
 - ~str.strip()~ to remove leading and trailing whitespace
 - ~dict.keys~ and ~dict.items~ to access dictionary keys, items
 - ~plt.barh~ for a horizontal bar chart
+- ~random.choice(seq)~ to pick one random element from a sequence
+- ~random.choices(seq, weights=.., k=..)~ to pick several weighted random elements
+- ~tuple()~ to make an immutable, hashable pair usable as a dict key
 
 Remember to look functions up when you use them to check for
 additional parameters that you might use.
@@ -79,6 +82,7 @@ Packages:
 - ~unicodedata~ to manipulate letters in the Unicode standard
 - ~collections.Counter~ to do common counting tasks
 - ~matplotlib.pyplot~ to plot
+- ~random~ to generate pseudorandom numbers and make weighted choices
 
 * Unique words
 
@@ -106,8 +110,6 @@ Colab) with TCP/IP:
 #+end_src
 
 #+RESULTS:
-: -rw-rw-r-- 1 aletheia aletheia 477688 Aug 14 16:46 ../data/brown.txt
-: The Project Gutenberg eBook of The innocence of Father Brown
 
 *** If you don't have an OS (e.g. JuypterLite/Pyodide)
 
@@ -424,13 +426,13 @@ Three string functions are our helpers:
 
   #+RESULTS:
   : Help on method_descriptor:
-  :
+  : 
   : join(self, iterable, /)
   :     Concatenate any number of strings.
-  :
+  :     
   :     The string whose method is called is inserted in between each given string.
   :     The result is returned as a new string.
-  :
+  :     
   :     Example: '.'.join(['ab', 'pq', 'rs']) -> 'ab.pq.rs'
 
 ** Strip punctuation from words
@@ -565,13 +567,13 @@ Three string functions are our helpers:
 
   #+RESULTS:
   : str (code points): ['0x63', '0x61', '0x66', '0xe9']
-  :
+  : 
   : UTF-8 bytes:        b'caf\xc3\xa9'
   : UTF-8 byte count:   5
-  :
+  : 
   : Latin-1 bytes:      b'caf\xe9'
   : Latin-1 byte count: 4
-  :
+  : 
   : UTF-8 bytes decoded as Latin-1: cafÃ©
 
 * Word frequencies
@@ -930,7 +932,9 @@ today's session.
 - Sort =valid_counter= the same way we sorted everything else, and
   take the top 15:
   #+begin_src python :results none :session *Python* :python python3
-    items = sorted(valid_counter.items(), key=second_element, reverse=True)[:15]
+    items = sorted(valid_counter.items(),
+                   key=second_element,
+                   reverse=True)[:15]
     words = [word for word, freq in items]
     freqs = [freq for word, freq in items]
   #+end_src
@@ -979,7 +983,10 @@ Keywords:
 - Plot the histogram, one bin per word length:
   #+begin_src python :file ../img/word_lengths.png :results file graphics output :exports both :session *Python* :python python3
     plt.figure(figsize=(8,5))
-    plt.hist(lengths, bins=range(1, max(lengths)+2), edgecolor="white", color="steelblue")
+    plt.hist(lengths,
+             bins=range(1, max(lengths)+2),
+             edgecolor="white",
+             color="steelblue")
     plt.xlabel("Word length (characters)")
     plt.ylabel("Count")
     plt.title("Distribution of word lengths in the valid-word list")
@@ -991,19 +998,426 @@ Keywords:
 
 - The distribution is roughly bell-shaped and right-skewed: most
   English words cluster around 7-9 letters, with a long thin tail of
-  much longer ones. Worth asking students: where would you guess the
-  peak falls before you run it?
+  much longer ones. 
 
+* Random numbers
 
-* IN PROGRESS Random numbers
+- Most programs are *deterministic*: given the same input, they
+  produce the same output every time. That's normally what we want -
+  but sometimes (games, sampling, generating variety) we want the
+  computer to be unpredictable.
 
-* TODO Bigrams
-* TODO Markov analysis
-* TODO Generating text
-* TODO Debugging
+- True randomness is hard to get out of a deterministic machine, so
+  Python's ~random~ module instead generates *pseudorandom* numbers:
+  the sequence is actually computed by a deterministic algorithm, but
+  it's practically impossible to tell that just by looking at it.
+  #+begin_src python :results none :session *Python* :python python3
+    import random
+  #+end_src
+
+** Picking a random word
+
+- ~random.choice~ picks one element from a sequence, with every element
+  equally likely to be chosen:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    t = [1, 2, 3]
+    print(random.choice(t))
+  #+end_src
+
+  #+RESULTS:
+  : 3
+
+- Call it again and you may get the same value, or a different one -
+  that's the point:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    print(random.choice(t))
+  #+end_src
+
+  #+RESULTS:
+  : 2
+
+- =word_counter= is a *dictionary*, not a sequence. ~random.choice~
+  tries to treat it like one and look up a random integer position,
+  which raises a ~KeyError~ because that integer isn't one of the
+  dictionary's keys:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    try:
+        random.choice(word_counter)
+    except KeyError as e:
+        print("KeyError:", e)
+  #+end_src
+
+  #+RESULTS:
+  : KeyError: 2703
+
+- To choose a random *key*, put the keys into a list first:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    words = list(word_counter)
+    print(random.choice(words))
+  #+end_src
+
+  #+RESULTS:
+  : devil
+
+  (=word_counter= keeps every token that appeared in the text,
+  including numbers like =90= - not only "real" words.)
+
+- Six random words in a row don't make much sense together, because
+  nothing connects one word to the next:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    chosen = [random.choice(words) for i in range(6)]
+    print(' '.join(chosen))
+  #+end_src
+
+  #+RESULTS:
+  : postures shared hasn’t events highgate him
+
+  (Run this cell again yourself and you'll get a different sequence -
+  that's expected.)
+
+** Weighting by frequency
+
+- Right now every word is equally likely, but common words like "the"
+  should show up far more often than rare ones. ~random.choices~
+  (note the *s*) takes a ~weights~ argument, so more frequent words are
+  more likely to be picked:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    weights = word_counter.values()
+    print(random.choices(words, weights=weights))
+  #+end_src
+
+  #+RESULTS:
+  : ['other']
+
+- Add ~k=~ to draw several words at once:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    random_words = random.choices(words, weights=weights, k=6)
+    print(random_words)
+    print(' '.join(random_words))
+  #+end_src
+
+  #+RESULTS:
+  : ['punjab', 'fell', 'the', 'completely', 'and', 'to']
+  : punjab fell the completely and to
+
+- Weighting by frequency gives a better sense of the book's
+  vocabulary, but the words are still chosen independently of each
+  other - there's still no relationship between one word and the
+  next. To fix that, we need to look at *pairs* of words.
+
+* Bigrams
+
+- A pair of consecutive words is called a *bigram*. Three words in a
+  row is a *trigram*, and a sequence of unspecified length is an
+  *n-gram*.
+
+** Counting bigrams
+
+- We store bigram counts the same way we stored word counts, in a
+  dictionary - except each *key* is now a 2-word ~tuple~ instead of a
+  single string:
+  #+begin_src python :results none :session *Python* :python python3
+    bigram_counter = {}
+
+    def count_bigram(bigram):
+        key = tuple(bigram)          # e.g. ['of','the'] -> ('of','the')
+        if key not in bigram_counter:
+            bigram_counter[key] = 1
+        else:
+            bigram_counter[key] += 1
+  #+end_src
+
+- To build each bigram while scanning the text, we keep a small
+  *sliding window* - a list holding just the last one or two words
+  seen. Once the window holds two words, we count that bigram and drop
+  the oldest word to make room for the next one:
+  #+begin_src python :results none :session *Python* :python python3
+    window = []
+
+    def process_word(word):
+        window.append(word)
+        if len(window) == 2:
+            count_bigram(window)
+            window.pop(0)         # slide the window forward
+  #+end_src
+
+- Now run every word in the book through =process_word=, the same loop
+  shape we used to build =word_counter=:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    for line in open(filename):
+        for word in split_line(line):
+            word = clean_word(word)
+            process_word(word)
+
+    print(len(bigram_counter))    # number of *distinct* bigrams
+  #+end_src
+
+  #+RESULTS:
+  : 46828
+
+- Sort =bigram_counter= the same way we sorted =word_counter= - by
+  frequency, descending - to see the five most common bigrams:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    items = sorted(bigram_counter.items(), key=second_element, reverse=True)
+    for bigram, freq in items[:5]:
+        print(f"{freq:<10}{bigram}")
+  #+end_src
+
+  #+RESULTS:
+  : 613       ('of', 'the')
+  : 434       ('in', 'the')
+  : 273       ('to', 'the')
+  : 220       ('father', 'brown')
+  : 219       ('it', 'was')
+
+- Function words dominate the top of the list, just as they did for
+  single words - except now "father brown" himself shows up, since the
+  detective's name is repeated constantly through the stories.
+
+** Generating text from bigrams
+
+- We can weight-sample *bigrams* the same way we weight-sampled single
+  words, then string the pairs together:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    bigrams = list(bigram_counter)
+    weights = bigram_counter.values()
+    random_bigrams = random.choices(bigrams, weights=weights, k=6)
+
+    print(' '.join(' '.join(pair) for pair in random_bigrams))
+  #+end_src
+
+  #+RESULTS:
+  : a good elizabethan ruff their hands but the providing copies sour smile
+
+- That reads a little more like English than six random words did -
+  each pair internally makes sense - but consecutive pairs still have
+  no relationship to each other. What we actually want is: given the
+  word we just picked, what tends to come *next*?
+
+* Markov analysis
+
+- Instead of counting how often a pair of words occurs, we can record,
+  for *every* word, the list of words that immediately followed it
+  each time it appeared. This is Markov chain analysis - a simplified
+  version of the same statistical idea behind how a Large Language
+  Model predicts its next token.
+
+** A small example first
+
+- To keep the dictionary small enough to read on screen, we'll analyze
+  four lines from the Monty Python song /Eric, the Half a Bee/ before
+  turning the same code loose on the whole book:
+  #+begin_src python :results none :session *Python* :python python3
+    song = """
+    Half a bee, philosophically,
+    Must, ipso facto, half not be.
+    But half the bee has got to be
+    Vis a vis, its entity. D'you see?
+    """
+  #+end_src
+
+- We'll build a dictionary =successor_map= that maps each word to the
+  *list* of words seen after it. Start with the first two words of the
+  song as an example:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    successor_map = {}
+    first, second = 'half', 'a'
+    successor_map[first] = [second]
+    print(successor_map)
+  #+end_src
+
+  #+RESULTS:
+  : {'half': ['a']}
+
+- The next time "half" is followed by a *different* word, we ~append~
+  to the existing list instead of overwriting it:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    first, second = 'half', 'not'
+    successor_map[first].append(second)
+    print(successor_map)
+  #+end_src
+
+  #+RESULTS:
+  : {'half': ['a', 'not']}
+
+- Wrapped as a function, using the same "add if new key, append if
+  not" pattern as =count_bigram=:
+  #+begin_src python :results none :session *Python* :python python3
+    def add_bigram(bigram):
+        first, second = bigram
+        if first not in successor_map:
+            successor_map[first] = [second]
+        else:
+            successor_map[first].append(second)
+  #+end_src
+
+- If a word is followed by the *same* successor more than once, that
+  successor is added to the list again - so the list itself carries
+  the frequency information, without needing a separate weight.
+
+- We slide a window over the words exactly as before, but call
+  =add_bigram= instead of =count_bigram=:
+  #+begin_src python :results none :session *Python* :python python3
+    def process_word_bigram(word):
+        window.append(word)
+        if len(window) == 2:
+            add_bigram(window)
+            window.pop(0)
+  #+end_src
+
+- Reset =successor_map= and =window=, then process the song word by word:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    successor_map = {}
+    window = []
+
+    for word in song.split():
+        word = clean_word(word)
+        process_word_bigram(word)
+
+    print(successor_map)
+  #+end_src
+
+  #+RESULTS:
+  : {'half': ['a', 'not', 'the'], 'a': ['bee', 'vis'], 'bee': ['philosophically', 'has'], 'philosophically': ['must'], 'must': ['ipso'], 'ipso': ['facto'], 'facto': ['half'], 'not': ['be'], 'be': ['but', 'vis'], 'but': ['half'], 'the': ['bee'], 'has': ['got'], 'got': ['to'], 'to': ['be'], 'vis': ['a', 'its'], 'its': ['entity'], 'entity': ["d'you"], "d'you": ['see']}
+
+- "half" can be followed by "a", "not", or "the"; "a" can be followed
+  by "bee" or "vis". Most other words in this short song appear only
+  once, so they have exactly one recorded successor.
+
+** Building the successor map from the book
+
+- Reset =successor_map= and =window= again, then run the exact same loop
+  over the whole book instead of the song:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    successor_map = {}
+    window = []
+
+    for line in open(filename):
+        for word in split_line(line):
+            word = clean_word(word)
+            process_word_bigram(word)
+
+    print(len(successor_map))
+  #+end_src
+
+  #+RESULTS:
+  : 8564
+
+- Every word that ever appears in the book (except possibly the very
+  last one) now has an entry - which is why =successor_map= comes out
+  the same size as =word_counter=.
+
+- Look up what tends to follow "going":
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    going = successor_map['going']
+    print(going)
+    print(len(going), going.count('to'))
+  #+end_src
+
+  #+RESULTS:
+  : ['up', 'up', 'to', 'well', 'asked', 'out', 'to', 'but', 'to', 'to', 'there', 'to', 'said', 'again', 'to', 'on', 'round', 'to', 'on', 'off', 'north', 'to', 'to', 'back', 'to', 'like', 'to', 'to', 'up', 'to', 'to', 'to', 'about', 'to', 'to']
+  : 35 17
+
+- Out of the 35 times "going" is followed by another word, "to" is the
+  successor 17 of those times - nearly half. That imbalance is exactly
+  what lets us generate more plausible text: picking randomly from
+  this list with ~random.choice~ will favor "to" without us having to
+  track a separate weight at all.
+
+* Generating text
+
+- Generating text is now a two-step loop:
+  1) Look up the current word's list of successors in =successor_map=.
+  2) Choose one at random with ~random.choice~, then repeat, using the
+     chosen word as the new current word.
+
+- Start with a word that has several different successors, "said":
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    word = 'said'
+    successors = successor_map[word]
+    print(successors[:10])
+  #+end_src
+
+  #+RESULTS:
+  : ['after', 'that', 'that', 'with', 'the', 'the', 'it’s', 'nothing', 'pray', 'the']
+
+- Pick the next word:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    word = random.choice(successors)
+    print(word)
+  #+end_src
+
+  #+RESULTS:
+  : and
+
+- Repeat that step in a loop to generate a longer run of text:
+  #+begin_src python :results output :exports both :session *Python* :python python3
+    word = 'said'
+    for i in range(10):
+        successors = successor_map[word]
+        word = random.choice(successors)
+        print(word, end=' ')
+  #+end_src
+
+  #+RESULTS:
+  : the other will last oh it’s like the counter vaulted
+
+- That's noticeably more sentence-shaped than anything generated from
+  single words or bigram pairs alone - but it can still wander, since
+  each step only remembers *one* word back. Using two-word keys (bigram
+  -> next word, i.e. trigrams) instead of one-word keys would give the
+  generator more context and produce even more coherent runs.  That's
+  a natural extension of =add_bigram= and =process_word_bigram= above - a
+  bigram as the dictionary key instead of a single word - and it's
+  left for you to try.
+
+* Debugging
+
+- The programs in this chapter are longer than earlier ones, and it's
+  easy to get a sliding window or a dictionary-of-lists subtly wrong.
+  When you're stuck, work through these in order rather than jumping
+  straight to "just try things":
+
+  1) *Read*: Read your code back to yourself, line by line. Does it
+     say what you actually meant, or what you *think* you meant? This
+     only catches typos and slips - if you misunderstand what
+     =window.pop(0)= does, reading the line ten times won't reveal
+     that, because the error is in your head, not on the screen.
+
+  2) *Run*: Add a ~print~ at the point you're unsure about - print
+     =window= right after you append to it, or print
+     =successor_map[word]= right before you call ~random.choice~ on it.
+     Small, targeted experiments beat large, vague ones.
+
+  3) *Ruminate*: Stop and think before changing more code. Is this a
+     syntax error, a runtime error (like the ~KeyError~ from choosing
+     on a dictionary earlier in this chapter), or a semantic error
+     (code runs, but the *logic* is wrong)? What did you change right
+     before it broke?
+
+  4) *Rubber-duck*: Explain the problem out loud, line by line, to
+     anyone - or anything - willing to listen. You will often find the
+     bug while explaining it, before the other party says a word.
+
+  5) *Retreat*: If a program has too many things wrong with it at
+     once, back up. Copy it aside, strip it down to the last version
+     that worked, and rebuild from there one piece at a time instead
+     of debugging all the pieces simultaneously.
+
+  6) *Rest*: If none of the above works, stop. Come back to it later.
+     It's extremely common to see the bug immediately the next time
+     you look, once you're not staring at the same wrong assumption
+     anymore.
+
+- A concrete example from this chapter: if =successor_map[word]= raises
+  a ~KeyError~ while you're generating text, *read* first (did you
+  spell the starting word correctly?), then *run* a quick check -
+  =word in successor_map= - before assuming anything more complicated
+  is wrong. The most likely cause is simply that your chosen starting
+  word never occurred in the book, or it only occurred as the very
+  last word of the text (so it has no recorded successor).
 
 * Footnotes
-[fn:2]The command would like
 
 [fn:1]In the textbook, a different text is used that has em-dash
 characters (U+2014) while I use the two-character ASCII sequence (--)
