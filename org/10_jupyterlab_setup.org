@@ -3,7 +3,6 @@
 #+AUTHOR: Marcus Birkenkrahe
 #+STARTUP: overview hideblocks indent
 #+OPTIONS: toc:nil num:nil ^:nil
-
 * Why install this at all?
 
 So far you have been coding entirely in the browser: Colab, DataCamp,
